@@ -1152,7 +1152,8 @@ function fmt(d){
    
 function parent(t){let a=find(t);return a?`<span class="link" onclick="event.stopPropagation();selectAnimal('${a.id}')">${a.id} ${a.name}</span>`:t}
    
-function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,ys=[...new Set(animals.map(a=>a.geb.slice(0,4)))].sort().reverse();s.innerHTML='<option value="">Alle Jahrgänge</option>'+ys.map(y=>`<option>${y}</option>`).join('');s.value=old}function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${selectedId==a.id?'selected':''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td>
+function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,ys=[...new Set(animals.map(a=>a.geb.slice(0,4)))].sort().reverse();s.innerHTML='<option value="">Alle Jahrgänge</option>'+ys.map(y=>`<option>${y}</option>`).join('');s.value=old}
+   function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${selectedId==a.id?'selected':''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td>
 <td>${fmt(a.geb)}</td><td>${age(a.geb)}</td>
 
 <td>${a.geschlecht}</td><td>${a.punkte||'-'}</td><td>${parent(a.vater)}</td><td>${parent(a.mutter)}</td>
@@ -1192,6 +1193,7 @@ function selectAnimal(id) {
     }
     
     selectedId=id;
+   journalAnzeigen(selectedId);
     let a=animals.find(x=>x.id==id),
         kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));
 
