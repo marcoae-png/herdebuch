@@ -1739,21 +1739,16 @@ async function journalEintragHinzufuegen(tierId) {
     try {
 
         const { data, error } = await db
-            .from("tier_journal")
-            .insert({
-
-                tier_id: String(tierId),
-
-                datum: datum,
-
-                ereignis: ereignis,
-
-                bemerkung: bemerkung
-
-            })
-            .select()
-            .single();
-
+    .from("tier_journal")
+    .insert({
+        tier_id: String(tierId),
+        datum: datum,
+        ereignis: ereignis,
+        bemerkung: bemerkung,
+        brunst: brunst
+    })
+    .select()
+    .single();
 
         if (error) {
 
