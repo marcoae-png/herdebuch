@@ -8,10 +8,11 @@
 .logo-wrap{
     display:flex;
     align-items:center;
+    justify-content:flex-end;
     gap:14px;
     height:70px;
 }
-
+    
 .logo-badge{
     width:340px !important;
     height:150px !important;
@@ -515,7 +516,19 @@
     }
 }
 
+@media (max-width: 700px) {
 
+    header {
+        background: #315f36 !important;
+        color: white !important;
+    }
+
+    header h1,
+    header small {
+        color: white !important;
+    }
+
+}
 
 
     
@@ -1114,6 +1127,16 @@ function selectAnimal(id) {
     document
         .getElementById("detailsCard")
         .classList.add("mobile-open");
+// Auf dem Handy direkt zur Tierdetails-Karte scrollen
+    if (window.innerWidth <= 700) {
+        setTimeout(() => {
+            document.getElementById("detailsCard").scrollIntoView({
+                behavior: "smooth",
+                block: "start"
+            });
+        }, 50);
+    }
+    
     selectedId=id;
     let a=animals.find(x=>x.id==id),
         kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));
