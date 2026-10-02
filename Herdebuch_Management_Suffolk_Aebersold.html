@@ -63,8 +63,8 @@ header{
 }
 
 .logo-badge{
-    width:220px !important;
-    height:80px !important;
+    width:340px !important;
+    height:150px !important;
     object-fit:contain !important;
     display:block !important;
     transform:none !important;
@@ -191,14 +191,15 @@ header{
         overflow-x: hidden;
     }
 
-       /* =====================================================
-       HEADER – KOMPAKT UND GRÜN
+    /* =====================================================
+       HEADER
        ===================================================== */
 
     header {
         width: 100%;
         min-height: 68px !important;
         height: auto !important;
+
         padding: 6px 10px !important;
 
         background: linear-gradient(
@@ -210,96 +211,150 @@ header{
 
         color: #fff !important;
 
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: flex-start !important;
 
-        gap: 8px;
+        gap: 8px !important;
         flex-wrap: nowrap !important;
+
+        overflow: hidden !important;
     }
 
-    /* TITEL LINKS */
-    .header-title {
-        order: 1;
-        flex: 1;
-        min-width: 0;
-        margin: 0;
-        padding: 0;
-    }
 
-    .header-title h1 {
+    /* =====================================================
+       TITEL LINKS
+       ===================================================== */
+
+    header .header-title {
+        order: 1 !important;
+
+        flex: 1 1 auto !important;
+        min-width: 0 !important;
+
         margin: 0 !important;
+        padding: 0 !important;
+
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+
+        gap: 2px !important;
+    }
+
+    header .header-title h1 {
+        margin: 0 !important;
+        padding: 0 !important;
+
         color: #fff !important;
+
         font-size: 18px !important;
-        line-height: 1.15;
+        line-height: 1.15 !important;
+
+        white-space: nowrap !important;
     }
 
-    .header-title small {
-        display: block;
+    header .header-title small {
+        display: block !important;
+
         color: #fff !important;
-        font-size: 10px;
-        line-height: 1.2;
+
+        font-size: 10px !important;
+        line-height: 1.2 !important;
+
+        white-space: nowrap !important;
     }
 
-    /* BUTTONS */
-    .header-buttons {
-        order: 2;
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        flex-wrap: nowrap;
-        flex-shrink: 0;
+
+    /* =====================================================
+       BUTTONS
+       ===================================================== */
+
+    header .header-buttons {
+        order: 2 !important;
+
+        display: flex !important;
+        align-items: center !important;
+
+        gap: 5px !important;
+
+        flex-wrap: nowrap !important;
+        flex-shrink: 0 !important;
+
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
-    .header-buttons button {
-        min-height: 36px;
-        padding: 6px 8px;
-        font-size: 12px;
-        white-space: nowrap;
+    header .header-buttons button {
+        min-height: 36px !important;
+
+        padding: 6px 8px !important;
+
+        font-size: 12px !important;
+        line-height: 1.1 !important;
+
+        white-space: nowrap !important;
     }
 
-    /* LOGO GANZ RECHTS */
-    .logo-wrap {
-        order: 3;
+
+    /* =====================================================
+       LOGO GANZ RECHTS
+       ===================================================== */
+
+    header .logo-wrap {
+        order: 3 !important;
 
         width: auto !important;
         height: 55px !important;
 
-        margin: 0 0 0 auto !important;
+        margin: 0 !important;
         padding: 0 !important;
 
         display: flex !important;
         align-items: center !important;
         justify-content: flex-end !important;
 
-        flex-shrink: 0;
+        flex: 0 0 auto !important;
+        flex-shrink: 0 !important;
+
         overflow: visible !important;
     }
 
-    .logo-badge {
+    header .logo-badge {
         width: 115px !important;
         height: 55px !important;
 
         max-width: 115px !important;
+        max-height: 55px !important;
 
         object-fit: contain !important;
+
         display: block !important;
 
         margin: 0 !important;
+        padding: 0 !important;
+
         transform: none !important;
     }
 
 
-    /* INHALT NÄHER NACH OBEN */
+    /* =====================================================
+       INHALT
+       ===================================================== */
+
     .container {
         width: 100%;
         max-width: 100%;
+
         margin: 8px auto !important;
         padding: 0 8px !important;
     }
 
 
-    /* FILTER */
+    /* =====================================================
+       FILTER
+       ===================================================== */
+
     .toolbar {
         padding: 9px;
         gap: 6px;
@@ -314,7 +369,10 @@ header{
     }
 
 
-    /* STATISTIK */
+    /* =====================================================
+       STATISTIK
+       ===================================================== */
+
     .stats {
         grid-template-columns: repeat(2, 1fr);
         gap: 7px;
@@ -330,7 +388,10 @@ header{
     }
 
 
-    /* LAYOUT */
+    /* =====================================================
+       LAYOUT
+       ===================================================== */
+
     .layout {
         display: block !important;
         width: 100%;
@@ -342,16 +403,22 @@ header{
     }
 
 
-    /* TABELLE */
+    /* =====================================================
+       TABELLE – HANDY QUERFORMAT
+       ===================================================== */
+
     .table-wrap {
         width: 100%;
         max-width: 100%;
+
         overflow-x: auto;
+
         -webkit-overflow-scrolling: touch;
     }
 
     table {
         border-collapse: collapse;
+
         width: max-content !important;
         min-width: 1000px !important;
     }
@@ -371,8 +438,11 @@ header{
 
     table tbody td {
         display: table-cell !important;
+
         min-height: 0 !important;
+
         padding: 8px 10px !important;
+
         white-space: nowrap !important;
         text-align: left !important;
     }
@@ -380,70 +450,6 @@ header{
     table tbody td::before {
         content: none !important;
         display: none !important;
-    }
-
-
-    /* =====================================================
-       HOCHFORMAT – NUR 3 SPALTEN
-       ===================================================== */
-
-    @media (orientation: portrait) {
-
-        .table-wrap {
-            overflow-x: hidden !important;
-        }
-
-        table {
-            width: 100% !important;
-            min-width: 0 !important;
-            table-layout: fixed !important;
-        }
-
-        /* Orig.-Nr. */
-        table th:nth-child(1),
-        table td:nth-child(1) {
-            display: table-cell !important;
-            width: 38% !important;
-        }
-
-        /* Name */
-        table th:nth-child(3),
-        table td:nth-child(3) {
-            display: table-cell !important;
-            width: 32% !important;
-        }
-
-        /* Geburtsdatum */
-        table th:nth-child(5),
-        table td:nth-child(5) {
-            display: table-cell !important;
-            width: 30% !important;
-        }
-
-        /* Alle übrigen Spalten ausblenden */
-        table th:nth-child(2),
-        table td:nth-child(2),
-        table th:nth-child(4),
-        table td:nth-child(4),
-        table th:nth-child(6),
-        table td:nth-child(6),
-        table th:nth-child(7),
-        table td:nth-child(7),
-        table th:nth-child(8),
-        table td:nth-child(8),
-        table th:nth-child(9),
-        table td:nth-child(9),
-        table th:nth-child(10),
-        table td:nth-child(10),
-        table th:nth-child(11),
-        table td:nth-child(11) {
-            display: none !important;
-        }
-
-        table tbody td:nth-child(3) {
-            font-weight: 700;
-            font-size: 16px;
-        }
     }
 
 
@@ -460,15 +466,16 @@ header{
         display: block !important;
     }
 
-
-    /* DETAILS */
     #details {
         width: 100%;
         margin-top: 0;
     }
 
 
-    /* FORMULARE */
+    /* =====================================================
+       FORMULARE
+       ===================================================== */
+
     .form {
         grid-template-columns: 1fr !important;
     }
@@ -489,6 +496,94 @@ header{
         min-height: 40px;
     }
 }
+
+
+/* =========================================================
+   HANDY HOCHFORMAT
+   NUR 3 SPALTEN
+   ========================================================= */
+
+@media (max-width: 700px) and (orientation: portrait) {
+
+    .table-wrap {
+        overflow-x: hidden !important;
+    }
+
+    table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed !important;
+    }
+
+
+    /* Orig.-Nr. */
+
+    table th:nth-child(1),
+    table td:nth-child(1) {
+        display: table-cell !important;
+        width: 38% !important;
+    }
+
+
+    /* Name */
+
+    table th:nth-child(3),
+    table td:nth-child(3) {
+        display: table-cell !important;
+        width: 32% !important;
+    }
+
+
+    /* Geb.-Dat. */
+
+    table th:nth-child(5),
+    table td:nth-child(5) {
+        display: table-cell !important;
+        width: 30% !important;
+    }
+
+
+    /* Alle anderen Spalten ausblenden */
+
+    table th:nth-child(2),
+    table td:nth-child(2),
+
+    table th:nth-child(4),
+    table td:nth-child(4),
+
+    table th:nth-child(6),
+    table td:nth-child(6),
+
+    table th:nth-child(7),
+    table td:nth-child(7),
+
+    table th:nth-child(8),
+    table td:nth-child(8),
+
+    table th:nth-child(9),
+    table td:nth-child(9),
+
+    table th:nth-child(10),
+    table td:nth-child(10),
+
+    table th:nth-child(11),
+    table td:nth-child(11) {
+        display: none !important;
+    }
+
+
+    /* Name fett */
+
+    table tbody td:nth-child(3) {
+        font-weight: 700 !important;
+        font-size: 16px !important;
+    }
+}
+
+
+
+   
+   
 </style>
 
 </head>
