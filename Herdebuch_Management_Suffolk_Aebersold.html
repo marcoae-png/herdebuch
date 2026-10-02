@@ -1713,23 +1713,15 @@ async function journalEintragHinzufuegen(tierId) {
             "journalDatum"
         ).value;
 
-
     const ereignis =
         document.getElementById(
             "journalEreignis"
         ).value;
 
-
     const bemerkung =
         document.getElementById(
             "journalBemerkung"
         ).value.trim();
-
-
-    const brunst =
-        document.getElementById(
-            "brunst"
-        ).value;
 
 
     if (!datum) {
@@ -1754,30 +1746,34 @@ async function journalEintragHinzufuegen(tierId) {
 
                 ereignis: ereignis,
 
-                bemerkung: bemerkung,
-
-                brunst: brunst
+                bemerkung: bemerkung
 
             })
             .select()
             .single();
 
-if (error) {
 
-    console.error(
-        "SUPABASE FEHLER:",
-        error
-    );
+        if (error) {
 
-    alert(
-        "Supabase-Fehler:\n\n" +
-        error.message +
-        "\n\nCode: " +
-        error.code
-    );
+            console.error(
+                "Supabase-Fehler:",
+                error
+            );
 
-    return;
-}
+            alert(
+                "Der Journal-Eintrag konnte nicht gespeichert werden.\n\n" +
+                error.message
+            );
+
+            return;
+        }
+
+
+        console.log(
+            "Journal-Eintrag online gespeichert:",
+            data
+        );
+
 
         document.getElementById(
             "journalBemerkung"
@@ -1901,8 +1897,10 @@ function journalAnzeigen(tierId) {
 
     if (!liste) return;
 
-    const eintraege =
-        tierJournal[tierId] || [];
+const eintraege =
+    (tierJournal || []).filter(eintrag =>
+        String(eintrag.tier_id) === String(tierId)
+    );
 
     if (eintraege.length === 0) {
 
@@ -1957,10 +1955,10 @@ function journalAnzeigen(tierId) {
                 <button
                     type="button"
                     class="journal-delete"
-                    onclick="journalEintragLoeschen(
-                        '${tierId}',
-                        ${eintraege.indexOf(eintrag)}
-                    )">
+                   onclick="journalEintragLoeschen(
+    '${tierId}',
+    ${eintrag.id}
+)">
                     Löschen
                 </button>
 
