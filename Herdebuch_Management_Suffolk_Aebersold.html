@@ -1952,64 +1952,6 @@ function journalAnzeigen(tierId) {
 }
 
 
-/* ---------------------------------------------------------
-   EINTRAG HINZUFÜGEN
-   --------------------------------------------------------- */
-
-function journalEintragHinzufuegen(tierId) {
-
-    const datum =
-        document.getElementById(
-            "journalDatum"
-        ).value;
-
-    const ereignis =
-        document.getElementById(
-            "journalEreignis"
-        ).value;
-
-    const bemerkung =
-        document.getElementById(
-            "journalBemerkung"
-        ).value.trim();
-
-
-    if (!datum) {
-
-        alert(
-            "Bitte zuerst ein Datum auswählen."
-        );
-
-        return;
-    }
-
-
-    if (!tierJournal[tierId]) {
-        tierJournal[tierId] = [];
-    }
-
-
-    tierJournal[tierId].push({
-
-        datum: datum,
-
-        ereignis: ereignis,
-
-        bemerkung: bemerkung
-
-    });
-
-
-    speichereTierJournal();
-
-
-    document.getElementById(
-        "journalBemerkung"
-    ).value = "";
-
-
-    journalAnzeigen(tierId);
-}
 
 
 /* ---------------------------------------------------------
