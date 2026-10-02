@@ -1706,7 +1706,6 @@ async function journalEintragHinzufuegen(tierId) {
             .value
             .trim();
 
-
     if (!datum) {
 
         alert(
@@ -1716,61 +1715,45 @@ async function journalEintragHinzufuegen(tierId) {
         return;
     }
 
-
-    /* ---------------------------------------------
-       Falls gemeinsamer Speicher noch nicht
-       eingerichtet ist
-       --------------------------------------------- */
-
-    if (!JOURNAL_API_URL) {
-
-        alert(
-            "Die gemeinsame Journal-Speicherung " +
-            "ist noch nicht eingerichtet."
-        );
-
-        return;
-    }
-
-
     try {
 
-        await fetch(JOURNAL_API_URL, {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "text/plain;charset=utf-8"
-            },
-
-            body: JSON.stringify({
-
-                aktion: "hinzufuegen",
-
-                tierId: tierId,
-
+        const { data, error } = await db
+            .from("tier_journal")
+            .insert({
+                tier_id: String(tierId),
                 datum: datum,
-
                 ereignis: ereignis,
-
                 bemerkung: bemerkung
-
             })
+            .select()
+            .single();
 
-        });
+        if (error) {
 
+            console.error(
+                "Fehler beim Speichern des Journal-Eintrags:",
+                error
+            );
+
+            alert(
+                "Der Journal-Eintrag konnte nicht gespeichert werden."
+            );
+
+            return;
+        }
+
+        console.log(
+            "Journal-Eintrag online gespeichert:",
+            data
+        );
 
         document
             .getElementById("journalBemerkung")
             .value = "";
 
-
         await journalLaden();
 
-
         journalAnzeigen(tierId);
-
 
     } catch (fehler) {
 
@@ -1780,12 +1763,9 @@ async function journalEintragHinzufuegen(tierId) {
         );
 
         alert(
-            "Der Journal-Eintrag konnte " +
-            "nicht gespeichert werden."
+            "Der Journal-Eintrag konnte nicht gespeichert werden."
         );
-
     }
-
 }
 
 
