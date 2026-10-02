@@ -1247,12 +1247,13 @@ addForm.onsubmit = async e => {
 
         mutter: o.mutter || "",
 
-        eriz:
-            String(o.zeichen || "")
-                .toUpperCase()
-                .includes("EZ")
-                ? "ErizWAHR"
-                : "ErizFALSCH",
+<td>${
+    String(a.zeichen || "")
+        .toUpperCase()
+        .includes("EZ")
+        ? '<span style="color:green;font-weight:bold;font-size:20px;">✓</span>'
+        : '<span style="color:red;font-weight:bold;font-size:20px;">✕</span>'
+}</td>
 
         gewicht40:
             o.gewicht40 === "" ||
