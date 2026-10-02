@@ -358,10 +358,7 @@
     button {
         min-height: 42px;
     }
-/* Tierdetails auf dem Handy zuerst verstecken */
-#details {
-    display: none !important;
-}
+
     
 }
 
@@ -385,18 +382,17 @@
     display: block !important;
 }
 
+}
+
+    
 /* =========================================
-   TIERDETAILS – HANDY
+   HANDY – DETAILBEREICH
    ========================================= */
 
 @media (max-width: 700px) {
 
-    #details {
+    body.mobile-start #details {
         display: none !important;
-    }
-
-    #details.has-selection {
-        display: block !important;
     }
 
 }
@@ -404,9 +400,11 @@
 
 
 
+</style>
 
-
-</style></head><body>
+</head>
+    
+   <body class="mobile-start">
 
 <header>
 
