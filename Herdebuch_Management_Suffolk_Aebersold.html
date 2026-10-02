@@ -202,134 +202,68 @@
         font-size: 20px;
     }
 
-    /* =========================================
-       TIERLISTE ALS KARTEN
-       ========================================= */
+/* =========================================
+   HANDY – TABELLE BLEIBT TABELLE
+   ========================================= */
 
-    .card {
-        overflow: visible;
+@media (max-width: 700px) {
+
+    .table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     table {
-        width: 100% !important;
-        min-width: 0 !important;
-        border: 0 !important;
+        width: max-content !important;
+        min-width: 1000px !important;
+        border-collapse: collapse;
     }
 
-    /* Tabellenkopf ausblenden */
     table thead {
-        display: none;
+        display: table-header-group;
     }
 
     table tbody {
-        display: block;
-        width: 100%;
+        display: table-row-group;
     }
 
-    /* Jedes Tier = eine Karte */
     table tbody tr {
-        display: block;
-        width: 100%;
-        margin-bottom: 12px;
-        padding: 12px;
-        background: #fff;
-        border: 1px solid #dce8d7;
-        border-left: 5px solid #4f8a45;
-        border-radius: 12px;
-        box-shadow: 0 2px 8px #315f3618;
+        display: table-row;
         cursor: pointer;
     }
 
-    /* ausgewähltes Tier */
+    table tbody td {
+        display: table-cell;
+        min-height: 0;
+        width: auto;
+        padding: 8px 10px;
+        white-space: nowrap;
+        text-align: left;
+        border: 1px solid #ddd !important;
+    }
+
+    table tbody td::before {
+        content: none !important;
+        display: none !important;
+    }
+
     table tbody tr.selected {
-        border-left-color: #9bcf62;
         background: #f5faef;
     }
 
-    /* einzelne Angaben */
-    table tbody td {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        width: 100%;
-        min-height: 32px;
-        padding: 5px 2px;
-        border: 0 !important;
-        white-space: normal;
-        text-align: right;
-    }
-
-    /* Beschriftungen */
-    table tbody td::before {
-        font-weight: 700;
-        color: #315f36;
-        text-align: left;
-        margin-right: 12px;
-    }
-
-    table tbody td:nth-child(1)::before {
-        content: "Orig.-Nr.";
-    }
-
-    table tbody td:nth-child(2)::before {
-        content: "Zeichen";
-    }
-
-    table tbody td:nth-child(3)::before {
-        content: "Name";
-    }
-
-    table tbody td:nth-child(4)::before {
-        content: "Rasse";
-    }
-
-    table tbody td:nth-child(5)::before {
-        content: "Geboren";
-    }
-
-    table tbody td:nth-child(6)::before {
-        content: "Alter";
-    }
-
-    table tbody td:nth-child(7)::before {
-        content: "Geschlecht";
-    }
-
-    table tbody td:nth-child(8)::before {
-        content: "Punkte";
-    }
-
-    table tbody td:nth-child(9)::before {
-        content: "Vater";
-    }
-
-    table tbody td:nth-child(10)::before {
-        content: "Mutter";
-    }
-
-    table tbody td:nth-child(11)::before {
-        content: "Eriz";
-    }
-
-    /* Name hervorheben */
     table tbody td:nth-child(3) {
-        font-size: 17px;
+        font-size: inherit;
         padding-bottom: 8px;
-        border-bottom: 1px solid #e4ecdf !important;
-        margin-bottom: 4px;
+        border-bottom: 1px solid #ddd !important;
+        margin-bottom: 0;
     }
 
-    /* Orig.-Nr. ebenfalls hervorheben */
-    table tbody td:nth-child(1) {
-        font-weight: 700;
-    }
-
-    /* Eltern nicht über den Bildschirm laufen lassen */
     table tbody td:nth-child(9),
     table tbody td:nth-child(10) {
-        word-break: break-word;
+        word-break: normal;
     }
-
+}
     /* =========================================
        DETAILBEREICH
        ========================================= */
@@ -366,22 +300,47 @@
    LOGO – HANDY
    ========================================= */
 
-.logo-wrap {
-    width: 100%;
-    height: auto;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 5px;
-}
+@media (max-width: 700px) {
 
-.logo-badge {
-    width: 280px !important;
-    height: 120px !important;
-    object-fit: contain !important;
-    display: block !important;
-}
+    .logo-wrap {
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 5px;
+        box-sizing: border-box;
+        overflow: hidden;
+    }
 
+    .logo-badge {
+        width: 140px !important;
+        height: 80px !important;
+        max-width: 100%;
+        object-fit: contain !important;
+        display: block !important;
+        flex-shrink: 0;
+    }
+
+    .header-title {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .header-title h1 {
+        font-size: 20px;
+        line-height: 1.2;
+        margin: 0;
+    }
+
+    .header-title small {
+        font-size: 11px;
+        line-height: 1.2;
+        display: block;
+    }
+
+}
 
     
 
@@ -1049,7 +1008,9 @@ let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYe
 
 function selectAnimal(id) {
 
-document.getElementById("details").parentElement.classList.add("mobile-open");
+    document
+        .getElementById("detailsCard")
+        .classList.add("mobile-open");
     selectedId=id;
     let a=animals.find(x=>x.id==id),
         kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));
