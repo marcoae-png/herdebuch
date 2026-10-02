@@ -1726,6 +1726,12 @@ async function journalEintragHinzufuegen(tierId) {
         ).value.trim();
 
 
+    const brunst =
+        document.getElementById(
+            "brunst"
+        ).value;
+
+
     if (!datum) {
 
         alert(
@@ -1739,16 +1745,23 @@ async function journalEintragHinzufuegen(tierId) {
     try {
 
         const { data, error } = await db
-    .from("tier_journal")
-    .insert({
-        tier_id: String(tierId),
-        datum: datum,
-        ereignis: ereignis,
-        bemerkung: bemerkung,
-        brunst: brunst
-    })
-    .select()
-    .single();
+            .from("tier_journal")
+            .insert({
+
+                tier_id: String(tierId),
+
+                datum: datum,
+
+                ereignis: ereignis,
+
+                bemerkung: bemerkung,
+
+                brunst: brunst
+
+            })
+            .select()
+            .single();
+
 
         if (error) {
 
@@ -1798,7 +1811,6 @@ async function journalEintragHinzufuegen(tierId) {
         );
     }
 }
-
 
 /* ---------------------------------------------------------
    EINTRAG LÖSCHEN – SUPABASE
