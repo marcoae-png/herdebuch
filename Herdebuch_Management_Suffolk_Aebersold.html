@@ -1555,18 +1555,11 @@ function fillParentLists(){
 
 
 
-
 /* =========================================================
-   TIER-JOURNAL
+   TIER-JOURNAL – SUPABASE
    ========================================================= */
 
-/* =========================================================
-   TIER-JOURNAL – GEMEINSAME SPEICHERUNG
-   ========================================================= */
-
-
-
-let tierJournal = {};
+let tierJournal = [];
 
 
 /* ---------------------------------------------------------
@@ -1584,30 +1577,38 @@ async function journalLaden() {
             .order("id", { ascending: false });
 
         if (error) {
-            console.error("Fehler beim Laden des Tier-Journals:", error);
+
+            console.error(
+                "Fehler beim Laden des Tier-Journals:",
+                error
+            );
+
             return;
         }
 
-        window.tierJournal = data || [];
+        tierJournal = data || [];
 
         console.log(
             "Tier-Journal aus Supabase geladen:",
-            window.tierJournal.length
+            tierJournal.length
         );
 
-        // Falls bereits ein Tier ausgewählt ist
-        if (typeof selectedId !== "undefined" && selectedId) {
+        if (
+            typeof selectedId !== "undefined" &&
+            selectedId
+        ) {
             journalAnzeigen(selectedId);
         }
 
-    } catch (err) {
+    } catch (fehler) {
 
         console.error(
             "Fehler beim Laden des Tier-Journals:",
-            err
+            fehler
         );
     }
 }
+
 
 /* ---------------------------------------------------------
    JOURNAL ANZEIGEN
@@ -1615,96 +1616,115 @@ async function journalLaden() {
 
 function journalAnzeigen(tierId) {
 
-    const liste = document.getElementById("journalListe");
+    const liste =
+        document.getElementById("journalListe");
 
     if (!liste) return;
 
-    const eintraege = (tierJournal || [])
-        .filter(eintrag =>
-            String(eintrag.tier_id) === String(tierId)
-        );
+
+    const eintraege =
+        (tierJournal || [])
+            .filter(eintrag =>
+                String(eintrag.tier_id) ===
+                String(tierId)
+            );
+
 
     if (eintraege.length === 0) {
 
-        liste.innerHTML =
-            `<div class="empty">
+        liste.innerHTML = `
+            <div class="empty">
                 Noch keine Einträge vorhanden.
-            </div>`;
+            </div>
+        `;
 
         return;
     }
 
-    const sortiert = [...eintraege].sort(
-        (a, b) =>
-            new Date(b.datum) -
-            new Date(a.datum)
-    );
 
-    liste.innerHTML = sortiert.map(eintrag => `
+    const sortiert =
+        [...eintraege].sort(
+            (a, b) =>
+                new Date(b.datum) -
+                new Date(a.datum)
+        );
 
-        <div class="journal-entry">
 
-            <div class="journal-date">
-                ${new Date(eintrag.datum + "T00:00:00")
-                    .toLocaleDateString("de-CH")}
+    liste.innerHTML =
+        sortiert.map(eintrag => `
+
+            <div class="journal-entry">
+
+                <div class="journal-date">
+                    ${new Date(
+                        eintrag.datum
+                    ).toLocaleDateString("de-CH")}
+                </div>
+
+
+                <div class="journal-content">
+
+                    <strong>
+                        ${escapeJournalHTML(
+                            eintrag.ereignis || ""
+                        )}
+                    </strong>
+
+
+                    ${
+                        eintrag.bemerkung
+                            ? `
+                                <div class="journal-note">
+                                    ${escapeJournalHTML(
+                                        eintrag.bemerkung
+                                    )}
+                                </div>
+                              `
+                            : ""
+                    }
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="journal-delete"
+                    onclick="journalEintragLoeschen(
+                        '${tierId}',
+                        ${eintrag.id}
+                    )">
+                    Löschen
+                </button>
+
             </div>
 
-            <div>
-                <strong>
-                    ${escapeJournalHTML(eintrag.ereignis)}
-                </strong>
-            </div>
-
-            <div class="journal-content">
-
-                ${
-                    eintrag.bemerkung
-                        ? `<div class="journal-note">
-                            ${escapeJournalHTML(
-                                eintrag.bemerkung
-                            )}
-                           </div>`
-                        : ""
-                }
-
-            </div>
-
-   <button
-                type="button"
-                class="journal-delete"
-                onclick="journalEintragLoeschen(
-                    '${tierId}',
-                    '${eintrag.id}'
-                )">
-
-                Löschen
-
-            </button>
-
-
-        </div>
-
-    `).join("");
+        `).join("");
 }
 
 
 /* ---------------------------------------------------------
-   EINTRAG HINZUFÜGEN
+   EINTRAG HINZUFÜGEN – ONLINE
    --------------------------------------------------------- */
 
 async function journalEintragHinzufuegen(tierId) {
 
     const datum =
-        document.getElementById("journalDatum").value;
+        document.getElementById(
+            "journalDatum"
+        ).value;
+
 
     const ereignis =
-        document.getElementById("journalEreignis").value;
+        document.getElementById(
+            "journalEreignis"
+        ).value;
+
 
     const bemerkung =
-        document
-            .getElementById("journalBemerkung")
-            .value
-            .trim();
+        document.getElementById(
+            "journalBemerkung"
+        ).value.trim();
+
 
     if (!datum) {
 
@@ -1715,18 +1735,25 @@ async function journalEintragHinzufuegen(tierId) {
         return;
     }
 
+
     try {
 
         const { data, error } = await db
             .from("tier_journal")
             .insert({
+
                 tier_id: String(tierId),
+
                 datum: datum,
+
                 ereignis: ereignis,
+
                 bemerkung: bemerkung
+
             })
             .select()
             .single();
+
 
         if (error) {
 
@@ -1742,18 +1769,27 @@ async function journalEintragHinzufuegen(tierId) {
             return;
         }
 
+
         console.log(
             "Journal-Eintrag online gespeichert:",
             data
         );
 
-        document
-            .getElementById("journalBemerkung")
-            .value = "";
+
+        document.getElementById(
+            "journalBemerkung"
+        ).value = "";
+
+
+        document.getElementById(
+            "journalDatum"
+        ).value = "";
+
 
         await journalLaden();
 
         journalAnzeigen(tierId);
+
 
     } catch (fehler) {
 
@@ -1770,7 +1806,7 @@ async function journalEintragHinzufuegen(tierId) {
 
 
 /* ---------------------------------------------------------
-   EINTRAG LÖSCHEN
+   EINTRAG LÖSCHEN – SUPABASE
    --------------------------------------------------------- */
 
 async function journalEintragLoeschen(
@@ -1787,41 +1823,36 @@ async function journalEintragLoeschen(
     }
 
 
-    if (!JOURNAL_API_URL) {
-
-        alert(
-            "Die gemeinsame Journal-Speicherung " +
-            "ist noch nicht eingerichtet."
-        );
-
-        return;
-    }
-
-
     try {
 
-        await fetch(JOURNAL_API_URL, {
+        const { error } = await db
+            .from("tier_journal")
+            .delete()
+            .eq("id", serverId);
 
-            method: "POST",
 
-            headers: {
-                "Content-Type":
-                    "text/plain;charset=utf-8"
-            },
+        if (error) {
 
-            body: JSON.stringify({
+            console.error(
+                "Fehler beim Löschen des Journal-Eintrags:",
+                error
+            );
 
-                aktion: "loeschen",
+            alert(
+                "Der Journal-Eintrag konnte nicht gelöscht werden."
+            );
 
-                serverId: serverId
+            return;
+        }
 
-            })
 
-        });
+        console.log(
+            "Journal-Eintrag online gelöscht:",
+            serverId
+        );
 
 
         await journalLaden();
-
 
         journalAnzeigen(tierId);
 
@@ -1834,12 +1865,9 @@ async function journalEintragLoeschen(
         );
 
         alert(
-            "Der Journal-Eintrag konnte " +
-            "nicht gelöscht werden."
+            "Der Journal-Eintrag konnte nicht gelöscht werden."
         );
-
     }
-
 }
 
 
@@ -1858,18 +1886,6 @@ function escapeJournalHTML(text) {
         .replace(/'/g, "&#039;");
 }
 
-
-/* ---------------------------------------------------------
-   JOURNAL SPEICHERN
-   --------------------------------------------------------- */
-
-function speichereTierJournal() {
-
-    localStorage.setItem(
-        "tierJournal",
-        JSON.stringify(tierJournal)
-    );
-}
 
 
 /* ---------------------------------------------------------
