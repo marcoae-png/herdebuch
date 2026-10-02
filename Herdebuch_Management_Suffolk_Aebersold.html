@@ -979,11 +979,12 @@ async function tiereNachSupabaseUebertragen() {
         vater: a.vater || "",
         mutter: a.mutter || "",
         eriz:
-  String(a.zeichen || "")
-    .toUpperCase()
-    .includes("EZ")
-    ? '<span style="color:green;font-weight:bold;">✓</span>'
-    : '<span style="color:red;font-weight:bold;">✕</span>',
+
+    String(a.zeichen || "")
+        .toUpperCase()
+        .includes("EZ")
+        ? "WAHR"
+        : "FALSCH",
         
         gewicht40:
             a.gewicht40 === "" ||
@@ -1247,13 +1248,6 @@ addForm.onsubmit = async e => {
 
         mutter: o.mutter || "",
 
-<td>${
-    String(a.zeichen || "")
-        .toUpperCase()
-        .includes("EZ")
-        ? '<span style="color:green;font-weight:bold;font-size:20px;">✓</span>'
-        : '<span style="color:red;font-weight:bold;font-size:20px;">✕</span>'
-}</td>
 
         gewicht40:
             o.gewicht40 === "" ||
@@ -2264,33 +2258,31 @@ document
             /* =================================================
                SUPABASE SPEICHERN
                ================================================= */
+const supabaseDaten =
+    neueLaemmer.map(a => ({
+        id: a.id,
+        name: a.name || "",
+        zeichen: a.zeichen || "EZ",
+        rasse: a.rasse || "SU",
+        geb: a.geb || null,
+        geschlecht: a.geschlecht || "",
+        punkte: a.punkte || "",
+        vater: a.vater || "",
+        mutter: a.mutter || "",
 
-            const supabaseDaten =
-                neueLaemmer.map(a => ({
-                    id: a.id,
-                    name: a.name || "",
-                    zeichen: a.zeichen || "EZ",
-                    rasse: a.rasse || "SU",
-                    geb: a.geb || null,
-                    geschlecht: a.geschlecht || "",
-                    punkte: a.punkte || "",
-                    vater: a.vater || "",
-                    mutter: a.mutter || "",
+        eriz:
+            String(a.zeichen || "EZ")
+                .toUpperCase()
+                .includes("EZ")
+                ? "WAHR"
+                : "FALSCH",
 
-                    eriz:
-                        String(a.zeichen || "")
-                            .toUpperCase()
-                            .includes("EZ")
-                            ? "ErizWAHR"
-                            : "ErizFALSCH",
-
-                    gewicht40:
-                        a.gewicht40 === "" ||
-                        a.gewicht40 == null
-                            ? null
-                            : Number(a.gewicht40)
-                }));
-
+        gewicht40:
+            a.gewicht40 === "" ||
+            a.gewicht40 == null
+                ? null
+                : Number(a.gewicht40)
+    }));
 
             const { error } =
                 await db
@@ -2347,28 +2339,30 @@ document
 
 async function tiereNachSupabaseUebertragen() {
 
-    const daten = animals.map(a => ({
-        id: a.id,
-        name: a.name || "",
-        zeichen: a.zeichen || "",
-        rasse: a.rasse || "",
-        geb: a.geb || null,
-        geschlecht: a.geschlecht || "",
-        punkte: a.punkte || "",
-        vater: a.vater || "",
-        mutter: a.mutter || "",
-        eriz:
-            String(a.zeichen || "")
-                .toUpperCase()
-                .includes("EZ")
-                ? "ErizWAHR"
-                : "ErizFALSCH",
-        gewicht40:
-            a.gewicht40 === "" ||
-            a.gewicht40 == null
-                ? null
-                : Number(a.gewicht40)
-    }));
+   const daten = animals.map(a => ({
+    id: a.id,
+    name: a.name || "",
+    zeichen: a.zeichen || "",
+    rasse: a.rasse || "",
+    geb: a.geb || null,
+    geschlecht: a.geschlecht || "",
+    punkte: a.punkte || "",
+    vater: a.vater || "",
+    mutter: a.mutter || "",
+
+    eriz:
+        String(a.zeichen || "")
+            .toUpperCase()
+            .includes("EZ")
+            ? "WAHR"
+            : "FALSCH",
+
+    gewicht40:
+        a.gewicht40 === "" ||
+        a.gewicht40 == null
+            ? null
+            : Number(a.gewicht40)
+}));
 
     const { error } = await db
         .from("animals")
