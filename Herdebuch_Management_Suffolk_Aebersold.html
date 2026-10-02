@@ -1762,27 +1762,22 @@ async function journalEintragHinzufuegen(tierId) {
             .select()
             .single();
 
+if (error) {
 
-        if (error) {
+    console.error(
+        "SUPABASE FEHLER:",
+        error
+    );
 
-            console.error(
-                "Fehler beim Speichern des Journal-Eintrags:",
-                error
-            );
+    alert(
+        "Supabase-Fehler:\n\n" +
+        error.message +
+        "\n\nCode: " +
+        error.code
+    );
 
-            alert(
-                "Der Journal-Eintrag konnte nicht gespeichert werden."
-            );
-
-            return;
-        }
-
-
-        console.log(
-            "Journal-Eintrag online gespeichert:",
-            data
-        );
-
+    return;
+}
 
         document.getElementById(
             "journalBemerkung"
