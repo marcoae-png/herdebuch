@@ -456,6 +456,7 @@ alt="Aebersold Suffolk Logo">
 <div class="card"><h2>Tierdetails</h2><div id="details" class="detail"><div class="empty">Klicke auf ein Tier.</div>
 
 
+</div>
 </div></div></div></div><div id="modal" class="modal"><div class="modal-box"><h2>Neues Tier</h2><form id="addForm" class="form"><label>Orig.-Nr.<input name="id" required></label><label>Zeichen<input name="zeichen"></label><label>Name<input name="name" required></label><label>Rasse<input name="rasse" value="SU"></label><label>Geb.-Dat.<input name="geb" type="date" required></label><label>Geschlecht<select name="geschlecht"><option>F</option><option>M</option></select></label><label>Punkte<input name="punkte"></label><label>Eriz<select name="eriz"><option>WAHR</option><option>FALSCH</option></select></label><label class="full">Vater<input name="vater"></label><label class="full">Mutter<input name="mutter"></label><div class="full"><button>Speichern</button> <button type="button" onclick="closeModal()">Abbrechen</button></div></form></div></div>
 
 
@@ -704,8 +705,8 @@ let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYe
     String(a.zeichen || "")
         .toUpperCase()
         .includes("EZ")
-        ? "ErizWAHR"
-        : "ErizFALSCH"
+        ? '<span style="color:green;font-weight:bold;font-size:20px;">✓</span>'
+        : '<span style="color:red;font-weight:bold;font-size:20px;">✕</span>'
 }</td>
 
 
