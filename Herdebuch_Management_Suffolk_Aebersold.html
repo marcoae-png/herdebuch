@@ -1101,17 +1101,12 @@ if (window.innerWidth <= 700) {
         const detailsCard = document.getElementById("detailsCard");
 
         if (detailsCard) {
-            const position =
-                detailsCard.getBoundingClientRect().top +
-                window.pageYOffset -
-                120;
-
-            window.scrollTo({
-                top: position,
-                behavior: "smooth"
+            detailsCard.scrollIntoView({
+                behavior: "smooth",
+                block: "start"
             });
         }
-    }, 50);
+    }, 300);
 }
 
     selectedId = id;
