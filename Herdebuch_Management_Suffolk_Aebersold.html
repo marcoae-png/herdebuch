@@ -317,7 +317,7 @@ header .header-title h1 {
     padding: 0 !important;
 
     color: #fff !important;
-    font-size: 24px !important;
+    font-size: 20px !important;
     line-height: 1.1 !important;
     white-space: nowrap !important;
 
@@ -330,7 +330,7 @@ header .header-title h1 {
     }
 
     100% {
-        transform: translateX(10px);
+        transform: translateX(5px);
     }
 }
 
@@ -1089,10 +1089,19 @@ async function selectAnimal(id) {
 // Auf dem Handy direkt zur Tierdetails-Karte scrollen
 if (window.innerWidth <= 700) {
     setTimeout(() => {
-        document.getElementById("detailsCard").scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-        });
+        const detailsCard = document.getElementById("detailsCard");
+
+        if (detailsCard) {
+            const position =
+                detailsCard.getBoundingClientRect().top +
+                window.pageYOffset -
+                80;
+
+            window.scrollTo({
+                top: position,
+                behavior: "smooth"
+            });
+        }
     }, 50);
 }
 
