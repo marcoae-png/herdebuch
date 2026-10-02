@@ -340,6 +340,17 @@
         display: block;
     }
 
+    /* HEADER GRÜN – ALLE GERÄTE */
+header {
+    background: #315f36 !important;
+    color: white !important;
+}
+
+header h1,
+header small {
+    color: white !important;
+}
+
 }
 
     
@@ -363,7 +374,7 @@
 
 /* =========================================
    HANDY HOCHFORMAT
-   TABELLE BLEIBT HORIZONTAL SCROLLBAR
+   NUR WICHTIGE TIERDATEN ANZEIGEN
    ========================================= */
 
 @media (max-width: 700px) and (orientation: portrait) {
@@ -393,19 +404,17 @@
         max-width: 100%;
     }
 
-    /* Tabelle darf breiter als Handy sein */
+    /* Tabelle */
     .table-wrap {
         width: 100%;
         max-width: 100%;
-        overflow-x: auto !important;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
+        overflow-x: hidden !important;
     }
 
     table {
-        width: max-content !important;
-        min-width: 1000px !important;
-        table-layout: auto !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed !important;
     }
 
     table thead {
@@ -418,13 +427,13 @@
 
     table tbody tr {
         display: table-row !important;
+        cursor: pointer;
     }
 
     table tbody td {
         display: table-cell !important;
-        width: auto !important;
-        min-height: 0 !important;
         white-space: nowrap !important;
+        padding: 9px 6px !important;
         text-align: left !important;
     }
 
@@ -433,7 +442,79 @@
         content: none !important;
     }
 
-    /* Details erst nach Klick */
+
+    /* =========================================
+       NUR DIESE 3 SPALTEN ANZEIGEN
+       ========================================= */
+
+    /* Orig.-Nr. */
+    table th:nth-child(1),
+    table td:nth-child(1) {
+        display: table-cell !important;
+        width: 38% !important;
+    }
+
+    /* Name */
+    table th:nth-child(3),
+    table td:nth-child(3) {
+        display: table-cell !important;
+        width: 32% !important;
+    }
+
+    /* Geb.-Dat. */
+    table th:nth-child(5),
+    table td:nth-child(5) {
+        display: table-cell !important;
+        width: 30% !important;
+    }
+
+
+    /* Alle anderen Spalten verstecken */
+
+    table th:nth-child(2),
+    table td:nth-child(2),
+
+    table th:nth-child(4),
+    table td:nth-child(4),
+
+    table th:nth-child(6),
+    table td:nth-child(6),
+
+    table th:nth-child(7),
+    table td:nth-child(7),
+
+    table th:nth-child(8),
+    table td:nth-child(8),
+
+    table th:nth-child(9),
+    table td:nth-child(9),
+
+    table th:nth-child(10),
+    table td:nth-child(10),
+
+    table th:nth-child(11),
+    table td:nth-child(11) {
+        display: none !important;
+    }
+
+
+    /* Name hervorheben */
+    table tbody td:nth-child(3) {
+        font-weight: 700;
+        font-size: 16px;
+    }
+
+
+    /* Ausgewähltes Tier */
+    table tbody tr.selected {
+        background: #f5faef;
+    }
+
+
+    /* =========================================
+       TIERDETAILS
+       ========================================= */
+
     #detailsCard {
         display: none !important;
     }
