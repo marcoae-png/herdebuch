@@ -1564,7 +1564,7 @@ function fillParentLists(){
    TIER-JOURNAL – GEMEINSAME SPEICHERUNG
    ========================================================= */
 
-const JOURNAL_API_URL = "";
+
 
 let tierJournal = {};
 
@@ -1619,7 +1619,10 @@ function journalAnzeigen(tierId) {
 
     if (!liste) return;
 
-    const eintraege = tierJournal[tierId] || [];
+    const eintraege = (tierJournal || [])
+        .filter(eintrag =>
+            String(eintrag.tier_id) === String(tierId)
+        );
 
     if (eintraege.length === 0) {
 
@@ -1642,7 +1645,7 @@ function journalAnzeigen(tierId) {
         <div class="journal-entry">
 
             <div class="journal-date">
-                ${new Date(eintrag.datum)
+                ${new Date(eintrag.datum + "T00:00:00")
                     .toLocaleDateString("de-CH")}
             </div>
 
@@ -1666,17 +1669,18 @@ function journalAnzeigen(tierId) {
 
             </div>
 
-            <button
+   <button
                 type="button"
                 class="journal-delete"
                 onclick="journalEintragLoeschen(
                     '${tierId}',
-                    '${eintrag.serverId || ""}'
+                    '${eintrag.id}'
                 )">
 
                 Löschen
 
             </button>
+
 
         </div>
 
