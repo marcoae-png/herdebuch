@@ -1,48 +1,76 @@
-<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Herdebuch Management – Suffolk Aebersold</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f6ef;color:#243126}header{background:linear-gradient(135deg,#315f36 0%,#4f8a45 55%,#7eaf55 100%);color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;box-shadow:0 3px 12px #315f3633}h1{margin:0}.container{max-width:1500px;margin:20px auto;padding:0 16px}.toolbar,.card,.stat{background:#fff;border-radius:12px;box-shadow:0 2px 10px #315f3614;border:1px solid #dce8d7}.toolbar{padding:14px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;border-left:5px solid #4f8a45}input,select,button{font:inherit}input,select{padding:10px;border:1px solid #b9ceb1;border-radius:8px;background:#fff}input:focus,select:focus{outline:2px solid #9bcf62;outline-offset:1px;border-color:#4f8a45}button{padding:10px 14px;border:0;border-radius:8px;background:#4f8a45;color:#fff;cursor:pointer;font-weight:700}button:hover{background:#315f36}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{padding:16px;border-top:4px solid #9bcf62}.stat b{display:block;font-size:25px;margin-top:4px;color:#315f36}
+<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 
+<title>Herdebuch Management – Suffolk Aebersold</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f6ef;color:#243126}
+
+
+
+color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;box-shadow:0 3px 12px #315f3633}h1{margin:0}.container{max-width:1500px;margin:20px auto;padding:0 16px}.toolbar,.card,.stat{background:#fff;border-radius:12px;box-shadow:0 2px 10px #315f3614;border:1px solid #dce8d7}.toolbar{padding:14px;display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;border-left:5px solid #4f8a45}input,select,button{font:inherit}input,select{padding:10px;border:1px solid #b9ceb1;border-radius:8px;background:#fff}input:focus,select:focus{outline:2px solid #9bcf62;outline-offset:1px;border-color:#4f8a45}button{padding:10px 14px;border:0;border-radius:8px;background:#4f8a45;color:#fff;cursor:pointer;font-weight:700}button:hover{background:#315f36}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}.stat{padding:16px;border-top:4px solid #9bcf62}.stat b{display:block;font-size:25px;margin-top:4px;color:#315f36}
 
 /* =========================================================
    HEADER
    ========================================================= */
 
-header{
-    background:linear-gradient(
+header {
+    background: linear-gradient(
         135deg,
         #315f36 0%,
         #4f8a45 55%,
         #7eaf55 100%
     );
-    color:#fff;
-    padding:10px 18px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:12px;
-    min-height:78px;
-    box-shadow:0 3px 12px #315f3633;
+    color: #fff;
+    padding: 10px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    min-height: 78px;
+    box-shadow: 0 3px 12px #315f3633;
+}
+
+
+.header-title small {
+    display: block;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.2;
+    opacity: 0.9;
+    white-space: nowrap;
 }
 
 /* Linker Bereich */
-.header-title{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:3px;
-    flex:1;
-    min-width:0;
+.header-title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+    opacity: 1;
 }
 
-.header-title h1{
-    margin:0;
-    color:#fff;
-    font-size:24px;
-    line-height:1.15;
+/* Titel */
+.header-title h1 {
+    margin: 0;
+    color: #fff;
+    font-size: 38px;
+    line-height: 1.15;
+    white-space: nowrap;
+    position: relative;
+
+    animation: titelLinksMitte 4s ease-in-out infinite alternate;
 }
 
-.header-title small{
-    color:#fff;
-    font-size:12px;
+/* Von links Richtung Mitte */
+@keyframes titelLinksMitte {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(300px);
+    }
 }
 
 /* Buttons */
@@ -72,7 +100,54 @@ header{
     
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 650px;gap:16px}
 
-.card{overflow:hidden}.card h2{font-size:18px;margin:0;padding:16px;border-bottom:1px solid #dce8d7;background:linear-gradient(90deg,#f4f8f1,#fff);color:#315f36}.table-wrap{overflow:auto;max-height:680px}table{border-collapse:collapse;width:100%;min-width:1050px}th,td{padding:9px;border-bottom:1px solid #e3ebe0;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#4f8a45;color:#fff}tr:hover{background:#f2f8ee}tr.selected{background:#dcefd2}.link{color:#315f36;cursor:pointer;font-weight:bold;text-decoration:underline;text-decoration-color:#9bcf62}.detail{padding:16px}.detail h3{margin:0 0 6px;font-size:24px;color:#315f36}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#e3f1dc;color:#315f36;font-size:12px;font-weight:bold;border:1px solid #b8d5aa}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.field{background:#f3f7f1;border-radius:8px;padding:9px;border-left:3px solid #9bcf62}.field span{display:block;color:#68737a;font-size:11px;margin-bottom:3px}.section{border-top:1px solid #dce8d7;padding-top:14px;margin-top:14px}.section h4{color:#315f36}.family{display:flex;gap:8px;flex-wrap:wrap}.animal{border:1px solid #c4d7bd;border-radius:9px;padding:9px;background:#fafcf9;cursor:pointer}.animal:hover{background:#eaf4e5;border-color:#9bcf62}.empty{padding:25px;text-align:center;color:#69747b}.tree{text-align:center}.tree-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.tree-line{height:18px;width:2px;background:#4f8a45;margin:auto}.modal{display:none;position:fixed;inset:0;background:#315f3688;align-items:center;justify-content:center;padding:20px}.modal.show{display:flex}.modal-box{background:white;border-radius:12px;padding:20px;max-width:700px;width:100%;border-top:6px solid #4f8a45}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.form label{font-size:12px}.form input,.form select{width:100%;margin-top:4px}.full{grid-column:1/-1}@media(max-width:900px){.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}@media(max-width:550px){.stats,.form{grid-template-columns:1fr}}
+.card{overflow:hidden}.card h2{font-size:18px;margin:0;padding:16px;border-bottom:1px solid #dce8d7;background:linear-gradient(90deg,#f4f8f1,#fff);color:#315f36}.table-wrap{overflow:auto;max-height:680px}table{border-collapse:collapse;width:100%;min-width:1050px}th,td{padding:9px;border-bottom:1px solid #e3ebe0;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:#4f8a45;color:#fff}tr:hover{background:#f2f8ee}tr.selected{background:#dcefd2}.link{color:#315f36;cursor:pointer;font-weight:bold;text-decoration:underline;text-decoration-color:#9bcf62}.detail{padding:16px}.detail h3{margin:0 0 6px;font-size:24px;color:#315f36}.badge{display:inline-block;padding:4px 8px;border-radius:20px;background:#e3f1dc;color:#315f36;font-size:12px;font-weight:bold;border:1px solid #b8d5aa}.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.field{background:#f3f7f1;border-radius:8px;padding:9px;border-left:3px solid #9bcf62}.field span{display:block;color:#68737a;font-size:11px;margin-bottom:3px}
+
+.section{border-top:1px solid #dce8d7;padding-top:14px;margin-top:14px}
+
+.section h4{color:#315f36}.family{display:flex;gap:8px;flex-wrap:wrap}
+.animal{border:1px solid #c4d7bd;border-radius:9px;padding:9px;background:#fafcf9;cursor:pointer}
+
+.animal:hover{background:#eaf4e5;border-color:#9bcf62}
+
+.empty{padding:25px;text-align:center;color:#69747b}.tree{text-align:center}
+
+.tree-row{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}.tree-line{height:18px;width:2px;background:#4f8a45;margin:auto}
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#315f3688;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-box{
+    background:white;
+    border-radius:12px;
+    padding:20px;
+    max-width:700px;
+    width:100%;
+    max-height:90vh;
+    border-top:6px solid #4f8a45;
+    box-sizing:border-box;
+    overflow-y:auto;
+}
+
+
+
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.form label{font-size:12px}.form input,
+.form select{width:100%;margin-top:4px}
+.full{grid-column:1/-1}@media(max-width:900px){
+
+.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}@media(max-width:550px){.stats,.form{grid-template-columns:1fr}}
 
 
 
@@ -252,11 +327,14 @@ header .header-title small {
     display: block !important;
 
     color: #fff !important;
-    font-size: 10px !important;
+    font-size: 14px !important;
     line-height: 1.15 !important;
 
     white-space: nowrap !important;
 }
+
+
+
 
 
 /* LOGO RECHTS */
@@ -338,239 +416,15 @@ header .header-buttons button {
 
 
 
-    /* =====================================================
-       FILTER
-       ===================================================== */
 
-    .toolbar {
-        padding: 9px;
-        gap: 6px;
-        margin-bottom: 10px;
-    }
 
-    .toolbar input,
-    .toolbar select,
-    .toolbar button {
-        width: 100%;
-        min-height: 40px;
-    }
 
 
-    /* =====================================================
-       STATISTIK
-       ===================================================== */
 
-    .stats {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 7px;
-        margin-bottom: 10px;
-    }
 
-    .stat {
-        padding: 9px;
-    }
 
-    .stat b {
-        font-size: 20px;
-    }
 
 
-    /* =====================================================
-       LAYOUT
-       ===================================================== */
-
-    .layout {
-        display: block !important;
-        width: 100%;
-    }
-
-    .card {
-        width: 100%;
-        max-width: 100%;
-    }
-
-
-    /* =====================================================
-       TABELLE – HANDY QUERFORMAT
-       ===================================================== */
-
-    .table-wrap {
-        width: 100%;
-        max-width: 100%;
-
-        overflow-x: auto;
-
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        border-collapse: collapse;
-
-        width: max-content !important;
-        min-width: 1000px !important;
-    }
-
-    table thead {
-        display: table-header-group !important;
-    }
-
-    table tbody {
-        display: table-row-group !important;
-    }
-
-    table tbody tr {
-        display: table-row !important;
-        cursor: pointer;
-    }
-
-    table tbody td {
-        display: table-cell !important;
-
-        min-height: 0 !important;
-
-        padding: 8px 10px !important;
-
-        white-space: nowrap !important;
-        text-align: left !important;
-    }
-
-    table tbody td::before {
-        content: none !important;
-        display: none !important;
-    }
-
-
-    /* =====================================================
-       TIERDETAILS – ERST NACH KLICK
-       ===================================================== */
-
-    #detailsCard {
-        display: none !important;
-        margin-top: 10px;
-    }
-
-    #detailsCard.mobile-open {
-        display: block !important;
-    }
-
-    #details {
-        width: 100%;
-        margin-top: 0;
-    }
-
-
-    /* =====================================================
-       FORMULARE
-       ===================================================== */
-
-    .form {
-        grid-template-columns: 1fr !important;
-    }
-
-    .form-grid,
-    .bestell-info-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    input,
-    select,
-    textarea {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    button {
-        min-height: 40px;
-    }
-}
-
-
-/* =========================================================
-   HANDY HOCHFORMAT
-   NUR 3 SPALTEN
-   ========================================================= */
-
-@media (max-width: 700px) and (orientation: portrait) {
-
-    .table-wrap {
-        overflow-x: hidden !important;
-    }
-
-    table {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: fixed !important;
-    }
-
-
-    /* Orig.-Nr. */
-
-    table th:nth-child(1),
-    table td:nth-child(1) {
-        display: table-cell !important;
-        width: 38% !important;
-    }
-
-
-    /* Name */
-
-    table th:nth-child(3),
-    table td:nth-child(3) {
-        display: table-cell !important;
-        width: 32% !important;
-    }
-
-
-    /* Geb.-Dat. */
-
-    table th:nth-child(5),
-    table td:nth-child(5) {
-        display: table-cell !important;
-        width: 30% !important;
-    }
-
-
-    /* Alle anderen Spalten ausblenden */
-
-    table th:nth-child(2),
-    table td:nth-child(2),
-
-    table th:nth-child(4),
-    table td:nth-child(4),
-
-    table th:nth-child(6),
-    table td:nth-child(6),
-
-    table th:nth-child(7),
-    table td:nth-child(7),
-
-    table th:nth-child(8),
-    table td:nth-child(8),
-
-    table th:nth-child(9),
-    table td:nth-child(9),
-
-    table th:nth-child(10),
-    table td:nth-child(10),
-
-    table th:nth-child(11),
-    table td:nth-child(11) {
-        display: none !important;
-    }
-
-
-    /* Name fett */
-
-    table tbody td:nth-child(3) {
-        font-weight: 700 !important;
-        font-size: 16px !important;
-    }
-}
-
-
-
-   
-   
 </style>
 
 </head>
@@ -604,12 +458,9 @@ header .header-buttons button {
         alt="Aebersold Suffolk Logo">
 
 
-
-
-
+  
 
 </header>
-
 <div class="container">
 
     <!-- =========================
@@ -832,7 +683,6 @@ header .header-buttons button {
 <!-- =====================================================
      GEBURT ERFASSEN
      ===================================================== -->
-
 <div id="birthModal" class="modal">
 
     <div class="modal-box">
@@ -840,7 +690,6 @@ header .header-buttons button {
         <h2>🐑 Geburt erfassen</h2>
 
         <form id="birthForm" class="form">
-
 
             <!-- GEBURTSDATUM -->
             <label>
@@ -861,25 +710,11 @@ header .header-buttons button {
                     id="lambCount"
                     onchange="buildLambFields()">
 
-                    <option value="1">
-                        1 Lamm
-                    </option>
-
-                    <option value="2">
-                        2 Lämmer
-                    </option>
-
-                    <option value="3">
-                        3 Lämmer
-                    </option>
-
-                    <option value="4">
-                        4 Lämmer
-                    </option>
-
-                    <option value="5">
-                        5 Lämmer
-                    </option>
+                    <option value="1">1 Lamm</option>
+                    <option value="2">2 Lämmer</option>
+                    <option value="3">3 Lämmer</option>
+                    <option value="4">4 Lämmer</option>
+                    <option value="5">5 Lämmer</option>
 
                 </select>
 
@@ -922,7 +757,7 @@ header .header-buttons button {
             </label>
 
 
-            <!-- LÄMMER -->
+            <!-- LÄMMER ÜBERSCHRIFT -->
             <div class="full">
 
                 <h3>Lämmer</h3>
@@ -930,6 +765,7 @@ header .header-buttons button {
             </div>
 
 
+            <!-- HIER WERDEN DIE LÄMMER EINGEFÜGT -->
             <div
                 id="lambFields"
                 class="full">
@@ -937,11 +773,23 @@ header .header-buttons button {
 
 
             <!-- BUTTONS -->
-            <div class="full">
+            <div
+                class="full"
+                style="
+                    display:flex;
+                    gap:10px;
+                    margin-top:20px;
+                "
+            >
 
-                <button type="submit">
+                <button
+                    type="submit"
+                    id="birthSaveButton">
+
                     💾 Geburt speichern
+
                 </button>
+
 
                 <button
                     type="button"
@@ -959,7 +807,6 @@ header .header-buttons button {
     </div>
 
 </div>
-
 
 <!-- =====================================================
      SUPABASE
@@ -1150,7 +997,54 @@ function fmt(d){
     });
 }
    
-function parent(t){let a=find(t);return a?`<span class="link" onclick="event.stopPropagation();selectAnimal('${a.id}')">${a.id} ${a.name}</span>`:t}
+function parent(t) {
+
+    if (!t) {
+        return "-";
+    }
+
+    // Falls bereits ein Tier-Objekt übergeben wurde
+    if (typeof t === "object") {
+
+        const id = t.id || "";
+        const name = t.name || "";
+
+        return `
+            <span
+                class="link"
+                onclick="event.stopPropagation(); selectAnimal('${id}')"
+            >
+                ${id} ${name}
+            </span>
+        `;
+    }
+
+    const wert = String(t).trim();
+
+    // Originalnummer aus dem gespeicherten Wert
+    const originalNr = wert.split(" ")[0];
+
+    const tier = animals.find(
+        x => String(x.id).trim() === originalNr
+    );
+
+    // Tier nicht gefunden
+    if (!tier) {
+        return wert;
+    }
+
+    const id = tier.id || "";
+    const name = tier.name || "";
+
+    return `
+        <span
+            class="link"
+            onclick="event.stopPropagation(); selectAnimal('${id}')"
+        >
+            ${id} ${name}
+        </span>
+    `;
+}
    
 function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,ys=[...new Set(animals.map(a=>a.geb.slice(0,4)))].sort().reverse();s.innerHTML='<option value="">Alle Jahrgänge</option>'+ys.map(y=>`<option>${y}</option>`).join('');s.value=old}
    function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${selectedId==a.id?'selected':''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td>
@@ -1176,6 +1070,15 @@ function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,y
 
 </tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size}
 
+
+
+
+
+
+
+
+
+
 async function selectAnimal(id) {
 
     document
@@ -1193,20 +1096,42 @@ async function selectAnimal(id) {
     }
 
     selectedId = id;
+
 console.log("ANGEKLICKTES TIER:", selectedId);
-    // Journal zuerst ONLINE neu laden
-    await journalLaden();
 
-    // Danach Journal für das ausgewählte Tier anzeigen
-    journalAnzeigen(selectedId);
+// Journal online laden
+await journalLaden();
 
-    let a = animals.find(x => x.id == id),
-        kids = animals.filter(
-            x =>
-                x.vater.startsWith(a.id + ' ') ||
-                x.mutter.startsWith(a.id + ' ')
-        );
+console.log("NACH journalLaden:", selectedId);
 
+
+    // =========================================================
+    // TIER ERMITTELN
+    // =========================================================
+
+    let a = animals.find(x => x.id == id);
+
+    if (!a) {
+        console.error("Tier nicht gefunden:", id);
+        return;
+    }
+
+
+    // =========================================================
+    // NACHKOMMEN ERMITTELN
+    // =========================================================
+
+let kids = animals.filter(
+    x =>
+        x.vater.startsWith(a.id + ' ') ||
+        x.mutter.startsWith(a.id + ' ')
+);
+
+
+   
+
+
+    
 
 
     details.innerHTML=`<h3>${a.name}</h3>
@@ -1216,6 +1141,7 @@ console.log("ANGEKLICKTES TIER:", selectedId);
 
 <button
     type="button"
+    id="tierBearbeitenButton"
     onclick="tierBearbeiten('${a.id}')"
     style="
         margin:10px 0 15px 0;
@@ -1245,21 +1171,42 @@ console.log("ANGEKLICKTES TIER:", selectedId);
 
 <span class="badge">${a.geschlecht=='F'?'Mutterschaf':'Widder'}
 
-</span> <span class="badge">${a.rasse}</span><div class="grid">
+</span> <span class="badge">${a.rasse}</span>
 
-<div class="field"><span>Orig.-Nr.</span><b>${a.id}</b></div><div class="field"><span>Zeichen</span>${a.zeichen||'-'}</div>
+<div class="grid">
 
+    <div class="field">
+        <span>Orig.-Nr.</span>
+        <b id="editId">${a.id}</b>
+    </div>
 
-<div class="field"><span>Geburtsdatum</span>${fmt(a.geb)}</div><div class="field"><span>Alter</span>${age(a.geb)} Jahre</div><div class="field"><span>Punkte</span>${a.punkte||'-'}</div>
+    <div class="field">
+        <span>Zeichen</span>
+        <span id="editZeichen">${a.zeichen || '-'}</span>
+    </div>
+
 
 <div class="field">
+    <span>Geburtsdatum</span>
+    <span id="editGeb">${fmt(a.geb)}</span>
+</div>
+
+<div class="field">
+    <span>Alter</span>
+    <span id="editAlter">${age(a.geb)} Jahre</span>
+</div>
+
+<div class="field">
+    <span>Punkte</span>
+    <span id="editPunkte">${a.punkte || '-'}</span>
+</div><div class="field">
     <span>Eriz</span>
     ${
         String(a.zeichen || "")
             .toUpperCase()
             .includes("EZ")
-            ? "WAHR"
-            : "FALSCH"
+            ? '<span style="color:green;font-weight:bold;font-size:20px;">✓</span>'
+            : '<span style="color:red;font-weight:bold;font-size:20px;">✕</span>'
     }
 </div>
 
@@ -1267,11 +1214,23 @@ console.log("ANGEKLICKTES TIER:", selectedId);
 
 
 
-
 </div>
 
 
-<div class="section"><h4>Abstammung</h4><p><b>Vater:</b> ${parent(a.vater)}</p><p><b>Mutter:</b> ${parent(a.mutter)}</p></div>
+<div class="section">
+    <h4>Abstammung</h4>
+
+    <div class="animal">
+        <b>Vater:</b><br>
+        ${parent(a.vater)}
+    </div>
+
+    <div class="animal" style="margin-top:8px;">
+        <b>Mutter:</b><br>
+        ${parent(a.mutter)}
+    </div>
+</div>
+
 
 <div class="section"><h4>Nachkommen (${kids.length})</h4>${kids.length?'<div class="family">'+kids.map(k=>`<div class="animal" onclick="selectAnimal('${k.id}')"><b>${k.name}</b><br><small>${k.id}</small></div>`).join('')+'</div>':'<div class="empty">Keine Nachkommen in dieser Tierliste.</div>'}</div>
 
@@ -1326,7 +1285,12 @@ console.log("ANGEKLICKTES TIER:", selectedId);
 
 </div>
 
-</div>`;render()}
+</div>`;
+
+journalAnzeigen(selectedId);
+
+render();
+}
 
 
 
@@ -1404,11 +1368,11 @@ const tier = {
     mutter: o.mutter || "",
 
     eriz:
-        String(o.zeichen || "")
-            .toUpperCase()
-            .includes("EZ")
-            ? "WAHR"
-            : "FALSCH",
+    String(o.zeichen || "")
+        .toUpperCase()
+        .includes("EZ")
+        ? "✓"
+        : "✕",
 
     gewicht40:
         o.gewicht40 === "" ||
@@ -1463,6 +1427,15 @@ const tier = {
     );
 };
 
+
+
+
+
+
+
+
+
+
 /* =========================================================
    GEBURT ERFASSEN
    ========================================================= */
@@ -1487,6 +1460,11 @@ function openBirth(){
 }
 
 
+
+
+
+
+
 function closeBirth(){
 
     const modal =
@@ -1496,6 +1474,15 @@ function closeBirth(){
         modal.classList.remove('show');
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 /* =========================================================
@@ -1576,6 +1563,14 @@ function fillParentLists(){
 let tierJournal = [];
 
 
+
+
+
+
+
+
+
+
 /* ---------------------------------------------------------
    JOURNAL LADEN
    --------------------------------------------------------- */
@@ -1607,13 +1602,6 @@ async function journalLaden() {
             tierJournal.length
         );
 
-        if (
-            typeof selectedId !== "undefined" &&
-            selectedId
-        ) {
-            journalAnzeigen(selectedId);
-        }
-
     } catch (fehler) {
 
         console.error(
@@ -1624,26 +1612,50 @@ async function journalLaden() {
 }
 
 
-/* ---------------------------------------------------------
-   JOURNAL ANZEIGEN
-   --------------------------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 function journalAnzeigen(tierId) {
 
-    const liste =
-        document.getElementById("journalListe");
+    const details = document.getElementById("details");
 
-    if (!liste) return;
+    if (!details) {
+        console.error("details NICHT GEFUNDEN!");
+        return;
+    }
 
+    // Journal-Liste suchen
+    let liste = document.getElementById("journalListe");
 
-    const eintraege =
-        (tierJournal || [])
-            .filter(eintrag =>
-                String(eintrag.tier_id) ===
-                String(tierId)
-            );
+    // Falls nicht vorhanden → erstellen
+    if (!liste) {
 
+        liste = document.createElement("div");
+        liste.id = "journalListe";
 
+        details.appendChild(liste);
+    }
+
+    // Einträge für dieses Tier
+    const eintraege = (tierJournal || []).filter(eintrag =>
+        String(eintrag.tier_id).trim() ===
+        String(tierId).trim()
+    );
+
+    // Keine Einträge
     if (eintraege.length === 0) {
 
         liste.innerHTML = `
@@ -1655,65 +1667,69 @@ function journalAnzeigen(tierId) {
         return;
     }
 
+    // Nach Datum sortieren
+    const sortiert = [...eintraege].sort(
+        (a, b) =>
+            new Date(b.datum) - new Date(a.datum)
+    );
 
-    const sortiert =
-        [...eintraege].sort(
-            (a, b) =>
-                new Date(b.datum) -
-                new Date(a.datum)
-        );
+    // Journal anzeigen
+    liste.innerHTML = sortiert.map(eintrag => `
 
+        <div class="journal-entry">
 
-    liste.innerHTML =
-        sortiert.map(eintrag => `
+            <div class="journal-date">
+                ${new Date(
+                    eintrag.datum
+                ).toLocaleDateString("de-CH")}
+            </div>
 
-            <div class="journal-entry">
+            <div class="journal-content">
 
-                <div class="journal-date">
-                    ${new Date(
-                        eintrag.datum
-                    ).toLocaleDateString("de-CH")}
-                </div>
+                <strong>
+                    ${escapeJournalHTML(
+                        eintrag.ereignis || ""
+                    )}
+                </strong>
 
-
-                <div class="journal-content">
-
-                    <strong>
-                        ${escapeJournalHTML(
-                            eintrag.ereignis || ""
-                        )}
-                    </strong>
-
-
-                    ${
-                        eintrag.bemerkung
-                            ? `
-                                <div class="journal-note">
-                                    ${escapeJournalHTML(
-                                        eintrag.bemerkung
-                                    )}
-                                </div>
-                              `
-                            : ""
-                    }
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="journal-delete"
-                    onclick="journalEintragLoeschen(
-                        '${tierId}',
-                        ${eintrag.id}
-                    )">
-                    Löschen
-                </button>
+                ${
+                    eintrag.bemerkung
+                        ? `
+                            <div class="journal-note">
+                                ${escapeJournalHTML(
+                                    eintrag.bemerkung
+                                )}
+                            </div>
+                          `
+                        : ""
+                }
 
             </div>
 
-        `).join("");
+            <button
+                type="button"
+                class="journal-delete"
+                onclick="journalEintragLoeschen(
+                    '${String(tierId).replace(/'/g, "\\'")}',
+                    ${Number(eintrag.id)}
+                )">
+                Löschen
+            </button>
+
+        </div>
+
+    `).join("");
 }
+
+
+
+
+
+
+
+
+
+
 
 
 /* ---------------------------------------------------------
@@ -1817,70 +1833,98 @@ async function journalEintragHinzufuegen(tierId) {
     }
 }
 
+
+
+
+
+
+
 /* ---------------------------------------------------------
-   EINTRAG LÖSCHEN – SUPABASE
+   JOURNAL-EINTRAG LÖSCHEN NEU
    --------------------------------------------------------- */
 
-async function journalEintragLoeschen(
-    tierId,
-    serverId
-) {
+async function journalEintragLoeschen(tierId, serverId) {
 
-    if (
-        !confirm(
-            "Diesen Journal-Eintrag wirklich löschen?"
-        )
-    ) {
+    if (!confirm("Diesen Journal-Eintrag wirklich löschen?")) {
         return;
     }
 
+    console.log("LÖSCHEN:");
+    console.log("Tier:", tierId);
+    console.log("Journal-ID:", serverId);
 
     try {
 
-        const { error } = await db
+        // Eintrag in Supabase löschen
+        const { data, error } = await db
             .from("tier_journal")
             .delete()
-            .eq("id", serverId);
-
+            .eq("id", Number(serverId))
+            .select();
 
         if (error) {
 
             console.error(
-                "Fehler beim Löschen des Journal-Eintrags:",
+                "FEHLER BEIM LÖSCHEN:",
                 error
             );
 
             alert(
-                "Der Journal-Eintrag konnte nicht gelöscht werden."
+                "Der Journal-Eintrag konnte nicht gelöscht werden.\n\n" +
+                error.message
             );
 
             return;
         }
 
-
         console.log(
-            "Journal-Eintrag online gelöscht:",
-            serverId
+            "GELÖSCHTER EINTRAG:",
+            data
         );
 
+        // Prüfen, ob wirklich etwas gelöscht wurde
+        if (!data || data.length === 0) {
 
+            console.warn(
+                "Es wurde kein Journal-Eintrag gelöscht!"
+            );
+
+            alert(
+                "Der Eintrag wurde in Supabase nicht gelöscht.\n\n" +
+                "Möglicherweise verhindert die Supabase-Berechtigung (RLS) das Löschen."
+            );
+
+            return;
+        }
+
+        // Lokale Journal-Liste neu laden
         await journalLaden();
 
-        journalAnzeigen(tierId);
+        console.log(
+            "JOURNAL NACH LÖSCHEN:",
+            tierJournal
+        );
 
+        // Journal auf der Seite neu anzeigen
+        journalAnzeigen(tierId);
 
     } catch (fehler) {
 
         console.error(
-            "Fehler beim Löschen:",
+            "FEHLER:",
             fehler
         );
 
         alert(
-            "Der Journal-Eintrag konnte nicht gelöscht werden."
+            "Fehler beim Löschen des Journal-Eintrags."
         );
     }
 }
+
+
+
+
+
 
 
 /* ---------------------------------------------------------
@@ -1899,140 +1943,6 @@ function escapeJournalHTML(text) {
 }
 
 
-
-function journalAnzeigen(tierId) {
-
-    const liste =
-        document.getElementById("journalListe");
-
-    if (!liste) return;
-
-
-    console.log("JOURNAL ANZEIGEN FÜR TIER:", tierId);
-    console.log("ALLE JOURNALEINTRÄGE:", tierJournal);
-
-
-    const eintraege =
-        (tierJournal || []).filter(eintrag =>
-            String(eintrag.tier_id).trim() ===
-            String(tierId).trim()
-        );
-
-
-    console.log(
-        "EINTRÄGE FÜR DIESES TIER:",
-        eintraege
-    );
-
-
-    if (eintraege.length === 0) {
-
-        liste.innerHTML = `
-            <div class="empty">
-                Noch keine Einträge vorhanden.
-            </div>
-        `;
-
-        return;
-    }
-
-
-    const sortiert =
-        [...eintraege].sort(
-            (a, b) =>
-                new Date(b.datum) -
-                new Date(a.datum)
-        );
-
-
-    liste.innerHTML =
-        sortiert.map(eintrag => `
-
-            <div class="journal-entry">
-
-                <div class="journal-date">
-                    ${new Date(
-                        eintrag.datum
-                    ).toLocaleDateString("de-CH")}
-                </div>
-
-
-                <div class="journal-content">
-
-                    <strong>
-                        ${escapeJournalHTML(
-                            eintrag.ereignis || ""
-                        )}
-                    </strong>
-
-
-                    ${
-                        eintrag.bemerkung
-                            ? `
-                                <div class="journal-note">
-                                    ${escapeJournalHTML(
-                                        eintrag.bemerkung
-                                    )}
-                                </div>
-                              `
-                            : ""
-                    }
-
-                </div>
-
-
-                <button
-                    type="button"
-                    class="journal-delete"
-                    onclick="journalEintragLoeschen(
-                        '${tierId}',
-                        ${eintrag.id}
-                    )">
-                    Löschen
-                </button>
-
-            </div>
-
-        `).join("");
-}
-
-
-/* ---------------------------------------------------------
-   EINTRAG LÖSCHEN
-   --------------------------------------------------------- */
-
-function journalEintragLoeschen(
-    tierId,
-    index
-) {
-
-    if (
-        !confirm(
-            "Diesen Journal-Eintrag wirklich löschen?"
-        )
-    ) {
-        return;
-    }
-
-
-    if (
-        !tierJournal[tierId] ||
-        !tierJournal[tierId][index]
-    ) {
-        return;
-    }
-
-
-    tierJournal[tierId].splice(
-        index,
-        1
-    );
-
-
-    speichereTierJournal();
-
-    journalAnzeigen(tierId);
-}
 
 
 /* ---------------------------------------------------------
@@ -2166,14 +2076,7 @@ function buildLambFields(){
                         name="lamb_punkte_${i}">
                 </label>
 
-                <label>
-                    Eriz
-                    <input
-                        type="text"
-                        name="lamb_eriz_${i}"
-                        value=""
-                        readonly>
-                </label>
+                
 
             </div>
         `;
@@ -2301,10 +2204,6 @@ document
                         `[name="lamb_punkte_${i}"]`
                     ).value.trim();
 
-                const eriz =
-                    document.querySelector(
-                        `[name="lamb_eriz_${i}"]`
-                    ).value;
 
                 const gewicht40 =
                     document.querySelector(
@@ -2337,7 +2236,7 @@ document
                     zeichen: zeichen || 'EZ',
                     name: name,
                     punkte: punkte,
-                    eriz: eriz,
+                
                     rasse: 'SU',
                     geb: date,
                     geschlecht: sex,
@@ -2373,13 +2272,7 @@ const supabaseDaten =
         vater: a.vater || "",
         mutter: a.mutter || "",
 
-        eriz:
-            String(a.zeichen || "EZ")
-                .toUpperCase()
-                .includes("EZ")
-                ? "WAHR"
-                : "FALSCH",
-
+   
         gewicht40:
             a.gewicht40 === "" ||
             a.gewicht40 == null
@@ -2434,7 +2327,17 @@ const supabaseDaten =
         }
     );
 
-           
+  
+
+
+
+
+
+
+
+
+
+         
 
 /* =========================================================
    SUPABASE – BESTEHENDE TIERE ÜBERTRAGEN
@@ -2574,6 +2477,293 @@ window.tierEntfernen = async function(id) {
 
 
     
+
+
+function tierBearbeiten(id) {
+
+    const a = animals.find(
+        x => String(x.id) === String(id)
+    );
+
+    if (!a) return;
+
+    // Felder zu Eingabefeldern machen
+    document.getElementById("editId").innerHTML = `
+        <input
+            id="editIdInput"
+            class="edit-field"
+            type="text"
+            value="${a.id || ''}"
+        >
+    `;
+
+    document.getElementById("editZeichen").innerHTML = `
+        <input
+            id="editZeichenInput"
+            class="edit-field"
+            type="text"
+            value="${a.zeichen || ''}"
+        >
+    `;
+
+    document.getElementById("editGeb").innerHTML = `
+        <input
+            id="editGebInput"
+            class="edit-field"
+            type="date"
+            value="${a.geb || ''}"
+        >
+    `;
+
+    document.getElementById("editPunkte").innerHTML = `
+        <input
+            id="editPunkteInput"
+            class="edit-field"
+            type="text"
+            value="${a.punkte || ''}"
+        >
+    `;
+
+    // Alter bleibt automatisch
+    document.getElementById("editAlter").innerHTML =
+        `${age(a.geb)} Jahre`;
+
+
+    // ==========================================
+    // BUTTON AUF SPEICHERN ÄNDERN
+    // ==========================================
+
+    const button =
+        document.getElementById("tierBearbeitenButton");
+
+    if (button) {
+
+        button.innerHTML = "💾 Speichern";
+
+        button.onclick = function () {
+
+            tierBearbeitungSpeichern(id);
+
+        };
+    }
+}
+
+
+
+
+
+
+
+
+
+async function tierBearbeitungSpeichern(alteId) {
+
+    console.log("SPEICHERN:", alteId);
+
+    const a = animals.find(
+        x => String(x.id) === String(alteId)
+    );
+
+    if (!a) {
+        alert("Tier nicht gefunden.");
+        return;
+    }
+
+    // ==========================================
+    // WERTE AUS DEN FELDERN LESEN
+    // ==========================================
+
+    const neueId =
+        document.getElementById("editIdInput").value.trim();
+
+    const neuesZeichen =
+        document.getElementById("editZeichenInput").value.trim();
+
+    const neuesGeb =
+        document.getElementById("editGebInput").value;
+
+    const neuePunkte =
+        document.getElementById("editPunkteInput").value.trim();
+
+
+    // ==========================================
+    // PRÜFUNG
+    // ==========================================
+
+    if (!neueId) {
+        alert("Die Orig.-Nr. darf nicht leer sein.");
+        return;
+    }
+
+
+    // ==========================================
+    // LOKALE DATEN ÄNDERN
+    // ==========================================
+
+    a.id = neueId;
+    a.zeichen = neuesZeichen;
+    a.geb = neuesGeb;
+    a.punkte = neuePunkte;
+
+
+    // Eriz automatisch aus Zeichen
+    a.eriz =
+        String(a.zeichen || "")
+            .toUpperCase()
+            .includes("EZ")
+            ? "WAHR"
+            : "FALSCH";
+
+
+    // ==========================================
+    // SUPABASE SPEICHERN
+    // ==========================================
+
+    const { error } = await db
+        .from("animals")
+        .update({
+            zeichen: a.zeichen || "",
+            geb: a.geb || null,
+            punkte: a.punkte || "",
+            eriz: a.eriz || ""
+        })
+        .eq("id", alteId);
+
+
+    if (error) {
+
+        console.error(
+            "SUPABASE FEHLER:",
+            error
+        );
+
+        alert(
+            "Das Tier konnte nicht gespeichert werden.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    // ==========================================
+    // ORIG.-NR. GEÄNDERT?
+    // ==========================================
+
+    if (String(alteId) !== String(neueId)) {
+
+        // Prüfen ob neue Nummer bereits existiert
+        const { data: vorhanden } = await db
+            .from("animals")
+            .select("id")
+            .eq("id", neueId)
+            .maybeSingle();
+
+
+        if (vorhanden) {
+
+            alert(
+                "Die Orig.-Nr. " +
+                neueId +
+                " existiert bereits."
+            );
+
+            return;
+        }
+
+
+        // Neues Tier mit neuer ID speichern
+        const { error: insertError } =
+            await db
+                .from("animals")
+                .insert({
+                    id: neueId,
+                    name: a.name || "",
+                    zeichen: a.zeichen || "",
+                    rasse: a.rasse || "",
+                    geb: a.geb || null,
+                    geschlecht: a.geschlecht || "",
+                    punkte: a.punkte || "",
+                    vater: a.vater || "",
+                    mutter: a.mutter || "",
+                    eriz: a.eriz || "",
+                    gewicht40:
+                        a.gewicht40 === "" ||
+                        a.gewicht40 == null
+                            ? null
+                            : Number(a.gewicht40)
+                });
+
+
+        if (insertError) {
+
+            console.error(
+                "Fehler bei neuer Orig.-Nr.:",
+                insertError
+            );
+
+            alert(
+                "Die neue Orig.-Nr. konnte nicht gespeichert werden.\n\n" +
+                insertError.message
+            );
+
+            return;
+        }
+
+
+        // Alte Nummer löschen
+        const { error: deleteError } =
+            await db
+                .from("animals")
+                .delete()
+                .eq("id", alteId);
+
+
+        if (deleteError) {
+
+            console.error(
+                "Fehler beim Löschen der alten Nummer:",
+                deleteError
+            );
+
+            alert(
+                "Das Tier wurde mit der neuen Nummer gespeichert, " +
+                "aber die alte Nummer konnte nicht gelöscht werden."
+            );
+
+            return;
+        }
+    }
+
+
+    // ==========================================
+    // LOKAL AKTUALISIEREN
+    // ==========================================
+
+    a.id = neueId;
+
+    selectedId = neueId;
+
+
+    // ==========================================
+    // NEU LADEN
+    // ==========================================
+
+    await tiereAusSupabaseLaden();
+
+    await selectAnimal(neueId);
+
+
+    console.log(
+        "Tier erfolgreich gespeichert:",
+        neueId
+    );
+}
+
+
+
+
+
 
 
 
