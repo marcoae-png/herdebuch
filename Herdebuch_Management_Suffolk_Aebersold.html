@@ -939,7 +939,7 @@ async function tiereAusSupabaseLaden() {
         id: a.id || "",
         zeichen: a.zeichen || "",
         name: a.name || "",
-        punkte: a.punkte || "",
+       punkte: String(a.punkte || "").replace(/^\.+/, ""),
         eriz: a.eriz || "",
         rasse: a.rasse || "",
         geb: a.geb || "",
@@ -2352,7 +2352,9 @@ async function tiereNachSupabaseUebertragen() {
     rasse: a.rasse || "",
     geb: a.geb || null,
     geschlecht: a.geschlecht || "",
-    punkte: a.punkte || "",
+    punkte:
+    String(a.punkte || "")
+        .replace(/^\.+/, ""),
     vater: a.vater || "",
     mutter: a.mutter || "",
 
@@ -2492,7 +2494,7 @@ async function tiereAusSupabaseLaden() {
     const { data, error } = await db
         .from("animals")
         .select("*")
-        .order("geb", { ascending: true });
+        .order("id");
 
     if (error) {
         console.error(
@@ -2501,29 +2503,37 @@ async function tiereAusSupabaseLaden() {
         );
 
         alert(
-            "Die Tiere konnten nicht aus Supabase geladen werden."
+            "Die Tiere konnten nicht aus der gemeinsamen Datenbank geladen werden."
         );
 
         return;
     }
 
+    if (!data || data.length === 0) {
+        console.log(
+            "Supabase ist noch leer – bestehende Tiere bleiben zunächst lokal."
+        );
+        return;
+    }
+
     animals = data.map(a => ({
-        id: a.id,
-        name: a.name || "",
+        id: a.id || "",
         zeichen: a.zeichen || "",
+        name: a.name || "",
+
+        punkte:
+            String(a.punkte || "")
+                .replace(/^\.+/, ""),
+
+        eriz: a.eriz || "",
         rasse: a.rasse || "",
         geb: a.geb || "",
         geschlecht: a.geschlecht || "",
-        punkte: a.punkte || "",
         vater: a.vater || "",
         mutter: a.mutter || "",
-        eriz: a.eriz || "",
-        gewicht40:
-            a.gewicht40 == null
-                ? ""
-                : a.gewicht40
+        gewicht40: a.gewicht40 ?? ""
     }));
-
+    
     console.log(
         "Tiere aus Supabase geladen:",
         animals.length
