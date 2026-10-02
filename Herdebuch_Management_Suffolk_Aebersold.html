@@ -1094,7 +1094,6 @@ async function selectAnimal(id) {
     document
         .getElementById("detailsCard")
         .classList.add("mobile-open");
-
 // Auf dem Handy nach dem Laden der Tierdetails scrollen
 if (window.innerWidth <= 700) {
     setTimeout(() => {
@@ -1103,8 +1102,7 @@ if (window.innerWidth <= 700) {
         if (detailsCard) {
             const position =
                 detailsCard.getBoundingClientRect().top +
-                window.pageYOffset -
-                20;
+                window.pageYOffset;
 
             window.scrollTo({
                 top: position,
