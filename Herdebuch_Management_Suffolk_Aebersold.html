@@ -402,6 +402,61 @@
 
 }
 
+/* =========================================
+   HANDY HOCHFORMAT
+   ========================================= */
+
+@media (max-width: 700px) and (orientation: portrait) {
+
+    body {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    .layout {
+        display: block !important;
+        width: 100%;
+    }
+
+    .card {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .table-wrap {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    table {
+        width: 100% !important;
+        min-width: 0 !important;
+        table-layout: fixed;
+    }
+
+    /* Tierdetails zuerst verstecken */
+    #detailsCard {
+        display: none !important;
+    }
+
+    #detailsCard.mobile-open {
+        display: block !important;
+    }
+
+}
+
+
+    
 
 
 </style>
