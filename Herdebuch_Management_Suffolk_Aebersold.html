@@ -282,13 +282,151 @@ alt="Aebersold Suffolk Logo">
 
 
 
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const animals=[
+/* =========================================================
+   SUPABASE – HERDEBUCH
+   ========================================================= */
+
+const SUPABASE_URL =
+    "https://mhxqzaxjqvdmbfgxjjtk.supabase.co";
+
+const SUPABASE_KEY =
+    "sb_publishable_u2CoXFjgd5S2qmkpsEyvVg_g9OscRBv";
+
+const db =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+let animals=[
 ["1806.8549","LSU","MALEIA",".6/6/6","FALSCH","SU","2017-01-06","F","1767.3666 DUGI","1651.2933 MINA"],["1806.9869","","VITA","-","FALSCH","SM","2018-02-15","F","1735.4617 FANTOM","1806.9657 VOGEL"],["1873.7571","EW","DORADA",".6/6/6","FALSCH","SU","2019-02-10","F","1762.9911 AMOR","1762.9914"],["1825.4000","EZ","SUNA",".6/6/6","FALSCH","SU","2020-02-14","F","1907.7969 ZEUS","1830.5679 SOFIA"],["1825.4002","EZ","MALENIA",".6/5/6","FALSCH","SU","2020-01-08","F","1907.7969 ZEUS","1806.8549 MALEIA"],["2122.5426","EZ","THANK","-","FALSCH","SU","2026-01-08","M","2099.9876 SUNDAYB","1996.8228 TAMINA"],["2099.9877","IMP","NUVO",".6/6/6","FALSCH","SU","2023-02-23","F","01 03 115 55484 WE-FV CONNOR","01 03 114 97930 WE-WI"],["1996.8225","EZ","SALOME",".6/5/6","FALSCH","SU","2023-02-08","F","1873.7647 NINO","1825.4000 SUNA"],["2122.5443","EZ","TIMA","-","FALSCH","SU","2026-04-27","F","2004.0360 LOGIE","1875.1094 TIADRUM"],["2122.5442","EZ","TIM","-","FALSCH","SU","2026-04-27","M","2004.0360 LOGIE","1875.1094 TIADRUM"],["1996.8203","EZ","FRIDA",".6/6/5","FALSCH","SU","2022-02-20","F","2004.0360 LOGIE","1996.8168 FIONA"],["1996.8207","EZ","MALA",".6/5/5","FALSCH","SU","2022-03-11","F","2004.0360 LOGIE","1806.8549 MALEIA"],["1996.8204","EZ","TINA",".6/6/6","FALSCH","SU","2022-02-24","F","2004.0360 LOGIE","1875.1094 TIADRUM"],["1996.8208","EZ","DELIA",".5/5/6","WAHR","SU","2022-03-16","F","2004.0360 LOGIE","1873.7571 DORADA"],["1996.8228","EZ","TAMINA",".6/5/6","WAHR","SU","2023-02-16","F","2004.0360 LOGIE","1875.1094 TIADRUM"],["1996.8259","EZ","LENA",".5/4/5","WAHR","SU","2024-05-29","F","2004.0360 LOGIE","2004.0359 LUNA"],["1996.8256","EZ","MANTA",".5/5/5","WAHR","SU","2024-04-15","F","1806.8549 MALEIA","1806.8549 MALEIA"],["1996.8249","EZ","MEL C",".5/5/4","WAHR","SU","2024-03-12","F","2099.9876 SUNDAYB","1996.8207 MALA"],["1996.8242","EZ","THUNDRA",".5/5/5","WAHR","SU","2024-02-26","F","2099.9876 SUNDAYB","1996.8204 TINA"],["2122.5403","EZ","MASSA",".4/4/3","WAHR","SU","2025-01-19","F","2099.9876 SUNDAYB","1996.8207 MALA"],["2122.5401","EZ","SALINA","-","WAHR","SU","2025-01-11","F","2004.0360 LOGIE","1825.4000 SUNA"],["2181.5344","IMP","MULI","-","WAHR","SU","2025-02-25","M","041668203469 MULLINVALE","056143700114 CAPIELAW"],["2122.5427","EZ","MILA","","WAHR","SU","2026-01-11","F","2004.0360 LOGIE","1825.4002 MALENIA"],["2122.5422","EZ","MELODI","","WAHR","SU","2025-12-24","F","2099.9876 SUNDAYB","1996.8207 MALA"],["2122.5434","EZ","NUANCE","","WAHR","SU","2026-02-06","F","2004.0360 LOGIE","2099.9877 NUVO"],["2122.5431","EZ","FALKE","","WAHR","SU","2026-01-15","F","2099.9876 SUNDAYB","1996.8203 FRIDA"]
 ].map(x=>({id:x[0],zeichen:x[1],name:x[2],punkte:x[3],eriz:x[4],rasse:x[5],geb:x[6],geschlecht:x[7],vater:x[8],mutter:x[9]}));
+
+
+/* =========================================================
+   SUPABASE – TIERE LADEN
+   ========================================================= */
+
+async function tiereAusSupabaseLaden() {
+
+    const { data, error } = await db
+        .from("animals")
+        .select("*")
+        .order("id");
+
+    if (error) {
+        console.error(
+            "Fehler beim Laden der Tiere:",
+            error
+        );
+
+        alert(
+            "Die Tiere konnten nicht aus der gemeinsamen Datenbank geladen werden."
+        );
+
+        return;
+    }
+
+    if (!data || data.length === 0) {
+        console.log(
+            "Supabase ist noch leer – bestehende Tiere bleiben zunächst lokal."
+        );
+        return;
+    }
+
+    animals = data.map(a => ({
+        id: a.id || "",
+        zeichen: a.zeichen || "",
+        name: a.name || "",
+        punkte: a.punkte || "",
+        eriz: a.eriz || "",
+        rasse: a.rasse || "",
+        geb: a.geb || "",
+        geschlecht: a.geschlecht || "",
+        vater: a.vater || "",
+        mutter: a.mutter || "",
+        gewicht40: a.gewicht40 ?? ""
+    }));
+
+    render();
+
+    if (selectedId) {
+        selectAnimal(selectedId);
+    }
+
+    console.log(
+        "Tiere aus Supabase geladen:",
+        animals.length
+    );
+}
+
+
+/* =========================================================
+   BESTEHENDE TIERE EINMALIG IN SUPABASE SPEICHERN
+   ========================================================= */
+
+async function tiereNachSupabaseUebertragen() {
+
+    const daten = animals.map(a => ({
+        id: a.id,
+        name: a.name || "",
+        zeichen: a.zeichen || "",
+        rasse: a.rasse || "",
+        geb: a.geb || null,
+        geschlecht: a.geschlecht || "",
+        punkte: a.punkte || "",
+        vater: a.vater || "",
+        mutter: a.mutter || "",
+        eriz:
+            String(a.zeichen || "")
+                .toUpperCase()
+                .includes("EZ")
+                ? "ErizWAHR"
+                : "ErizFALSCH",
+        gewicht40:
+            a.gewicht40 === "" ||
+            a.gewicht40 == null
+                ? null
+                : Number(a.gewicht40)
+    }));
+
+    const { error } = await db
+        .from("animals")
+        .upsert(
+            daten,
+            { onConflict: "id" }
+        );
+
+    if (error) {
+
+        console.error(
+            "Fehler beim Übertragen:",
+            error
+        );
+
+        alert(
+            "Die Tiere konnten nicht gespeichert werden."
+        );
+
+        return;
+    }
+
+    alert(
+        daten.length +
+        " Tiere wurden erfolgreich in Supabase gespeichert."
+    );
+
+    console.log(
+        "Übertragen:",
+        daten
+    );
+}
+
 
 let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYear()-x.getFullYear();if(n.getMonth()<x.getMonth()||(n.getMonth()==x.getMonth()&&n.getDate()<x.getDate()))a--;return a}function fmt(d){return new Date(d).toLocaleDateString('de-CH')}function find(t){return animals.find(a=>(a.id+' '+a.name).toLowerCase()==t.toLowerCase())||animals.find(a=>t.startsWith(a.id+' '))}function parent(t){let a=find(t);return a?`<span class="link" onclick="event.stopPropagation();selectAnimal('${a.id}')">${a.id} ${a.name}</span>`:t}function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,ys=[...new Set(animals.map(a=>a.geb.slice(0,4)))].sort().reverse();s.innerHTML='<option value="">Alle Jahrgänge</option>'+ys.map(y=>`<option>${y}</option>`).join('');s.value=old}function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${selectedId==a.id?'selected':''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td><td>${fmt(a.geb)}</td><td>${age(a.geb)}</td><td>${a.geschlecht}</td><td>${a.punkte||'-'}</td><td>${parent(a.vater)}</td><td>${parent(a.mutter)}</td>
 
@@ -308,7 +446,27 @@ let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYe
 
 
 
-</tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size}function selectAnimal(id){selectedId=id;let a=animals.find(x=>x.id==id),kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));details.innerHTML=`<h3>${a.name}</h3><span class="badge">${a.geschlecht=='F'?'Mutterschaf':'Widder'}</span> <span class="badge">${a.rasse}</span><div class="grid">
+</tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size}
+
+
+function selectAnimal(id){selectedId=id;let a=animals.find(x=>x.id==id),kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));details.innerHTML=`<h3>${a.name}</h3>
+
+<button
+    type="button"
+    onclick="tierBearbeiten('${a.id}')"
+    style="
+        margin:10px 0 15px 0;
+        padding:8px 14px;
+        cursor:pointer;
+    "
+>
+    ✏️ Tier bearbeiten
+</button>
+
+
+<span class="badge">${a.geschlecht=='F'?'Mutterschaf':'Widder'}
+
+</span> <span class="badge">${a.rasse}</span><div class="grid">
 
 <div class="field"><span>Orig.-Nr.</span><b>${a.id}</b></div><div class="field"><span>Zeichen</span>${a.zeichen||'-'}</div>
 
@@ -414,15 +572,25 @@ function closeModal(){
     addForm.reset();
 }
 
-addForm.onsubmit = e => {
+
+addForm.onsubmit = async e => {
 
     e.preventDefault();
 
-    let o = Object.fromEntries(
+    const o = Object.fromEntries(
         new FormData(addForm)
     );
 
-    if(animals.some(a => a.id == o.id)){
+
+    /* =====================================================
+       DOPPELTE ORIG.-NR. PRÜFEN
+       ===================================================== */
+
+    if (
+        animals.some(
+            a => a.id == o.id
+        )
+    ) {
 
         alert(
             'Diese Orig.-Nr. existiert bereits.'
@@ -431,15 +599,90 @@ addForm.onsubmit = e => {
         return;
     }
 
-    animals.push(o);
+
+    /* =====================================================
+       DATEN FÜR SUPABASE
+       ===================================================== */
+
+    const tier = {
+
+        id: o.id || "",
+
+        name: o.name || "",
+
+        zeichen: o.zeichen || "",
+
+        rasse: o.rasse || "SU",
+
+        geb: o.geb || null,
+
+        geschlecht: o.geschlecht || "",
+
+        punkte: o.punkte || "",
+
+        vater: o.vater || "",
+
+        mutter: o.mutter || "",
+
+        eriz:
+            String(o.zeichen || "")
+                .toUpperCase()
+                .includes("EZ")
+                ? "ErizWAHR"
+                : "ErizFALSCH",
+
+        gewicht40:
+            o.gewicht40 === "" ||
+            o.gewicht40 == null
+                ? null
+                : Number(o.gewicht40)
+    };
+
+
+    /* =====================================================
+       IN SUPABASE SPEICHERN
+       ===================================================== */
+
+    const { error } =
+        await db
+            .from("animals")
+            .insert(tier);
+
+
+    if (error) {
+
+        console.error(
+            "Fehler beim Speichern des Tieres:",
+            error
+        );
+
+        alert(
+            "Das Tier konnte nicht gespeichert werden.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       LOKALE LISTE AKTUALISIEREN
+       ===================================================== */
+
+    animals.push(tier);
+
 
     closeModal();
 
     render();
 
-    selectAnimal(o.id);
-};
+    selectAnimal(tier.id);
 
+
+    alert(
+        "Das Tier wurde erfolgreich gespeichert."
+    );
+};
 
 /* =========================================================
    GEBURT ERFASSEN
@@ -552,9 +795,332 @@ function fillParentLists(){
    TIER-JOURNAL
    ========================================================= */
 
-let tierJournal = JSON.parse(
-    localStorage.getItem("tierJournal") || "{}"
-);
+/* =========================================================
+   TIER-JOURNAL – GEMEINSAME SPEICHERUNG
+   ========================================================= */
+
+const JOURNAL_API_URL = "";
+
+let tierJournal = {};
+
+
+/* ---------------------------------------------------------
+   JOURNAL LADEN
+   --------------------------------------------------------- */
+
+async function journalLaden() {
+
+    if (!JOURNAL_API_URL) {
+        console.log("Journal: gemeinsame Speicherung noch nicht eingerichtet.");
+        return;
+    }
+
+    try {
+
+        const response = await fetch(JOURNAL_API_URL);
+
+        if (!response.ok) {
+            throw new Error("Journal konnte nicht geladen werden.");
+        }
+
+        const daten = await response.json();
+
+        tierJournal = {};
+
+        daten.forEach(eintrag => {
+
+            if (!tierJournal[eintrag.tierId]) {
+                tierJournal[eintrag.tierId] = [];
+            }
+
+            tierJournal[eintrag.tierId].push({
+                datum: eintrag.datum,
+                ereignis: eintrag.ereignis,
+                bemerkung: eintrag.bemerkung || "",
+                serverId: eintrag.serverId
+            });
+
+        });
+
+        if (selectedId) {
+            journalAnzeigen(selectedId);
+        }
+
+    } catch (fehler) {
+
+        console.error(
+            "Fehler beim Laden des Tier-Journals:",
+            fehler
+        );
+
+    }
+}
+
+
+/* ---------------------------------------------------------
+   JOURNAL ANZEIGEN
+   --------------------------------------------------------- */
+
+function journalAnzeigen(tierId) {
+
+    const liste = document.getElementById("journalListe");
+
+    if (!liste) return;
+
+    const eintraege = tierJournal[tierId] || [];
+
+    if (eintraege.length === 0) {
+
+        liste.innerHTML =
+            `<div class="empty">
+                Noch keine Einträge vorhanden.
+            </div>`;
+
+        return;
+    }
+
+    const sortiert = [...eintraege].sort(
+        (a, b) =>
+            new Date(b.datum) -
+            new Date(a.datum)
+    );
+
+    liste.innerHTML = sortiert.map(eintrag => `
+
+        <div class="journal-entry">
+
+            <div class="journal-date">
+                ${new Date(eintrag.datum)
+                    .toLocaleDateString("de-CH")}
+            </div>
+
+            <div>
+                <strong>
+                    ${escapeJournalHTML(eintrag.ereignis)}
+                </strong>
+            </div>
+
+            <div class="journal-content">
+
+                ${
+                    eintrag.bemerkung
+                        ? `<div class="journal-note">
+                            ${escapeJournalHTML(
+                                eintrag.bemerkung
+                            )}
+                           </div>`
+                        : ""
+                }
+
+            </div>
+
+            <button
+                type="button"
+                class="journal-delete"
+                onclick="journalEintragLoeschen(
+                    '${tierId}',
+                    '${eintrag.serverId || ""}'
+                )">
+
+                Löschen
+
+            </button>
+
+        </div>
+
+    `).join("");
+}
+
+
+/* ---------------------------------------------------------
+   EINTRAG HINZUFÜGEN
+   --------------------------------------------------------- */
+
+async function journalEintragHinzufuegen(tierId) {
+
+    const datum =
+        document.getElementById("journalDatum").value;
+
+    const ereignis =
+        document.getElementById("journalEreignis").value;
+
+    const bemerkung =
+        document
+            .getElementById("journalBemerkung")
+            .value
+            .trim();
+
+
+    if (!datum) {
+
+        alert(
+            "Bitte zuerst ein Datum auswählen."
+        );
+
+        return;
+    }
+
+
+    /* ---------------------------------------------
+       Falls gemeinsamer Speicher noch nicht
+       eingerichtet ist
+       --------------------------------------------- */
+
+    if (!JOURNAL_API_URL) {
+
+        alert(
+            "Die gemeinsame Journal-Speicherung " +
+            "ist noch nicht eingerichtet."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        await fetch(JOURNAL_API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify({
+
+                aktion: "hinzufuegen",
+
+                tierId: tierId,
+
+                datum: datum,
+
+                ereignis: ereignis,
+
+                bemerkung: bemerkung
+
+            })
+
+        });
+
+
+        document
+            .getElementById("journalBemerkung")
+            .value = "";
+
+
+        await journalLaden();
+
+
+        journalAnzeigen(tierId);
+
+
+    } catch (fehler) {
+
+        console.error(
+            "Fehler beim Speichern:",
+            fehler
+        );
+
+        alert(
+            "Der Journal-Eintrag konnte " +
+            "nicht gespeichert werden."
+        );
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   EINTRAG LÖSCHEN
+   --------------------------------------------------------- */
+
+async function journalEintragLoeschen(
+    tierId,
+    serverId
+) {
+
+    if (
+        !confirm(
+            "Diesen Journal-Eintrag wirklich löschen?"
+        )
+    ) {
+        return;
+    }
+
+
+    if (!JOURNAL_API_URL) {
+
+        alert(
+            "Die gemeinsame Journal-Speicherung " +
+            "ist noch nicht eingerichtet."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        await fetch(JOURNAL_API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type":
+                    "text/plain;charset=utf-8"
+            },
+
+            body: JSON.stringify({
+
+                aktion: "loeschen",
+
+                serverId: serverId
+
+            })
+
+        });
+
+
+        await journalLaden();
+
+
+        journalAnzeigen(tierId);
+
+
+    } catch (fehler) {
+
+        console.error(
+            "Fehler beim Löschen:",
+            fehler
+        );
+
+        alert(
+            "Der Journal-Eintrag konnte " +
+            "nicht gelöscht werden."
+        );
+
+    }
+
+}
+
+
+/* ---------------------------------------------------------
+   HTML SICHER AUSGEBEN
+   --------------------------------------------------------- */
+
+function escapeJournalHTML(text) {
+
+    return String(text)
+
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
 
 
 /* ---------------------------------------------------------
@@ -927,7 +1493,6 @@ function buildLambFields(){
 }
 
 
-
 /* =========================================================
    GEBURT SPEICHERN
    ========================================================= */
@@ -936,10 +1501,9 @@ document
     .getElementById('birthForm')
     .addEventListener(
         'submit',
-        function(e){
+        async function(e) {
 
             e.preventDefault();
-
 
             const date =
                 document.getElementById(
@@ -963,22 +1527,12 @@ document
                     ).value
                 );
 
-
-            if(!date || !motherId || !fatherId){
-
+            if (!date || !motherId || !fatherId) {
                 alert(
                     'Bitte Geburtsdatum, Mutter und Vater auswählen.'
                 );
-
                 return;
             }
-
-const gewicht40 =
-    document.querySelector(
-        `[name="lamb_gewicht40_${i}"]`
-    ).value.trim();
-
-
 
             const mother =
                 animals.find(
@@ -990,27 +1544,16 @@ const gewicht40 =
                     a => a.id === fatherId
                 );
 
-
-            if(!mother || !father){
-
+            if (!mother || !father) {
                 alert(
                     'Mutter oder Vater wurde nicht gefunden.'
                 );
-
                 return;
             }
 
-
-
-
-
-
-            /* Alle Lämmer prüfen */
-
             const neueLaemmer = [];
 
-
-            for(let i = 1; i <= count; i++){
+            for (let i = 1; i <= count; i++) {
 
                 const id =
                     document.querySelector(
@@ -1042,59 +1585,40 @@ const gewicht40 =
                         `[name="lamb_eriz_${i}"]`
                     ).value;
 
+                const gewicht40 =
+                    document.querySelector(
+                        `[name="lamb_gewicht40_${i}"]`
+                    ).value.trim();
 
-const gewicht40 =
-    document.querySelector(
-        `[name="lamb_gewicht40_${i}"]`
-    ).value.trim();
-
-
-
-                if(!id){
-
+                if (!id) {
                     alert(
                         `Bei Lamm ${i} fehlt die Orig.-Nr.`
                     );
-
                     return;
                 }
 
-
-                /* Bereits vorhandene Tiere prüfen */
-
-                if(
+                if (
                     animals.some(
                         a => a.id === id
                     ) ||
                     neueLaemmer.some(
                         a => a.id === id
                     )
-                ){
-
+                ) {
                     alert(
                         `Die Orig.-Nr. ${id} ist bereits vorhanden.`
                     );
-
                     return;
                 }
 
-
                 neueLaemmer.push({
-
                     id: id,
-
-                    zeichen: zeichen,
-
+                    zeichen: zeichen || 'EZ',
                     name: name,
-
                     punkte: punkte,
-
                     eriz: eriz,
-
                     rasse: 'SU',
-
                     geb: date,
-
                     geschlecht: sex,
 
                     vater:
@@ -1103,53 +1627,222 @@ const gewicht40 =
 
                     mutter:
                         `${mother.id} ${mother.name || ''}`
-                        .trim()
+                        .trim(),
 
+                    gewicht40:
+                        gewicht40 === ''
+                            ? ''
+                            : Number(gewicht40)
                 });
             }
 
 
-            /* Lämmer übernehmen */
+            /* =================================================
+               SUPABASE SPEICHERN
+               ================================================= */
+
+            const supabaseDaten =
+                neueLaemmer.map(a => ({
+                    id: a.id,
+                    name: a.name || "",
+                    zeichen: a.zeichen || "EZ",
+                    rasse: a.rasse || "SU",
+                    geb: a.geb || null,
+                    geschlecht: a.geschlecht || "",
+                    punkte: a.punkte || "",
+                    vater: a.vater || "",
+                    mutter: a.mutter || "",
+
+                    eriz:
+                        String(a.zeichen || "")
+                            .toUpperCase()
+                            .includes("EZ")
+                            ? "ErizWAHR"
+                            : "ErizFALSCH",
+
+                    gewicht40:
+                        a.gewicht40 === "" ||
+                        a.gewicht40 == null
+                            ? null
+                            : Number(a.gewicht40)
+                }));
+
+
+            const { error } =
+                await db
+                    .from("animals")
+                    .insert(supabaseDaten);
+
+
+            if (error) {
+
+                console.error(
+                    "Fehler beim Speichern des Lammes:",
+                    error
+                );
+
+                alert(
+                    "Die Lämmer konnten nicht in Supabase gespeichert werden.\n\n" +
+                    error.message
+                );
+
+                return;
+            }
+
+
+            /* =================================================
+               LOKALE LISTE AKTUALISIEREN
+               ================================================= */
 
             animals.push(
                 ...neueLaemmer
             );
 
-
-            /* Formular schliessen */
-
             closeBirth();
-
-
-            /* Tabelle aktualisieren */
 
             render();
 
-
-            /* Erstes neues Lamm auswählen */
-
-            if(neueLaemmer.length){
-
+            if (neueLaemmer.length) {
                 selectAnimal(
                     neueLaemmer[0].id
                 );
-
             }
 
-
             alert(
-                `${count} Lamm${count > 1 ? 'er' : ''} wurde erfolgreich erfasst.`
+                `${count} Lamm${count > 1 ? 'er' : ''} wurde erfolgreich in Supabase gespeichert.`
             );
 
         }
     );
+
+           
+
+/* =========================================================
+   SUPABASE – BESTEHENDE TIERE ÜBERTRAGEN
+   ========================================================= */
+
+async function tiereNachSupabaseUebertragen() {
+
+    const daten = animals.map(a => ({
+        id: a.id,
+        name: a.name || "",
+        zeichen: a.zeichen || "",
+        rasse: a.rasse || "",
+        geb: a.geb || null,
+        geschlecht: a.geschlecht || "",
+        punkte: a.punkte || "",
+        vater: a.vater || "",
+        mutter: a.mutter || "",
+        eriz:
+            String(a.zeichen || "")
+                .toUpperCase()
+                .includes("EZ")
+                ? "ErizWAHR"
+                : "ErizFALSCH",
+        gewicht40:
+            a.gewicht40 === "" ||
+            a.gewicht40 == null
+                ? null
+                : Number(a.gewicht40)
+    }));
+
+    const { error } = await db
+        .from("animals")
+        .upsert(
+            daten,
+            { onConflict: "id" }
+        );
+
+    if (error) {
+
+        console.error(
+            "Fehler beim Übertragen:",
+            error
+        );
+
+        alert(
+            "Die Tiere konnten nicht gespeichert werden."
+        );
+
+        return;
+    }
+
+    alert(
+        daten.length +
+        " Tiere wurden erfolgreich in Supabase gespeichert."
+    );
+
+    console.log(
+        "Übertragen:",
+        daten
+    );
+}
+
+
+/* =========================================================
+   SUPABASE TEST
+   ========================================================= */
+
+window.supabaseTiereTest = async function () {
+
+    await tiereNachSupabaseUebertragen();
+
+};
 
 
 /* =========================================================
    START
    ========================================================= */
 
-render();
+async function tiereAusSupabaseLaden() {
+
+    const { data, error } = await db
+        .from("animals")
+        .select("*")
+        .order("geb", { ascending: true });
+
+    if (error) {
+        console.error(
+            "Fehler beim Laden der Tiere:",
+            error
+        );
+
+        alert(
+            "Die Tiere konnten nicht aus Supabase geladen werden."
+        );
+
+        return;
+    }
+
+    animals = data.map(a => ({
+        id: a.id,
+        name: a.name || "",
+        zeichen: a.zeichen || "",
+        rasse: a.rasse || "",
+        geb: a.geb || "",
+        geschlecht: a.geschlecht || "",
+        punkte: a.punkte || "",
+        vater: a.vater || "",
+        mutter: a.mutter || "",
+        eriz: a.eriz || "",
+        gewicht40:
+            a.gewicht40 == null
+                ? ""
+                : a.gewicht40
+    }));
+
+    console.log(
+        "Tiere aus Supabase geladen:",
+        animals.length
+    );
+
+    render();
+}
 
 
-</script></body></html>
+tiereAusSupabaseLaden();
+
+</script>
+
+</body>
+</html>
