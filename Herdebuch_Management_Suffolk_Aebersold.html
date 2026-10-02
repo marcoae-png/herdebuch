@@ -1110,21 +1110,26 @@ await journalLaden();
    
   // Auf dem Handy nach dem Laden der Tierdetails scrollen
 if (window.innerWidth <= 700) {
+
     setTimeout(() => {
-        const detailsCard = document.getElementById("detailsCard");
 
-        if (detailsCard) {
-            const position =
-                detailsCard.getBoundingClientRect().top +
-                window.pageYOffset +
-                10;
+        const detailsCard =
+            document.getElementById("detailsCard");
 
-            window.scrollTo({
-                top: position,
-                behavior: "smooth"
-            });
-        }
-    }, 300);
+        if (!detailsCard) return;
+
+        const rect =
+            detailsCard.getBoundingClientRect();
+
+        const scrollPosition =
+            window.scrollY + rect.top - 80;
+
+        window.scrollTo({
+            top: scrollPosition,
+            behavior: "smooth"
+        });
+
+    }, 500);
 }
 
 
