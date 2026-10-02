@@ -1886,10 +1886,6 @@ function escapeJournalHTML(text) {
 
 
 
-/* ---------------------------------------------------------
-   JOURNAL ANZEIGEN
-   --------------------------------------------------------- */
-
 function journalAnzeigen(tierId) {
 
     const liste =
@@ -1897,10 +1893,23 @@ function journalAnzeigen(tierId) {
 
     if (!liste) return;
 
-const eintraege =
-    (tierJournal || []).filter(eintrag =>
-        String(eintrag.tier_id) === String(tierId)
+
+    console.log("JOURNAL ANZEIGEN FÜR TIER:", tierId);
+    console.log("ALLE JOURNALEINTRÄGE:", tierJournal);
+
+
+    const eintraege =
+        (tierJournal || []).filter(eintrag =>
+            String(eintrag.tier_id).trim() ===
+            String(tierId).trim()
+        );
+
+
+    console.log(
+        "EINTRÄGE FÜR DIESES TIER:",
+        eintraege
     );
+
 
     if (eintraege.length === 0) {
 
@@ -1914,7 +1923,6 @@ const eintraege =
     }
 
 
-    // Neueste Einträge zuerst
     const sortiert =
         [...eintraege].sort(
             (a, b) =>
@@ -1924,7 +1932,7 @@ const eintraege =
 
 
     liste.innerHTML =
-        sortiert.map((eintrag, index) => `
+        sortiert.map(eintrag => `
 
             <div class="journal-entry">
 
@@ -1934,31 +1942,38 @@ const eintraege =
                     ).toLocaleDateString("de-CH")}
                 </div>
 
+
                 <div class="journal-content">
 
                     <strong>
-                        ${eintrag.ereignis}
+                        ${escapeJournalHTML(
+                            eintrag.ereignis || ""
+                        )}
                     </strong>
+
 
                     ${
                         eintrag.bemerkung
-                            ? `<div class="journal-note">
-                                ${escapeJournalHTML(
-                                    eintrag.bemerkung
-                                )}
-                               </div>`
+                            ? `
+                                <div class="journal-note">
+                                    ${escapeJournalHTML(
+                                        eintrag.bemerkung
+                                    )}
+                                </div>
+                              `
                             : ""
                     }
 
                 </div>
 
+
                 <button
                     type="button"
                     class="journal-delete"
-                   onclick="journalEintragLoeschen(
-    '${tierId}',
-    ${eintrag.id}
-)">
+                    onclick="journalEintragLoeschen(
+                        '${tierId}',
+                        ${eintrag.id}
+                    )">
                     Löschen
                 </button>
 
@@ -1966,8 +1981,6 @@ const eintraege =
 
         `).join("");
 }
-
-
 
 
 /* ---------------------------------------------------------
