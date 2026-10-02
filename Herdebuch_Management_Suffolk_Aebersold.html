@@ -384,19 +384,18 @@
 
 }
     
-
 /* =========================================
-   HANDY – DETAILS
+   HANDY – TIERDETAILS ZUERST VERSTECKEN
    ========================================= */
 
 @media (max-width: 700px) {
 
-    #details {
-        display: none !important;
+    .layout > .card:nth-child(2) {
+        display: none;
     }
 
-    #details.mobile-open {
-        display: block !important;
+    .layout > .card:nth-child(2).mobile-open {
+        display: block;
     }
 
 }
@@ -716,7 +715,7 @@ let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYe
 
 function selectAnimal(id) {
 
-document.getElementById("details").classList.add("mobile-open");
+document.getElementById("details").parentElement.classList.add("mobile-open");
     selectedId=id;
     let a=animals.find(x=>x.id==id),
         kids=animals.filter(x=>x.vater.startsWith(a.id+' ')||x.mutter.startsWith(a.id+' '));
