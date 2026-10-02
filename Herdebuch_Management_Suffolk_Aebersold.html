@@ -1113,19 +1113,17 @@ if (window.innerWidth <= 700) {
 
     setTimeout(() => {
 
-        const detailsCard =
-            document.getElementById("detailsCard");
+        const details = document.getElementById("details");
 
-        if (!detailsCard) return;
+        if (!details) return;
 
-        const rect =
-            detailsCard.getBoundingClientRect();
+        details.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
 
-        const scrollPosition =
-            window.scrollY + rect.top - 80;
-
-        window.scrollTo({
-            top: scrollPosition,
+        window.scrollBy({
+            top: -70,
             behavior: "smooth"
         });
 
