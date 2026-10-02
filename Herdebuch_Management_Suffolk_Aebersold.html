@@ -1228,33 +1228,39 @@ addForm.onsubmit = async e => {
        DATEN FÜR SUPABASE
        ===================================================== */
 
-    const tier = {
+const tier = {
 
-        id: o.id || "",
+    id: o.id || "",
 
-        name: o.name || "",
+    name: o.name || "",
 
-        zeichen: o.zeichen || "",
+    zeichen: o.zeichen || "",
 
-        rasse: o.rasse || "SU",
+    rasse: o.rasse || "SU",
 
-        geb: o.geb || null,
+    geb: o.geb || null,
 
-        geschlecht: o.geschlecht || "",
+    geschlecht: o.geschlecht || "",
 
-        punkte: o.punkte || "",
+    punkte: o.punkte || "",
 
-        vater: o.vater || "",
+    vater: o.vater || "",
 
-        mutter: o.mutter || "",
+    mutter: o.mutter || "",
 
+    eriz:
+        String(o.zeichen || "")
+            .toUpperCase()
+            .includes("EZ")
+            ? "WAHR"
+            : "FALSCH",
 
-        gewicht40:
-            o.gewicht40 === "" ||
-            o.gewicht40 == null
-                ? null
-                : Number(o.gewicht40)
-    };
+    gewicht40:
+        o.gewicht40 === "" ||
+        o.gewicht40 == null
+            ? null
+            : Number(o.gewicht40)
+};
 
 
     /* =====================================================
