@@ -1095,8 +1095,26 @@ async function selectAnimal(id) {
         .getElementById("detailsCard")
         .classList.add("mobile-open");
 
-   // Auf dem Handy nach dem Laden der Tierdetails scrollen
+  // Auf dem Handy nach dem Laden der Tierdetails scrollen
 if (window.innerWidth <= 700) {
+    setTimeout(() => {
+        const detailsCard = document.getElementById("detailsCard");
+
+        if (detailsCard) {
+            const position =
+                detailsCard.getBoundingClientRect().top +
+                window.pageYOffset +
+                10;
+
+            window.scrollTo({
+                top: position,
+                behavior: "smooth"
+            });
+        }
+    }, 300);
+}
+
+   
     selectedId = id;
 
 console.log("ANGEKLICKTES TIER:", selectedId);
