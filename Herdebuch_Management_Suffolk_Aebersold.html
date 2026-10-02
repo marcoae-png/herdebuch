@@ -1176,7 +1176,7 @@ function renderYears(){let s=document.getElementById('yearFilter'),old=s.value,y
 
 </tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size}
 
-async function selectAnimal(id)
+async function selectAnimal(id) {
 
     document
         .getElementById("detailsCard")
