@@ -1071,6 +1071,22 @@ document.getElementById("details").parentElement.classList.add("mobile-open");
 </button>
 
 
+<button
+    type="button"
+    onclick="tierEntfernen('${a.id}')"
+    style="
+        margin:0 0 15px 8px;
+        padding:8px 14px;
+        cursor:pointer;
+        background:#b52b2b;
+        color:white;
+        border:none;
+        border-radius:6px;
+    "
+>
+    🗑️ Tier entfernen
+</button>
+
 <span class="badge">${a.geschlecht=='F'?'Mutterschaf':'Widder'}
 
 </span> <span class="badge">${a.rasse}</span><div class="grid">
@@ -2397,6 +2413,75 @@ window.supabaseTiereTest = async function () {
 };
 
 
+
+
+
+
+
+
+window.tierEntfernen = async function(id) {
+
+    const tier = animals.find(a => a.id === id);
+
+    if (!tier) {
+        alert("Tier wurde nicht gefunden.");
+        return;
+    }
+
+    const bestaetigt = confirm(
+        "Möchtest du dieses Tier wirklich entfernen?\n\n" +
+        tier.id + " – " + tier.name +
+        "\n\nDieser Vorgang kann nicht rückgängig gemacht werden."
+    );
+
+    if (!bestaetigt) {
+        return;
+    }
+
+    const { error } = await db
+        .from("animals")
+        .delete()
+        .eq("id", tier.id);
+
+    if (error) {
+        console.error("Fehler beim Löschen:", error);
+
+        alert(
+            "Das Tier konnte nicht entfernt werden.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+    animals = animals.filter(a => a.id !== tier.id);
+
+    selectedId = null;
+
+    document.getElementById("details").innerHTML =
+        '<div class="empty">Klicke auf ein Tier.</div>';
+
+    document
+        .getElementById("detailsCard")
+        .classList.remove("mobile-open");
+
+    render();
+
+    alert("Das Tier wurde erfolgreich entfernt.");
+};
+
+
+
+
+    
+
+
+
+
+
+
+
+    
 /* =========================================================
    START
    ========================================================= */
