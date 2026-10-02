@@ -363,6 +363,7 @@
 
 /* =========================================
    HANDY HOCHFORMAT
+   TABELLE BLEIBT HORIZONTAL SCROLLBAR
    ========================================= */
 
 @media (max-width: 700px) and (orientation: portrait) {
@@ -379,6 +380,7 @@
         padding-right: 8px;
         margin-left: 0;
         margin-right: 0;
+        box-sizing: border-box;
     }
 
     .layout {
@@ -391,19 +393,47 @@
         max-width: 100%;
     }
 
+    /* Tabelle darf breiter als Handy sein */
     .table-wrap {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
+        overflow-x: auto !important;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
     }
 
     table {
-        width: 100% !important;
-        min-width: 0 !important;
-        table-layout: fixed;
+        width: max-content !important;
+        min-width: 1000px !important;
+        table-layout: auto !important;
     }
 
-    /* Tierdetails zuerst verstecken */
+    table thead {
+        display: table-header-group !important;
+    }
+
+    table tbody {
+        display: table-row-group !important;
+    }
+
+    table tbody tr {
+        display: table-row !important;
+    }
+
+    table tbody td {
+        display: table-cell !important;
+        width: auto !important;
+        min-height: 0 !important;
+        white-space: nowrap !important;
+        text-align: left !important;
+    }
+
+    table tbody td::before {
+        display: none !important;
+        content: none !important;
+    }
+
+    /* Details erst nach Klick */
     #detailsCard {
         display: none !important;
     }
@@ -411,8 +441,9 @@
     #detailsCard.mobile-open {
         display: block !important;
     }
-
 }
+
+
 
 
     
