@@ -1575,52 +1575,39 @@ let tierJournal = {};
 
 async function journalLaden() {
 
-    if (!JOURNAL_API_URL) {
-        console.log("Journal: gemeinsame Speicherung noch nicht eingerichtet.");
-        return;
-    }
-
     try {
 
-        const response = await fetch(JOURNAL_API_URL);
+        const { data, error } = await db
+            .from("tier_journal")
+            .select("*")
+            .order("datum", { ascending: false })
+            .order("id", { ascending: false });
 
-        if (!response.ok) {
-            throw new Error("Journal konnte nicht geladen werden.");
+        if (error) {
+            console.error("Fehler beim Laden des Tier-Journals:", error);
+            return;
         }
 
-        const daten = await response.json();
+        window.tierJournal = data || [];
 
-        tierJournal = {};
+        console.log(
+            "Tier-Journal aus Supabase geladen:",
+            window.tierJournal.length
+        );
 
-        daten.forEach(eintrag => {
-
-            if (!tierJournal[eintrag.tierId]) {
-                tierJournal[eintrag.tierId] = [];
-            }
-
-            tierJournal[eintrag.tierId].push({
-                datum: eintrag.datum,
-                ereignis: eintrag.ereignis,
-                bemerkung: eintrag.bemerkung || "",
-                serverId: eintrag.serverId
-            });
-
-        });
-
-        if (selectedId) {
+        // Falls bereits ein Tier ausgewählt ist
+        if (typeof selectedId !== "undefined" && selectedId) {
             journalAnzeigen(selectedId);
         }
 
-    } catch (fehler) {
+    } catch (err) {
 
         console.error(
             "Fehler beim Laden des Tier-Journals:",
-            fehler
+            err
         );
-
     }
 }
-
 
 /* ---------------------------------------------------------
    JOURNAL ANZEIGEN
@@ -2680,12 +2667,15 @@ async function tiereAusSupabaseLaden() {
         animals.length
     );
 
+   
+(async function () {
+
+    await tiereAusSupabaseLaden();
+    await journalLaden();
+
     render();
-}
 
-
-tiereAusSupabaseLaden();
-
+})();
 </script>
 
 </body>
