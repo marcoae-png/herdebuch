@@ -1097,6 +1097,17 @@ async function selectAnimal(id) {
         .getElementById("detailsCard")
         .classList.add("mobile-open");
 
+
+
+   
+    selectedId = id;
+
+console.log("ANGEKLICKTES TIER:", selectedId);
+
+// Journal online laden
+await journalLaden();
+
+   
   // Auf dem Handy nach dem Laden der Tierdetails scrollen
 if (window.innerWidth <= 700) {
     setTimeout(() => {
@@ -1116,14 +1127,8 @@ if (window.innerWidth <= 700) {
     }, 300);
 }
 
+
    
-    selectedId = id;
-
-console.log("ANGEKLICKTES TIER:", selectedId);
-
-// Journal online laden
-await journalLaden();
-
 console.log("NACH journalLaden:", selectedId);
 
 
