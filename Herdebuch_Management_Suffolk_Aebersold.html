@@ -139,8 +139,8 @@
 
 
 /* =========================================================
-   HANDY-ANSICHT
-   Tablet bleibt unverändert
+   HANDY – TIERE ALS KOMPAKTE KARTEN
+   Tablet / PC bleiben unverändert
    ========================================================= */
 
 @media (max-width: 700px) {
@@ -152,7 +152,6 @@
 
     header {
         padding: 12px 14px;
-        gap: 8px;
     }
 
     header h1 {
@@ -170,6 +169,10 @@
         display: block;
     }
 
+    /* =========================================
+       FILTER
+       ========================================= */
+
     .toolbar {
         padding: 10px;
         gap: 7px;
@@ -181,6 +184,10 @@
         width: 100%;
         min-height: 42px;
     }
+
+    /* =========================================
+       STATISTIK
+       ========================================= */
 
     .stats {
         grid-template-columns: repeat(2, 1fr);
@@ -195,28 +202,147 @@
         font-size: 20px;
     }
 
-    /* Tabelle scrollbar */
+    /* =========================================
+       TIERLISTE ALS KARTEN
+       ========================================= */
+
     .card {
-        overflow-x: auto;
+        overflow: visible;
     }
 
     table {
-        min-width: 950px;
+        width: 100% !important;
+        min-width: 0 !important;
+        border: 0 !important;
     }
 
-    th,
-    td {
-        white-space: nowrap;
-        padding: 8px 7px;
+    /* Tabellenkopf ausblenden */
+    table thead {
+        display: none;
     }
 
-    /* Detailbereich unterhalb der Tabelle */
+    table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    /* Jedes Tier = eine Karte */
+    table tbody tr {
+        display: block;
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 12px;
+        background: #fff;
+        border: 1px solid #dce8d7;
+        border-left: 5px solid #4f8a45;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px #315f3618;
+        cursor: pointer;
+    }
+
+    /* ausgewähltes Tier */
+    table tbody tr.selected {
+        border-left-color: #9bcf62;
+        background: #f5faef;
+    }
+
+    /* einzelne Angaben */
+    table tbody td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 32px;
+        padding: 5px 2px;
+        border: 0 !important;
+        white-space: normal;
+        text-align: right;
+    }
+
+    /* Beschriftungen */
+    table tbody td::before {
+        font-weight: 700;
+        color: #315f36;
+        text-align: left;
+        margin-right: 12px;
+    }
+
+    table tbody td:nth-child(1)::before {
+        content: "Orig.-Nr.";
+    }
+
+    table tbody td:nth-child(2)::before {
+        content: "Zeichen";
+    }
+
+    table tbody td:nth-child(3)::before {
+        content: "Name";
+    }
+
+    table tbody td:nth-child(4)::before {
+        content: "Rasse";
+    }
+
+    table tbody td:nth-child(5)::before {
+        content: "Geboren";
+    }
+
+    table tbody td:nth-child(6)::before {
+        content: "Alter";
+    }
+
+    table tbody td:nth-child(7)::before {
+        content: "Geschlecht";
+    }
+
+    table tbody td:nth-child(8)::before {
+        content: "Punkte";
+    }
+
+    table tbody td:nth-child(9)::before {
+        content: "Vater";
+    }
+
+    table tbody td:nth-child(10)::before {
+        content: "Mutter";
+    }
+
+    table tbody td:nth-child(11)::before {
+        content: "Eriz";
+    }
+
+    /* Name hervorheben */
+    table tbody td:nth-child(3) {
+        font-size: 17px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid #e4ecdf !important;
+        margin-bottom: 4px;
+    }
+
+    /* Orig.-Nr. ebenfalls hervorheben */
+    table tbody td:nth-child(1) {
+        font-weight: 700;
+    }
+
+    /* Eltern nicht über den Bildschirm laufen lassen */
+    table tbody td:nth-child(9),
+    table tbody td:nth-child(10) {
+        word-break: break-word;
+    }
+
+    /* =========================================
+       DETAILBEREICH
+       ========================================= */
+
     #details {
         width: 100%;
         margin-top: 12px;
     }
 
-    /* Formulare */
+    /* =========================================
+       FORMULARE
+       ========================================= */
+
     .form-grid,
     .bestell-info-grid {
         grid-template-columns: 1fr !important;
@@ -225,6 +351,7 @@
     input,
     select,
     textarea {
+        width: 100%;
         max-width: 100%;
     }
 
@@ -232,9 +359,6 @@
         min-height: 42px;
     }
 }
-
-
-
 
 
 
