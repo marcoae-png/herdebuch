@@ -330,7 +330,7 @@ header .header-title h1 {
     }
 
     100% {
-        transform: translateX(40px);
+        transform: translateX(10px);
     }
 }
 
@@ -1086,15 +1086,15 @@ async function selectAnimal(id) {
         .getElementById("detailsCard")
         .classList.add("mobile-open");
 
-    // Auf dem Handy direkt zur Tierdetails-Karte scrollen
-    if (window.innerWidth <= 700) {
-        setTimeout(() => {
-            document.getElementById("detailsCard").scrollIntoView({
-                behavior: "smooth",
-                block: "start"
-            });
-        }, 50);
-    }
+// Auf dem Handy direkt zur Tierdetails-Karte scrollen
+if (window.innerWidth <= 700) {
+    setTimeout(() => {
+        document.getElementById("detailsCard").scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+    }, 50);
+}
 
     selectedId = id;
 
