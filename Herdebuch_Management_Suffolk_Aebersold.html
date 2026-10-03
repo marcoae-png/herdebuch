@@ -590,17 +590,20 @@ header {
         gap: 2px !important;
     }
 
-    header .header-title h1 {
-        margin: 0 !important;
-        padding: 0 !important;
+header .header-title h1 {
+    margin: 0 !important;
+    padding: 0 !important;
 
-        color: #fff !important;
+    color: #fff !important;
 
-        font-size: 15px !important;
-        line-height: 1.1 !important;
+    font-size: 15px !important;
+    line-height: 1.1 !important;
 
-        white-space: nowrap !important;
-    }
+    white-space: nowrap !important;
+
+    /* Mobile: nur wenig nach rechts bewegen */
+    animation: titelLinksMitteMobile 4s ease-in-out infinite alternate !important;
+}
 
     header .header-title small {
         display: block !important;
