@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -268,7 +273,7 @@ tr.selected { background: #dcefd2; }
   .header-title h1 { font-size: clamp(17px, 5vw, 24px); white-space: normal; }
   .header-title small { font-size: 12px; }
   .logo-wrap { grid-column: 2; grid-row: 1; }
-  .logo-badge { width: min(175px, 38vw); height: 76px; }
+  .logo-badge { width: min(210px, 44vw); height: 92px; }
   .header-buttons { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 6px; }
   .header-buttons button { min-height: 40px; padding: 8px 11px; border-radius: 10px; font-size: 12px; }
   .container { width: calc(100% - 16px); margin: 10px auto; }
@@ -681,7 +686,8 @@ tr.selected { background: #dcefd2; }
 
                 <select
                     id="birthMother"
-                    required>
+                    required
+                    onchange="geburtsInzuchtAktualisieren()">
 
                     <option value="">
                         -- Mutter auswählen --
@@ -699,7 +705,8 @@ tr.selected { background: #dcefd2; }
 
                 <select
                     id="birthFather"
-                    required>
+                    required
+                    onchange="geburtsInzuchtAktualisieren()">
 
                     <option value="">
                         -- Vater auswählen --
@@ -708,6 +715,10 @@ tr.selected { background: #dcefd2; }
                 </select>
 
             </label>
+
+            <div id="birthInbreeding" class="full" role="status" aria-live="polite" style="padding:10px 12px;background:#f4f8f1;border:1px solid var(--line);border-radius:8px;color:var(--ink)">
+                Wähle Mutter und Bock aus, um den erwarteten Inzuchtgrad der Lämmer zu sehen.
+            </div>
 
 
             <!-- LÄMMER ÜBERSCHRIFT -->
@@ -1660,6 +1671,7 @@ let kids = animals.filter(
         String(x.vater || "").startsWith(a.id + " ") ||
         String(x.mutter || "").startsWith(a.id + " ")
 );
+const inzucht = inzuchtAuswertung(a);
 
    const details = document.getElementById("details");
 
@@ -1747,6 +1759,16 @@ details.classList.add("show");
     <div class="animal" style="margin-top:8px;">
         <b>Mutter:</b><br>
         ${parent(a.mutter)}
+    </div>
+</div>
+
+
+<div class="section">
+    <h4>Inzucht-Auswertung</h4>
+    <div class="animal">
+        <strong>Geschätzter Inzuchtkoeffizient:</strong>
+        <span>${inzucht.wert === null ? "nicht berechenbar" : (inzucht.wert * 100).toLocaleString("de-CH", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " %"}</span>
+        <small style="display:block;margin-top:5px;color:var(--muted)">${inzucht.hinweis}</small>
     </div>
 </div>
 
@@ -2074,6 +2096,9 @@ function openBirth(){
         new Date().toISOString().split('T')[0];
 
     fillParentLists();
+    document.getElementById('birthMother').value = '';
+    document.getElementById('birthFather').value = '';
+    geburtsInzuchtAktualisieren();
 
     document.getElementById('lambCount').value = '1';
 
@@ -2203,6 +2228,80 @@ function openMassBrunst() {
     }
     renderMassBrunstTiere();
     document.getElementById("massBrunstModal")?.classList.add("show");
+}
+
+function geburtsInzuchtAktualisieren() {
+    const info = document.getElementById('birthInbreeding');
+    const motherId = document.getElementById('birthMother')?.value;
+    const fatherId = document.getElementById('birthFather')?.value;
+    if (!info) return;
+    if (!motherId || !fatherId) {
+        info.textContent = 'Wähle Mutter und Bock aus, um den erwarteten Inzuchtgrad der Lämmer zu sehen.';
+        return;
+    }
+    const result = inzuchtAuswertung({ vater: fatherId, mutter: motherId });
+    if (result.wert === null) {
+        info.textContent = 'Der Inzuchtgrad kann mit den erfassten Abstammungsdaten nicht berechnet werden.';
+        return;
+    }
+    const mother = findeTierNachNr(motherId);
+    const father = findeTierNachNr(fatherId);
+    const motherKey = String(mother?.origNr || mother?.id || motherId).trim();
+    const fatherParents = father ? [findeTierNachNr(father.vater), findeTierNachNr(father.mutter)] : [];
+    const directParentOffspring = fatherParents.some(parent =>
+        parent && String(parent.origNr || parent.id || "").trim() === motherKey
+    );
+    // Bei Elternteil-Nachkomme-Paarung beträgt F mindestens 25 %.
+    const coefficient = directParentOffspring ? Math.max(result.wert, 0.25) : result.wert;
+    const prozent = (coefficient * 100).toLocaleString('de-CH', { minimumFractionDigits: 1, maximumFractionDigits: 2 });
+    info.innerHTML = '<strong>Erwarteter Inzuchtgrad der Lämmer: ' + prozent + ' %</strong><small style="display:block;margin-top:4px;color:var(--muted)">' + escapeJournalHTML(result.hinweis) + '</small>';
+}
+
+// Wright-Inzuchtkoeffizient aus der im Herdebuch erfassten Abstammung.
+// Nicht erfasste Vorfahren werden als unbekannt behandelt.
+function inzuchtAuswertung(tier) {
+    const key = t => t ? String(t.origNr || t.id || "").trim() : "";
+    const sire = t => findeTierNachNr(t && t.vater);
+    const dam = t => findeTierNachNr(t && t.mutter);
+    const memo = new Map();
+    const aktiv = new Set();
+
+    function kinship(a, b, tiefe = 0) {
+        if (!a || !b || tiefe > 80) return 0;
+        let ka = key(a), kb = key(b);
+        if (!ka || !kb) return 0;
+        if (ka > kb) { [a, b] = [b, a]; [ka, kb] = [kb, ka]; }
+        const pair = ka + "|" + kb;
+        if (memo.has(pair)) return memo.get(pair);
+        if (aktiv.has(pair)) return 0;
+        aktiv.add(pair);
+
+        let result;
+        if (ka === kb) {
+            const v = sire(a), m = dam(a);
+            result = v && m ? (1 + kinship(v, m, tiefe + 1)) / 2 : 0.5;
+        } else {
+            const av = sire(a), am = dam(a);
+            const bv = sire(b), bm = dam(b);
+            // Expand the individual with known parents. Always expanding the
+            // lexically first ID incorrectly returned zero when it was a founder.
+            if (av || am) {
+                result = (kinship(av, b, tiefe + 1) + kinship(am, b, tiefe + 1)) / 2;
+            } else if (bv || bm) {
+                result = (kinship(bv, a, tiefe + 1) + kinship(bm, a, tiefe + 1)) / 2;
+            } else {
+                result = 0;
+            }
+        }
+
+        aktiv.delete(pair);
+        memo.set(pair, result);
+        return result;
+    }
+
+    const vater = sire(tier), mutter = dam(tier);
+    if (!vater || !mutter) return { wert: null, hinweis: "Vater oder Mutter ist nicht ausreichend erfasst." };
+    return { wert: Math.max(0, kinship(vater, mutter)), hinweis: "Berechnet aus den im Herdebuch vorhandenen Abstammungsdaten; unbekannte Vorfahren können den Wert unterschätzen." };
 }
 
 function journalDatumFormatieren(datum) {
