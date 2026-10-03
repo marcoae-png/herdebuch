@@ -1,1509 +1,289 @@
-<!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+/* Herdebuch Management – überarbeitetes Stylesheet */
+:root {
+  --green-900: #244a29;
+  --green-800: #315f36;
+  --green-700: #4f8a45;
+  --green-500: #7eaf55;
+  --green-300: #9bcf62;
+  --green-100: #e3f1dc;
+  --ink: #243126;
+  --muted: #68737a;
+  --line: #dce8d7;
+  --paper: #fff;
+  --page: #f2f6ef;
+  --radius: 12px;
+  --shadow: 0 2px 10px rgb(49 95 54 / 9%);
+}
 
-<title>Herdebuch Management – Suffolk Aebersold</title>
-   
-   <style>
-*{box-sizing:border-box}
-      
-body{margin:0;font-family:Arial,sans-serif;background:#f2f6ef;color:#243126}
+* { box-sizing: border-box; }
+html { min-width: 320px; }
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--page);
+  font: 16px/1.45 Arial, sans-serif;
+}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
+img { max-width: 100%; }
 
-   
-/* =========================================================
-   HEADER
-   ========================================================= */
-
+/* Kopfbereich */
 header {
-    background: linear-gradient(
-        135deg,
-        #315f36 0%,
-        #4f8a45 55%,
-        #7eaf55 100%
-    );
-    color: #fff;
-    padding: 10px 18px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    min-height: 78px;
-    box-shadow: 0 3px 12px #315f3633;
+  min-height: 78px;
+  padding: 10px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--green-800), var(--green-700) 55%, var(--green-500));
+  box-shadow: 0 3px 12px rgb(49 95 54 / 20%);
 }
-
-
-.header-title small {
-    display: block;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    line-height: 1.2;
-    opacity: 0.9;
-    white-space: nowrap;
-}
-
-/* Linker Bereich */
 .header-title {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 3px;
-    flex: 1;
-    min-width: 0;
-    opacity: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
 }
-
-/* Titel */
 .header-title h1 {
-    margin: 0;
-    color: #fff;
-    font-size: 38px;
-    line-height: 1.15;
-    white-space: nowrap;
-    position: relative;
-
-    animation: titelLinksMitte 4s ease-in-out infinite alternate;
+  margin: 0;
+  color: #fff;
+  font-size: clamp(22px, 3vw, 38px);
+  line-height: 1.15;
+  overflow-wrap: anywhere;
 }
-
-/* Von links Richtung Mitte */
-@keyframes titelLinksMitte {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(300px);
-    }
+.header-title small { color: #fff; font-size: 16px; font-weight: 600; }
+.header-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.logo-wrap { flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end; }
+.logo-badge { display: block; width: min(240px, 24vw); height: 90px; object-fit: contain; }
+.header-buttons button {
+  min-height: 38px;
+  padding: 8px 12px;
+  color: var(--green-900);
+  background: #fff;
+  border: 0;
+  border-radius: 7px;
 }
+.header-buttons button:hover { background: var(--green-100); }
 
-/* Buttons */
-.header-buttons{
-    display:flex;
-    gap:8px;
-    align-items:center;
-    flex-wrap:wrap;
-}
-
-/* Logo immer rechts */
-.logo-wrap{
-    display:flex;
-    align-items:center;
-    justify-content:flex-end;
-    margin-left:auto;
-    flex-shrink:0;
-}
-
-.logo-badge{
-    width:340px !important;
-    height:150px !important;
-    object-fit:contain !important;
-    display:block !important;
-    transform:none !important;
-}
-
-
-
-
-   
-/* =========================================================
-   HAUPTLAYOUT
-   ========================================================= */
-
+/* Seitenaufbau */
+.container { width: min(100% - 32px, 1500px); margin: 20px auto; }
 .layout {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 650px;
-    gap: 16px;
-    align-items: start;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 650px);
+  gap: 16px;
+  align-items: start;
 }
-
-
-/* =========================================================
-   INHALT
-   ========================================================= */
-
-.container {
-    width: 100%;
-    max-width: 1500px;
-    margin: 20px auto;
-    padding: 0 16px;
-    box-sizing: border-box;
-}
-
-
-/* =========================================================
-   STATISTIK
-   ========================================================= */
-
-.stats {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    width: 100%;
-    margin-bottom: 16px;
-}
-
-.stat {
-    background: #fff;
-    border: 1px solid #dce8d7;
-    border-top: 4px solid #9bcf62;
-    border-radius: 12px;
-    padding: 16px;
-    min-width: 0;
-    box-shadow: 0 2px 10px #315f3614;
-    box-sizing: border-box;
-}
-
-.stat span {
-    display: block;
-    font-size: 14px;
-    color: #243126;
-}
-
-.stat b {
-    display: block;
-    margin-top: 4px;
-    font-size: 25px;
-    color: #315f36;
-}
-
-
-/* =========================================================
-   KARTEN
-   ========================================================= */
-
 .card {
-    overflow: hidden;
-    min-width: 0;
+  min-width: 0;
+  overflow: hidden;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
-
 .card h2 {
-    font-size: 18px;
-    margin: 0;
-    padding: 16px;
-    border-bottom: 1px solid #dce8d7;
-    background: linear-gradient(90deg, #f4f8f1, #fff);
-    color: #315f36;
+  margin: 0;
+  padding: 16px;
+  color: var(--green-800);
+  background: linear-gradient(90deg, #f4f8f1, #fff);
+  border-bottom: 1px solid var(--line);
+  font-size: 18px;
 }
 
-
-/* =========================================================
-   TABELLE
-   ========================================================= */
-
-.table-wrap {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: auto;
-    max-height: 680px;
-    -webkit-overflow-scrolling: touch;
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 1050px;
-}
-
-th,
-td {
-    padding: 9px;
-    border-bottom: 1px solid #e3ebe0;
-    text-align: left;
-    white-space: nowrap;
-}
-
-th {
-    position: sticky;
-    top: 0;
-    background: #4f8a45;
-    color: #fff;
-}
-
-tr:hover {
-    background: #f2f8ee;
-}
-
-tr.selected {
-    background: #dcefd2;
-}
-
-
-/* =========================================================
-   TABLET
-   ========================================================= */
-
-@media (max-width: 1100px) {
-
-    .layout {
-        grid-template-columns: minmax(0, 1fr);
-    }
-
-    .stats {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 600px) {
-
-    .container {
-        width: 100%;
-        max-width: none;
-        margin: 12px 0;
-        padding: 0 10px;
-    }
-
-    .layout {
-        display: block;
-        width: 100%;
-    }
-
-    .stats {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-    }
-
-    .stat {
-        padding: 12px;
-        border-radius: 10px;
-    }
-
-    .stat span {
-        font-size: 12px;
-    }
-
-    .stat b {
-        font-size: 20px;
-    }
-
-    .card {
-        width: 100%;
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-
-    .card h2 {
-        font-size: 16px;
-        padding: 13px;
-    }
-
-    .table-wrap {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: auto;
-    }
-
-    table {
-        min-width: 1050px;
-    }
-}
-
-
-/* =========================================================
-   SEHR KLEINE HANDYS
-   ========================================================= */
-
-@media (max-width: 400px) {
-
-    .container {
-        padding: 0 8px;
-    }
-
-    .stats {
-        grid-template-columns: 1fr;
-    }
-
-    .stat b {
-        font-size: 19px;
-    }
-}
-/* =========================================================
-   LINKS
-   ========================================================= */
-
-.link {
-    color: #315f36;
-    cursor: pointer;
-    font-weight: bold;
-    text-decoration: underline;
-    text-decoration-color: #9bcf62;
-}
-
-
-/* =========================================================
-   TIERDETAILS
-   ========================================================= */
-
-.detail {
-    padding: 16px;
-}
-
-.detail h3 {
-    margin: 0 0 6px;
-    font-size: 24px;
-    color: #315f36;
-}
-
-.badge {
-    display: inline-block;
-    padding: 4px 8px;
-    border-radius: 20px;
-    background: #e3f1dc;
-    color: #315f36;
-    font-size: 12px;
-    font-weight: bold;
-    border: 1px solid #b8d5aa;
-}
-
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin: 15px 0;
-}
-
-.field {
-    background: #f3f7f1;
-    border-radius: 8px;
-    padding: 9px;
-    border-left: 3px solid #9bcf62;
-}
-
-.field span {
-    display: block;
-    color: #68737a;
-    font-size: 11px;
-    margin-bottom: 3px;
-}
-
-
-/* =========================================================
-   BEREICHE
-   ========================================================= */
-
-.section {
-    border-top: 1px solid #dce8d7;
-    padding-top: 14px;
-    margin-top: 14px;
-}
-
-.section h4 {
-    color: #315f36;
-}
-
-.family {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.animal {
-    border: 1px solid #c4d7bd;
-    border-radius: 9px;
-    padding: 9px;
-    background: #fafcf9;
-    cursor: pointer;
-}
-
-.animal:hover {
-    background: #eaf4e5;
-    border-color: #9bcf62;
-}
-
-.empty {
-    padding: 25px;
-    text-align: center;
-    color: #69747b;
-}
-
-.tree {
-    text-align: center;
-}
-
-.tree-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.tree-line {
-    height: 18px;
-    width: 2px;
-    background: #4f8a45;
-    margin: auto;
-}
-
-
-/* =========================================================
-   MODAL
-   ========================================================= */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #315f3688;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-}
-
-.modal.show {
-    display: flex;
-}
-
-.modal-box {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    max-width: 700px;
-    width: 100%;
-    max-height: 90vh;
-    border-top: 6px solid #4f8a45;
-    box-sizing: border-box;
-    overflow-y: auto;
-}
-
-
-/* =========================================================
-   FORMULARE
-   ========================================================= */
-
-.form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.form label {
-    font-size: 12px;
-}
-
-.form input,
-.form select {
-    width: 100%;
-    margin-top: 4px;
-}
-
-.full {
-    grid-column: 1 / -1;
-}
-
+/* Kennzahlen */
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
 .stat {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 10px #315f3614;
-    border: 1px solid #dce8d7;
-    border-top: 4px solid #9bcf62;
-    padding: 16px;
-    min-width: 0;
-    box-sizing: border-box;
+  min-width: 0;
+  padding: 16px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--green-300);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
 }
+.stat span { display: block; color: var(--ink); font-size: 14px; line-height: 1.2; }
+.stat b { display: block; margin-top: 5px; color: var(--green-800); font-size: 25px; line-height: 1.2; }
 
-.stat span {
-    display: block;
-    font-size: 14px;
-    line-height: 1.2;
-    color: #243126;
-}
-
-.stat b {
-    display: block;
-    font-size: 25px;
-    line-height: 1.2;
-    margin-top: 5px;
-    color: #315f36;
-}
-
-/* =========================================================
-   MOBILE / TABLET
-   ========================================================= */
-
-@media(max-width:900px){
-
-    .layout{
-        grid-template-columns:1fr;
-    }
-
-    .stats{
-        grid-template-columns:1fr 1fr;
-    }
-
-    .lamb-box{
-        background:#f3f7f1;
-        border:1px solid #c4d7bd;
-        border-radius:10px;
-        padding:12px;
-        margin-bottom:10px;
-    }
-
-    .lamb-title{
-        font-size:17px;
-        font-weight:bold;
-        color:#315f36;
-        margin-bottom:10px;
-        padding-bottom:7px;
-        border-bottom:1px solid #dce8d7;
-    }
-}
-
-
-/* =========================================================
-   KLEINES HANDY
-   ========================================================= */
-
-@media(max-width:550px){
-
-    .stats{
-        grid-template-columns:1fr;
-    }
-
-    .form{
-        grid-template-columns:1fr;
-    }
-}
-/* =========================================================
-   TIER-JOURNAL
-   ========================================================= */
-
-.journal-form {
-    display: grid;
-    grid-template-columns: 130px 180px minmax(180px, 1fr) auto;
-    gap: 10px;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-.journal-form input,
-.journal-form select {
-    padding: 8px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    width: 100%;
-}
-
-.journal-form button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.journal-entry {
-    display: grid;
-    grid-template-columns: 100px 140px minmax(180px, 1fr) 65px;
-    gap: 8px;
-    align-items: center;
-
-    padding: 8px 10px;
-    margin-bottom: 8px;
-
-    border: 1px solid #ddd;
-    border-radius: 7px;
-    background: #fafafa;
-}
-
-.journal-date {
-    font-weight: 600;
-}
-
-.journal-content strong {
-    display: block;
-}
-
-.journal-note {
-    margin-top: 3px;
-    color: #666;
-    font-size: 13px;
-}
-
-.journal-delete {
-    padding: 4px 6px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 11px;
-    width: 65px;
-    min-width: 65px;
-    white-space: nowrap;
-}
-
-
-/* =========================================================
-   TIER-JOURNAL – HANDY
-   ========================================================= */
-
-@media (max-width: 800px) {
-
-    .journal-form {
-        grid-template-columns: 1fr;
-    }
-
-    .journal-entry {
-        grid-template-columns: 1fr;
-    }
-
-    .journal-delete {
-        width: 65px;
-        min-width: 65px;
-    }
-}
-
-
-
-
-
-/* =========================================================
-   STAMMBAUM – 3 GENERATIONEN
-   ========================================================= */
-
-.pedigree-tree {
-    width: 100%;
-    min-width: 0px;
-    padding: 15px 5px 20px;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-
-/* =========================================================
-   AKTUELLES TIER
-   ========================================================= */
-
-.pedigree-current {
-    width: 185px;
-    min-height: 58px;
-
-    margin: 0 auto;
-
-    padding: 7px;
-
-    box-sizing: border-box;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    background: #315f36;
-    color: white;
-
-    border: 2px solid #244a29;
-    border-radius: 7px;
-
-    box-shadow: 0 2px 5px rgba(0,0,0,.15);
-}
-
-.pedigree-current strong {
-    font-size: 16px;
-}
-
-.pedigree-current small {
-    margin-top: 3px;
-    font-size: 11px;
-}
-
-
-/* =========================================================
-   HAUPT-LINIE
-   ========================================================= */
-
-.pedigree-trunk {
-    width: 2px;
-    height: 25px;
-    margin: 0 auto;
-    background: #777;
-}
-
-
-/* =========================================================
-   VATER / MUTTER
-   ========================================================= */
-
-.pedigree-parents {
-    width: 100%;
-    max-width: 620px;
-    margin: 0 auto;
-
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 35px;
-
-    position: relative;
-    box-sizing: border-box;
-}
-
-
-/* horizontale Verbindung */
-
-.pedigree-parents::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 25%;
-    right: 25%;
-
-    height: 2px;
-
-    background: #777;
-}
-
-
-.pedigree-side {
-    position: relative;
-
-    padding-top: 14px;
-}
-
- /* =========================================================
-    VATER / MUTTER BESCHRIFTUNG
-    ========================================================= */
-
-.pedigree-label {
-    font-size: 10px;
-    font-weight: bold;
-    color: #666;
-    margin-bottom: 4px;
-}
-
-
-/* =========================================================
-   KÄSTCHEN
-   ========================================================= */
-
-.pedigree-box {
-    width: 100%;
-    min-height: 55px;
-    padding: 7px;
-
-    box-sizing: border-box;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    text-align: center;
-
-    background: #fff;
-
-    border: 2px solid #aaa;
-    border-radius: 7px;
-
-    box-shadow: 0 2px 4px rgba(0,0,0,.10);
-
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   ELTERN
-   ========================================================= */
-
-.parent-box {
-    min-height: 60px;
-
-    background: #f3f8f1;
-
-    border: 2px solid #4f8a45;
-
-    font-weight: bold;
-}
-
-
-/* =========================================================
-   LINIE ZU GROSSELTERN
-   ========================================================= */
-
-.pedigree-branch {
-    width: 2px;
-    height: 18px;
-
-    margin: 0 auto;
-
-    background: #777;
-}
-
-
-/* =========================================================
-   GROSSELTERN
-   ========================================================= */
-
-.pedigree-grandparents {
-    display: grid;
-
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-
-    gap: 7px;
-
-    position: relative;
-
-    min-width: 0;
-}
-
-
-/* Verbindungslinie */
-
-.pedigree-grandparents::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 25%;
-    right: 25%;
-
-    height: 2px;
-
-    background: #777;
-}
-
-
-.grandparent-box {
-    min-height: 55px;
-
-    background: #fafafa;
-
-    border: 2px solid #aaa;
-
-    font-size: 10px;
-
-    min-width: 0;
-    overflow-wrap: anywhere;
-}
-
-
-/* =========================================================
-   TEXT IN DEN KÄSTCHEN
-   ========================================================= */
-
-.pedigree-box .link,
-.pedigree-box .ancestor {
-    display: block;
-
-    width: 100%;
-
-    text-align: center;
-
-    line-height: 1.25;
-
-    text-decoration: none;
-
-    overflow-wrap: anywhere;
-}
-
-
-
-
-
-
-
-
-
-    /* =====================================================
-       HEADER – HANDY
-       ===================================================== */
-@media (max-width: 700px) {
-    header {
-        width: 100%;
-        min-height: 105px !important;
-        height: auto !important;
-
-        padding: 7px 10px !important;
-
-        background: linear-gradient(
-            135deg,
-            #315f36 0%,
-            #4f8a45 55%,
-            #7eaf55 100%
-        ) !important;
-
-        color: #fff !important;
-
-        display: grid !important;
-        grid-template-columns: 1fr auto !important;
-        grid-template-rows: auto auto !important;
-
-        align-items: center !important;
-        gap: 4px 8px !important;
-
-        overflow: hidden !important;
-    }
-
-
-    /* =====================================================
-       HEADER – TITEL
-       ===================================================== */
-
-    header .header-title {
-        grid-column: 1 !important;
-        grid-row: 1 !important;
-
-        min-width: 0 !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        display: flex !important;
-        flex-direction: column !important;
-
-        gap: 2px !important;
-    }
-
-header .header-title h1 {
-    margin: 0 !important;
-    padding: 0 !important;
-
-    color: #fff !important;
-
-    font-size: 15px !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-
-    /* Mobile: nur wenig nach rechts bewegen */
-    animation: titelLinksMitteMobile 4s ease-in-out infinite alternate !important;
-}
-
-@keyframes titelLinksMitteMobile {
-    0% {
-        transform: translateX(0);
-    }
-
-    100% {
-        transform: translateX(25px);
-    }
-}
-
-
-   
-    header .header-title small {
-        display: block !important;
-
-        margin: 0 !important;
-        padding: 0 !important;
-
-        color: #fff !important;
-
-        font-size: 12px !important;
-        line-height: 1.15 !important;
-
-        white-space: nowrap !important;
-    }
-
-
-    /* =====================================================
-       HEADER – LOGO
-       ===================================================== */
-
-    header .logo-wrap {
-        grid-column: 2 !important;
-        grid-row: 1 !important;
-
-        width: auto !important;
-        height: 65px !important;
-
-       margin: 0 -20px 0 0 !important;
-        padding: 0 !important;
-
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-    }
-
-    header .logo-badge {
-   width: 150px !important;
-height: 65px !important;
-max-width: 150px !important;
-max-height: 65px !important;
-    }
-header .logo-wrap {
-    margin: 0 -20px 0 0 !important;
-}
-
-    /* =====================================================
-       MOBILE – LAYOUT
-       ===================================================== */
-
-    .layout {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    .card {
-        width: 100% !important;
-        max-width: 100% !important;
-
-        margin: 0 !important;
-        box-sizing: border-box !important;
-
-        overflow: hidden !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – TABELLE
-       ===================================================== */
-
-    .table-wrap {
-        width: 100% !important;
-        max-width: 100% !important;
-
-        overflow-x: auto !important;
-        overflow-y: auto !important;
-
-        -webkit-overflow-scrolling: touch;
-    }
-
-    table {
-        min-width: 1050px;
-    }
-
-
-    /* =====================================================
-       MOBILE – DETAIL
-       ===================================================== */
-
-    .detail {
-        padding: 10px !important;
-    }
-
-    .detail h3 {
-        font-size: 20px !important;
-        margin: 0 0 5px !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – SECTION
-       ===================================================== */
-
-    .section {
-        padding-top: 10px !important;
-        margin-top: 10px !important;
-    }
-
-    .section h4 {
-        font-size: 15px !important;
-        margin: 0 0 7px !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – FAMILIE / NACHKOMMEN
-       ===================================================== */
-
-    .family {
-        display: flex !important;
-        gap: 5px !important;
-        flex-wrap: wrap !important;
-    }
-
-    .animal {
-        padding: 7px !important;
-        border-radius: 7px !important;
-        font-size: 12px !important;
-    }
-
-
-    /* =====================================================
-       STAMMBAUM – HANDY
-       ===================================================== */
-
-    .pedigree-tree {
-        width: 100% !important;
-        min-width: 0 !important;
-
-        padding: 10px 2px 15px !important;
-
-        box-sizing: border-box !important;
-
-        overflow: hidden !important;
-    }
-
-
-    /* =====================================================
-       AKTUELLES TIER
-       ===================================================== */
-
-    .pedigree-current {
-        width: 140px !important;
-        min-height: 48px !important;
-
-        margin: 0 auto !important;
-        padding: 5px !important;
-
-        box-sizing: border-box !important;
-
-        border-width: 2px !important;
-        border-radius: 6px !important;
-    }
-
-    .pedigree-current strong {
-        font-size: 13px !important;
-        line-height: 1.1 !important;
-    }
-
-    .pedigree-current small {
-        margin-top: 2px !important;
-
-        font-size: 10px !important;
-        line-height: 1.1 !important;
-    }
-
-
-    /* =====================================================
-       LINIE VOM AKTUELLEN TIER
-       ===================================================== */
-
-    .pedigree-trunk {
-        width: 2px !important;
-        height: 15px !important;
-
-        margin: 0 auto !important;
-    }
-
-
-    /* =====================================================
-       VATER / MUTTER
-       ===================================================== */
-
-    .pedigree-parents {
-        width: 100% !important;
-
-        margin: 0 auto !important;
-
-        display: grid !important;
-
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
-
-        gap: 8px !important;
-
-        box-sizing: border-box !important;
-    }
-
-
-    /* Verbindungslinie Vater / Mutter */
-
-    .pedigree-parents::before {
-        top: 0 !important;
-
-        left: 25% !important;
-        right: 25% !important;
-
-        height: 2px !important;
-    }
-
-
-    /* =====================================================
-       VATER / MUTTER – BEREICH
-       ===================================================== */
-
-    .pedigree-side {
-        position: relative !important;
-
-        min-width: 0 !important;
-
-        padding-top: 12px !important;
-    }
-}
-
-    /* =====================================================
-       VATER / MUTTER BESCHRIFTUNG
-       ===================================================== */
-
-    .pedigree-label {
-        margin-bottom: 3px !important;
-
-        font-size: 8px !important;
-        line-height: 1 !important;
-    }
-
-
-       /* =====================================================
-       ALLE STAMMBAUM-BOXEN
-       ===================================================== */
-
-    .pedigree-box {
-        width: 100% !important;
-        min-height: 42px !important;
-        padding: 4px 3px !important;
-
-        box-sizing: border-box !important;
-        border-radius: 5px !important;
-
-        font-size: 9px !important;
-        line-height: 1.15 !important;
-
-        overflow: hidden !important;
-        word-break: break-word !important;
-    }
-
-    .parent-box {
-        min-height: 48px !important;
-        padding: 4px !important;
-        border-width: 2px !important;
-        font-size: 9px !important;
-    }
-
-    .pedigree-branch {
-        width: 2px !important;
-        height: 12px !important;
-        margin: 0 auto !important;
-    }
-
-    .pedigree-grandparents {
-        width: 100% !important;
-
-        display: grid !important;
-        grid-template-columns:
-            minmax(0, 1fr)
-            minmax(0, 1fr) !important;
-
-        gap: 3px !important;
-        position: relative !important;
-    }
-
-    .pedigree-grandparents::before {
-        top: 0 !important;
-        left: 25% !important;
-        right: 25% !important;
-        height: 2px !important;
-    }
-
-    .grandparent-box {
-        min-height: 42px !important;
-        padding: 3px 2px !important;
-
-        border-width: 1px !important;
-        border-radius: 4px !important;
-
-        font-size: 8px !important;
-        line-height: 1.1 !important;
-    }
-
-    .pedigree-box .link,
-    .pedigree-box .ancestor {
-        display: block !important;
-        width: 100% !important;
-
-        text-align: center !important;
-        line-height: 1.15 !important;
-
-        text-decoration: none !important;
-        overflow-wrap: anywhere !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – FORMULARE
-       ===================================================== */
-
-    .form {
-        grid-template-columns: 1fr !important;
-    }
-
-    .form-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – BUTTONS
-       ===================================================== */
-
-    button {
-        max-width: 100% !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – MODAL
-       ===================================================== */
-
-    .modal {
-        padding: 10px !important;
-    }
-
-    .modal-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        max-height: 90vh !important;
-
-        overflow-y: auto !important;
-        box-sizing: border-box !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – JOURNAL
-       ===================================================== */
-
-    .journal-entry {
-        display: flex !important;
-        flex-wrap: wrap !important;
-
-        gap: 5px !important;
-        padding: 8px !important;
-    }
-
-    .journal-date {
-        font-size: 11px !important;
-    }
-
-    .journal-content {
-        min-width: 0 !important;
-        flex: 1 !important;
-    }
-
-
-    /* =====================================================
-       MOBILE – LEERE ANZEIGEN
-       ===================================================== */
-
-    .empty {
-        font-size: 12px !important;
-        padding: 8px !important;
-    }
-
-}
-
-
-
-
-@media (max-width:700px) {
-/* LOGO RECHTS */
-
-header .logo-wrap {
-    grid-column: 2 !important;
-    grid-row: 1 !important;
-
-    width: auto !important;
-    height: 58px !important;
-
-    margin: 0 -5px 0 0 !important;
-    padding: 0 !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-}
-
-header .logo-badge {
-    width: 150px !important;
-    height: 65px !important;
-
-    max-width: 150px !important;
-    max-height: 65px !important;
-
-    object-fit: contain !important;
-
-    display: block !important;
-}
-
-
-/* BUTTONS UNTEN */
-
-header .header-buttons {
-    grid-column: 1 / 3 !important;
-    grid-row: 2 !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-
-    gap: 6px !important;
-    flex-wrap: nowrap !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-header .header-buttons button {
-    min-height: 34px !important;
-
-    padding: 6px 10px !important;
-
-    font-size: 12px !important;
-    line-height: 1.1 !important;
-
-    white-space: nowrap !important;
-}
-
-
-/* =====================================================
-   INHALT
-   ===================================================== */
-
-.container {
-    width: 100%;
-    max-width: 100%;
-
-    margin: 8px auto !important;
-    padding: 0 8px !important;
-}
-
-
-
-}
-
-
-
-/* =========================================================
-   FILTER
-   ========================================================= */
-
+/* Suche und Filter */
 .toolbar {
-    display: grid;
-    grid-template-columns: minmax(300px, 1fr) 220px 220px auto;
-    gap: 10px;
-    width: 100%;
-    margin-bottom: 16px;
-    align-items: center;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) repeat(2, minmax(150px, 220px)) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 16px;
 }
-
-.toolbar input,
-.toolbar select {
-    width: 100%;
-    height: 42px;
-    padding: 8px 12px;
-    box-sizing: border-box;
-    border: 1px solid #cfdcc9;
-    border-radius: 8px;
-    background: #fff;
-    color: #243126;
-    font-size: 14px;
+.toolbar input, .toolbar select {
+  width: 100%; min-width: 0; height: 42px; padding: 8px 12px;
+  color: var(--ink); background: #fff; border: 1px solid #cfdcc9; border-radius: 8px;
 }
-
 .toolbar button {
-    height: 42px;
-    padding: 8px 14px;
-    box-sizing: border-box;
-    border: none;
-    border-radius: 8px;
-    background: #4f8a45;
-    color: #fff;
-    font-size: 14px;
-    cursor: pointer;
-    white-space: nowrap;
+  min-height: 42px; padding: 8px 14px; color: #fff; background: var(--green-700);
+  border: 0; border-radius: 8px; white-space: nowrap;
+}
+.toolbar button:hover { background: var(--green-800); }
+
+/* Tabelle */
+.table-wrap { width: 100%; max-height: 680px; overflow: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; min-width: 900px; border-collapse: collapse; }
+th, td { padding: 9px; text-align: left; white-space: nowrap; border-bottom: 1px solid #e3ebe0; }
+th { position: sticky; top: 0; z-index: 1; color: #fff; background: var(--green-700); }
+tbody tr:hover { background: #f2f8ee; }
+tr.selected { background: #dcefd2; }
+
+/* Tierdetails */
+.detail { padding: 16px; }
+.detail h3 { margin: 0 0 6px; color: var(--green-800); font-size: 24px; }
+.badge {
+  display: inline-block; padding: 4px 8px; color: var(--green-800); background: var(--green-100);
+  border: 1px solid #b8d5aa; border-radius: 20px; font-size: 12px; font-weight: 700;
+}
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 15px 0; }
+.field { min-width: 0; padding: 9px; background: #f3f7f1; border-left: 3px solid var(--green-300); border-radius: 8px; overflow-wrap: anywhere; }
+.field span { display: block; margin-bottom: 3px; color: var(--muted); font-size: 11px; }
+.section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.section h4 { margin: 0 0 8px; color: var(--green-800); }
+.family { display: flex; flex-wrap: wrap; gap: 8px; }
+.animal { padding: 9px; background: #fafcf9; border: 1px solid #c4d7bd; border-radius: 9px; cursor: pointer; }
+.animal:hover { background: #eaf4e5; border-color: var(--green-300); }
+.link { color: var(--green-800); font-weight: 700; text-decoration: underline; text-decoration-color: var(--green-300); cursor: pointer; }
+.empty { padding: 25px; color: var(--muted); text-align: center; }
+
+/* Stammbaum */
+.tree { text-align: center; }
+.tree-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+.tree-line { width: 2px; height: 18px; margin: auto; background: var(--green-700); }
+.pedigree-tree { width: 100%; min-width: 0; padding: 15px 5px 20px; text-align: center; }
+.pedigree-current {
+  width: min(185px, 100%); min-height: 58px; margin: 0 auto; padding: 7px;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  color: #fff; background: var(--green-800); border: 2px solid var(--green-900); border-radius: 7px;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 15%);
+}
+.pedigree-current strong { font-size: 16px; }
+.pedigree-current small { margin-top: 3px; font-size: 11px; }
+.pedigree-trunk, .pedigree-branch { width: 2px; margin: 0 auto; background: #777; }
+.pedigree-trunk { height: 25px; }
+.pedigree-branch { height: 18px; }
+.pedigree-parents {
+  position: relative; width: 100%; max-width: 620px; margin: 0 auto; padding-top: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;
+}
+.pedigree-parents::before, .pedigree-grandparents::before {
+  content: ""; position: absolute; top: 0; left: 25%; right: 25%; height: 2px; background: #777;
+}
+.pedigree-side { position: relative; min-width: 0; padding-top: 14px; }
+.pedigree-label { margin-bottom: 4px; color: #666; font-size: 10px; font-weight: 700; }
+.pedigree-box {
+  width: 100%; min-width: 0; min-height: 55px; padding: 7px; display: flex;
+  justify-content: center; align-items: center; text-align: center; overflow-wrap: anywhere;
+  background: #fff; border: 2px solid #aaa; border-radius: 7px; box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+}
+.parent-box { min-height: 60px; color: var(--green-900); background: #f3f8f1; border-color: var(--green-700); font-weight: 700; }
+.pedigree-grandparents { position: relative; min-width: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 7px; }
+.grandparent-box { min-height: 55px; min-width: 0; background: #fafafa; border: 2px solid #aaa; font-size: 10px; overflow-wrap: anywhere; }
+.pedigree-box .link, .pedigree-box .ancestor { display: block; width: 100%; text-align: center; line-height: 1.25; text-decoration: none; overflow-wrap: anywhere; }
+
+/* Formulare und Dialog */
+.form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.form label { min-width: 0; font-size: 12px; }
+.form input, .form select, .form textarea { width: 100%; margin-top: 4px; padding: 8px; border: 1px solid #cfdcc9; border-radius: 6px; }
+.full { grid-column: 1 / -1; }
+.modal { position: fixed; inset: 0; z-index: 20; display: none; align-items: center; justify-content: center; padding: 20px; background: rgb(49 95 54 / 55%); }
+.modal.show { display: flex; }
+.modal-box, .modal-content {
+  width: min(700px, 100%); max-height: 90vh; padding: 20px; overflow-y: auto;
+  background: #fff; border-top: 6px solid var(--green-700); border-radius: var(--radius);
 }
 
-      
-grid-template-columns: minmax(300px, 1fr) 220px 220px auto;
+/* Tierjournal */
+.journal-form {
+  display: grid; grid-template-columns: 130px 180px minmax(180px, 1fr) auto;
+  align-items: center; gap: 10px; margin-bottom: 15px;
+}
+.journal-form input, .journal-form select { width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; }
+.journal-form button { padding: 8px 14px; border: 0; border-radius: 6px; font-weight: 600; }
+.journal-entry {
+  display: grid; grid-template-columns: 100px 140px minmax(180px, 1fr) 65px;
+  align-items: center; gap: 8px; margin-bottom: 8px; padding: 8px 10px;
+  background: #fafafa; border: 1px solid #ddd; border-radius: 7px;
+}
+.journal-date { font-weight: 600; }
+.journal-content { min-width: 0; }
+.journal-content strong { display: block; }
+.journal-note { margin-top: 3px; color: #666; font-size: 13px; }
+.journal-delete { width: 65px; min-width: 65px; padding: 4px 6px; border: 0; border-radius: 5px; font-size: 11px; white-space: nowrap; }
 
+/* Tablet */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 800px) {
+  .journal-form { grid-template-columns: 1fr 1fr; }
+  .journal-entry { grid-template-columns: 1fr 1fr; }
+  .journal-content { grid-column: 1 / -1; }
+}
 
-
-
-</style>
+/* Smartphone */
+@media (max-width: 700px) {
+  header { min-height: 0; padding: 10px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; }
+  .header-title { grid-column: 1; grid-row: 1; }
+  .header-title h1 { font-size: clamp(17px, 5vw, 24px); white-space: normal; }
+  .header-title small { font-size: 12px; }
+  .logo-wrap { grid-column: 2; grid-row: 1; }
+  .logo-badge { width: min(130px, 32vw); height: 58px; }
+  .header-buttons { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 6px; }
+  .header-buttons button { min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .container { width: calc(100% - 16px); margin: 10px auto; }
+  .layout { display: block; width: 100%; }
+  .layout > * + * { margin-top: 12px; }
+  .stats { gap: 8px; }
+  .stat { padding: 12px; }
+  .stat span { font-size: 12px; }
+  .stat b { font-size: 20px; }
+  .toolbar { grid-template-columns: 1fr 1fr; }
+  .toolbar input { grid-column: 1 / -1; }
+  .toolbar button { width: 100%; }
+  .detail { padding: 10px; }
+  .detail h3 { font-size: 20px; }
+  .section { margin-top: 10px; padding-top: 10px; }
+  .section h4 { font-size: 15px; }
+  .animal { padding: 7px; font-size: 12px; }
+  .pedigree-tree { padding: 10px 2px 15px; }
+  .pedigree-current { width: 140px; min-height: 48px; padding: 5px; }
+  .pedigree-current strong { font-size: 13px; line-height: 1.1; }
+  .pedigree-current small { font-size: 10px; }
+  .pedigree-trunk { height: 15px; }
+  .pedigree-parents { gap: 8px; }
+  .pedigree-side { padding-top: 12px; }
+  .pedigree-label { margin-bottom: 3px; font-size: 8px; line-height: 1; }
+  .pedigree-box { min-height: 42px; padding: 4px 3px; border-radius: 5px; font-size: 9px; line-height: 1.15; }
+  .parent-box { min-height: 48px; padding: 4px; font-size: 9px; }
+  .pedigree-branch { height: 12px; }
+  .pedigree-grandparents { gap: 3px; }
+  .grandparent-box { min-height: 42px; padding: 3px 2px; border-width: 1px; border-radius: 4px; font-size: 8px; line-height: 1.1; }
+  .pedigree-box .link, .pedigree-box .ancestor { line-height: 1.15; }
+  .form, .form-grid { grid-template-columns: 1fr; }
+  .full { grid-column: auto; }
+  .modal { padding: 10px; }
+  .modal-box, .modal-content { width: 100%; max-width: 100%; max-height: 90vh; padding: 14px; }
+  .journal-form { grid-template-columns: 1fr; }
+  .journal-entry { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
+  .journal-date { font-size: 11px; }
+  .journal-content { flex: 1 1 160px; min-width: 0; }
+  .empty { padding: 12px; font-size: 12px; }
+}
+@media (max-width: 400px) {
+  .container { width: calc(100% - 12px); }
+  .stats { grid-template-columns: 1fr; }
+  .stat b { font-size: 19px; }
+  .grid { grid-template-columns: 1fr; }
+  .toolbar { grid-template-columns: 1fr; }
+  .toolbar input { grid-column: auto; }
+}
 
 </head>
 
