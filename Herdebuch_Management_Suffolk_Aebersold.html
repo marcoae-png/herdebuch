@@ -278,7 +278,7 @@ header {
 
 .pedigree-tree {
     width: 100%;
-    min-width: 680px;
+    min-width: 0px;
     padding: 15px 5px 20px;
     box-sizing: border-box;
     text-align: center;
@@ -340,14 +340,16 @@ header {
    ========================================================= */
 
 .pedigree-parents {
-    width: 620px;
+    width: 100%;
+    max-width: 620px;
     margin: 0 auto;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     gap: 35px;
 
     position: relative;
+    box-sizing: border-box;
 }
 
 
