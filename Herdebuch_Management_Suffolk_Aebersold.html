@@ -503,41 +503,14 @@ header {
     text-decoration: none;
 }
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 700px) {
-
-    .pedigree-tree {
-        min-width: 760px;
-    }
-
-    .pedigree-parents {
-        width: 700px;
-    }
-
-}
 
 
 
 
 
 
-/* =========================================================
-   MOBILE
-   ========================================================= */
 
-@media (max-width: 700px) {
 
-    /* =====================================================
-       GRUNDLAGE
-       ===================================================== */
-
-    body {
-        font-size: 14px;
-        overflow-x: hidden;
-    }
 
 
     /* =====================================================
@@ -605,6 +578,18 @@ header .header-title h1 {
     animation: titelLinksMitteMobile 4s ease-in-out infinite alternate !important;
 }
 
+@keyframes titelLinksMitteMobile {
+    0% {
+        transform: translateX(0);
+    }
+
+    100% {
+        transform: translateX(25px);
+    }
+}
+
+
+   
     header .header-title small {
         display: block !important;
 
@@ -629,7 +614,7 @@ header .header-title h1 {
         grid-row: 1 !important;
 
         width: auto !important;
-        height: 52px !important;
+        height: 65px !important;
 
         margin: 0 !important;
         padding: 0 !important;
@@ -640,15 +625,10 @@ header .header-title h1 {
     }
 
     header .logo-badge {
-        width: 135px !important;
-        height: 58px !important;
-
-        max-width: 135px !important;
-        max-height: 58px !important;
-
-        object-fit: contain !important;
-
-        display: block !important;
+   width: 150px !important;
+height: 65px !important;
+max-width: 150px !important;
+max-height: 65px !important;
     }
 
 
@@ -1059,32 +1039,26 @@ header .logo-wrap {
     grid-row: 1 !important;
 
     width: auto !important;
-    height: 52px !important;
+    height: 58px !important;
 
-    margin: 0 !important;
+    margin: 0 -5px 0 0 !important;
     padding: 0 !important;
 
     display: flex !important;
     align-items: center !important;
-    justify-content: flex-end !important;
-
-    flex-shrink: 0 !important;
+    justify-content: center !important;
 }
 
 header .logo-badge {
-    width: 135px !important;
-    height: 58px !important;
+    width: 150px !important;
+    height: 65px !important;
 
-    max-width: 135px !important;
-    max-height: 58px !important;
+    max-width: 150px !important;
+    max-height: 65px !important;
 
     object-fit: contain !important;
+
     display: block !important;
-
-    margin: 0 !important;
-    padding: 0 !important;
-
-    transform: none !important;
 }
 
 
