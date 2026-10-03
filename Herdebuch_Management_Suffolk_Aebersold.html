@@ -1,8 +1,3 @@
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -70,25 +65,48 @@ header {
 .header-title small { color: #fff; font-size: 16px; font-weight: 600; }
 .header-buttons { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
 .logo-wrap { flex: 0 0 auto; display: flex; align-items: center; justify-content: flex-end; }
-.logo-badge { display: block; width: min(240px, 24vw); height: 90px; object-fit: contain; }
+.logo-badge { display: block; width: min(340px, 30vw); height: 130px; object-fit: contain; }
 .header-buttons button {
-  min-height: 38px;
-  padding: 8px 12px;
+  min-height: 46px;
+  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
   color: var(--green-900);
-  background: #fff;
-  border: 0;
-  border-radius: 7px;
+  background: linear-gradient(180deg, #fff, #f3f8f0);
+  border: 1px solid rgb(255 255 255 / 72%);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgb(24 63 29 / 20%);
+  font-weight: 700;
+  line-height: 1.2;
+  transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
 }
-.header-buttons button:hover { background: var(--green-100); }
+.header-buttons button:hover {
+  background: linear-gradient(180deg, #fff, #e3f1dc);
+  box-shadow: 0 6px 14px rgb(24 63 29 / 28%);
+  transform: translateY(-2px);
+}
+.header-buttons button:active { transform: translateY(0); }
+.header-buttons button:focus-visible { outline: 3px solid #d9f29a; outline-offset: 2px; }
+.header-buttons button:nth-child(3) {
+  color: #284c24;
+  background: linear-gradient(180deg, #f8fbe9, #e4efc8);
+  border-color: #e4efc8;
+}
+.header-buttons button:nth-child(3):hover { background: linear-gradient(180deg, #fbfde9, #dcebb4); }
 
 /* Seitenaufbau */
 .container { width: min(100% - 32px, 1500px); margin: 20px auto; }
 .layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(300px, 650px);
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 42%);
+  grid-template-areas: "animals details";
   gap: 16px;
   align-items: start;
 }
+.layout > .card:first-child { grid-area: animals; }
+#detailsCard { grid-area: details; }
 .card {
   min-width: 0;
   overflow: hidden;
@@ -232,8 +250,10 @@ tr.selected { background: #dcefd2; }
 
 /* Tablet */
 @media (max-width: 1100px) {
-  .layout { grid-template-columns: minmax(0, 1fr); }
   .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); grid-template-areas: "animals" "details"; }
 }
 @media (max-width: 800px) {
   .journal-form { grid-template-columns: 1fr 1fr; }
@@ -248,9 +268,9 @@ tr.selected { background: #dcefd2; }
   .header-title h1 { font-size: clamp(17px, 5vw, 24px); white-space: normal; }
   .header-title small { font-size: 12px; }
   .logo-wrap { grid-column: 2; grid-row: 1; }
-  .logo-badge { width: min(130px, 32vw); height: 58px; }
+  .logo-badge { width: min(175px, 38vw); height: 76px; }
   .header-buttons { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 6px; }
-  .header-buttons button { min-height: 34px; padding: 6px 9px; font-size: 12px; }
+  .header-buttons button { min-height: 40px; padding: 8px 11px; border-radius: 10px; font-size: 12px; }
   .container { width: calc(100% - 16px); margin: 10px auto; }
   .layout { display: block; width: 100%; }
   .layout > * + * { margin-top: 12px; }
@@ -299,9 +319,67 @@ tr.selected { background: #dcefd2; }
   .toolbar input { grid-column: auto; }
 }
 
+
+/* Massenmutation und Ablammplanung */
+.mass-animal-list { max-height: 42vh; overflow-y: auto; margin: 12px 0; padding: 8px; background: #f8faf6; border: 1px solid var(--line); border-radius: 8px; }
+.mass-animal-option { display: flex; align-items: center; gap: 9px; padding: 7px 5px; border-bottom: 1px solid #e7eee3; }
+.mass-animal-option:last-child { border-bottom: 0; }
+.mass-animal-option input { width: auto; margin: 0; }
+.mass-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
+.mass-actions button, .mass-submit { padding: 8px 12px; color: #fff; background: var(--green-700); border: 0; border-radius: 7px; }
+.planned-lambing { margin: 10px 0; padding: 10px 12px; color: var(--green-900); background: var(--green-100); border-left: 4px solid var(--green-500); border-radius: 7px; }
+.planned-lambing small { display: block; margin-top: 3px; color: var(--muted); }
+
+/* Formulare in den Dialogen */
+.modal { backdrop-filter: blur(4px); }
+.modal-box {
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid #e1eadc;
+  border-top: 6px solid var(--green-700);
+  border-radius: 18px;
+  box-shadow: 0 20px 60px rgb(22 49 26 / 28%);
+}
+.modal-box h2 { margin: 0; padding: 0 0 8px; color: var(--green-800); background: none; border: 0; font-size: 24px; }
+.modal-intro { margin: 0 0 18px; color: var(--muted); }
+.modal-box .form { gap: 14px; }
+.modal-box .form label { display: block; color: #405244; font-size: 13px; font-weight: 700; }
+.modal-box .form input, .modal-box .form select, .modal-box .form textarea {
+  min-height: 42px; padding: 10px 12px; color: var(--ink); background: #fbfdf9;
+  border: 1px solid #cfdcc9; border-radius: 8px; outline: none; transition: border-color .15s, box-shadow .15s;
+}
+.modal-box .form input:focus, .modal-box .form select:focus, .modal-box input:focus, .modal-box select:focus {
+  border-color: var(--green-700); box-shadow: 0 0 0 3px rgb(79 138 69 / 16%);
+}
+.modal-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 8px; }
+.modal-actions button, .mass-actions button {
+  min-height: 42px; padding: 10px 16px; border: 0; border-radius: 9px; font-weight: 700;
+  transition: transform .15s, filter .15s, background .15s;
+}
+.modal-actions button:hover, .mass-actions button:hover { transform: translateY(-1px); filter: brightness(.97); }
+.modal-actions .primary-action { color: #fff; background: linear-gradient(135deg, var(--green-700), var(--green-800)); box-shadow: 0 3px 8px rgb(49 95 54 / 20%); }
+.modal-actions .secondary-action { color: #526253; background: #edf2ea; }
+.lamb-box { margin: 8px 0; padding: 14px; background: #f7faf5; border: 1px solid var(--line); border-radius: 12px; }
+.lamb-title { margin-bottom: 12px; padding-bottom: 8px; color: var(--green-800); border-bottom: 1px solid var(--line); font-size: 16px; font-weight: 700; }
+
+/* Aktionsbuttons in den Tierdetails: gleiche Form, eigene Farben */
+.detail-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 9px; margin: 10px 0 16px; }
+.detail-action {
+  min-height: 42px; min-width: 160px; padding: 9px 15px;
+  display: inline-flex; justify-content: center; align-items: center; gap: 7px;
+  border: 1px solid transparent; border-radius: 10px;
+  color: #fff; font-weight: 700; line-height: 1.2;
+  box-shadow: 0 3px 8px rgb(0 0 0 / 13%);
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
+}
+.detail-action:hover { transform: translateY(-1px); box-shadow: 0 5px 12px rgb(0 0 0 / 18%); filter: brightness(1.04); }
+.detail-action:focus-visible { outline: 3px solid #9bcf62; outline-offset: 2px; }
+.edit-action { background: linear-gradient(135deg, #4f8a45, #315f36); border-color: #315f36; }
+.delete-action { background: linear-gradient(135deg, #cf5550, #a92f2a); border-color: #a92f2a; }
+@media (max-width: 550px) { .detail-action { flex: 1 1 140px; min-width: 0; } }
 </style>
 </head>
 <body>
+
 <header>
 
     <div class="header-title">
@@ -318,6 +396,8 @@ tr.selected { background: #dcefd2; }
         <button onclick="openAdd()">
             ＋ Tier hinzufügen
         </button>
+        <button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
+<button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
 
     </div>
 
@@ -461,7 +541,8 @@ tr.selected { background: #dcefd2; }
 
     <div class="modal-box">
 
-        <h2>Neues Tier</h2>
+        <h2>🐑 Tier hinzufügen</h2>
+<p class="modal-intro">Trage die wichtigsten Angaben zum Tier ein.</p>
 
         <form id="addForm" class="form">
 
@@ -530,15 +611,15 @@ tr.selected { background: #dcefd2; }
                 <input name="mutter">
             </label>
 
-            <div class="full">
+            <div class="full modal-actions">
 
-                <button type="submit">
+                <button class="primary-action" type="submit">
                     Speichern
                 </button>
 
                 <button
                     type="button"
-                    onclick="closeModal()">
+                    onclick="closeModal()" class="secondary-action">
                     Abbrechen
                 </button>
 
@@ -559,6 +640,7 @@ tr.selected { background: #dcefd2; }
     <div class="modal-box">
 
         <h2>🐑 Geburt erfassen</h2>
+<p class="modal-intro">Erfasse den Wurf und die Angaben zu Mutter, Vater und Lämmern.</p>
 
         <form id="birthForm" class="form">
 
@@ -644,18 +726,11 @@ tr.selected { background: #dcefd2; }
 
 
             <!-- BUTTONS -->
-            <div
-                class="full"
-                style="
-                    display:flex;
-                    gap:10px;
-                    margin-top:20px;
-                "
-            >
+            <div class="full modal-actions">
 
                 <button
                     type="submit"
-                    id="birthSaveButton">
+                    id="birthSaveButton" class="primary-action">
 
                     💾 Geburt speichern
 
@@ -664,8 +739,7 @@ tr.selected { background: #dcefd2; }
 
                 <button
                     type="button"
-                    onclick="closeBirth()"
-                    style="background:#777;">
+                    onclick="closeBirth()" class="secondary-action">
 
                     Abbrechen
 
@@ -679,6 +753,36 @@ tr.selected { background: #dcefd2; }
 
 </div>
 
+<!-- Massenmutation: Journal-Ereignis für ausgewählte Tiere -->
+<div id="massBrunstModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="massBrunstTitle">
+  <div class="modal-box">
+    <h2 id="massBrunstTitle">🐑 Massenmutation erfassen</h2>
+    <p>Wähle ein Journal-Ereignis, das Datum und die betroffenen Tiere. Die Ablammplanung wird ausschließlich aus Brunst-Einträgen berechnet.</p>
+    <form id="massBrunstForm" onsubmit="massBrunstSpeichern(event)">
+      <label>Ereignis-Datum <input type="date" id="massBrunstDatum" required></label>
+      <label style="display:block;margin-top:10px">Ereignis
+        <select id="massJournalEreignis" onchange="renderMassBrunstTiere()" style="width:100%;margin-top:4px;padding:8px;border:1px solid #cfdcc9;border-radius:6px">
+          <option value="Brunst">Brunst</option>
+          <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
+          <option value="Albex 10%">Entwurmt – Albex 10%</option>
+          <option value="Klauenpflege">Klauenpflege</option>
+        </select>
+      </label>
+      <label style="display:block;margin-top:10px">Bemerkung (optional)
+        <input type="text" id="massBrunstBemerkung" placeholder="z. B. Widder / Gruppe" style="width:100%;padding:8px;border:1px solid #cfdcc9;border-radius:6px">
+      </label>
+      <div class="mass-actions">
+        <button type="button" onclick="massBrunstAlle(true)">Alle auswählen</button>
+        <button type="button" onclick="massBrunstAlle(false)">Auswahl leeren</button>
+      </div>
+      <div id="massBrunstTierListe" class="mass-animal-list"></div>
+      <div class="mass-actions">
+        <button class="mass-submit" type="submit">Eintrag für Auswahl speichern</button>
+        <button type="button" onclick="closeMassBrunst()">Abbrechen</button>
+      </div>
+    </form>
+  </div>
+</div>
 <!-- =====================================================
      SUPABASE
      ===================================================== -->
@@ -687,6 +791,37 @@ tr.selected { background: #dcefd2; }
 
 <script>
 
+async function datenSichern() {
+    try {
+        const [animalResult, journalResult] = await Promise.all([
+            db.from("animals").select("*").order("id"),
+            db.from("tier_journal").select("*").order("datum", { ascending: true })
+        ]);
+        if (animalResult.error) throw animalResult.error;
+        if (journalResult.error) throw journalResult.error;
+        const exportData = {
+            format: "herdebuch-backup",
+            version: 1,
+            createdAt: new Date().toISOString(),
+            animals: animalResult.data || [],
+            journal: journalResult.data || []
+        };
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const date = new Date().toISOString().slice(0, 10);
+        link.href = url;
+        link.download = "herdebuch-sicherung-" + date + ".json";
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        alert("Die Sicherungsdatei wurde heruntergeladen.");
+    } catch (error) {
+        console.error("Sicherung fehlgeschlagen:", error);
+        alert("Die Sicherungsdatei konnte nicht erstellt werden.\n\n" + (error.message || String(error)));
+    }
+}
 /* =========================================================
    SUPABASE – HERDEBUCH
    ========================================================= */
@@ -752,122 +887,14 @@ map(x => ({
    SUPABASE – TIERE LADEN
    ========================================================= */
 
-async function tiereAusSupabaseLaden() {
 
-    const { data, error } = await db
-        .from("animals")
-        .select("*")
-        .order("id");
-
-    if (error) {
-        console.error(
-            "Fehler beim Laden der Tiere:",
-            error
-        );
-
-        alert(
-            "Die Tiere konnten nicht aus der gemeinsamen Datenbank geladen werden."
-        );
-
-        return;
-    }
-
-    if (!data || data.length === 0) {
-        console.log(
-            "Supabase ist noch leer – bestehende Tiere bleiben zunächst lokal."
-        );
-        return;
-    }
-
-    animals = data.map(a => ({
-        id: a.id || "",
-        zeichen: a.zeichen || "",
-        name: a.name || "",
-       punkte: String(a.punkte || "").replace(/^\.+/, ""),
-        eriz: a.eriz || "",
-        rasse: a.rasse || "",
-        geb: a.geb || "",
-        geschlecht: a.geschlecht || "",
-        vater: a.vater || "",
-        mutter: a.mutter || "",
-        gewicht40: a.gewicht40 ?? ""
-    }));
-
-    render();
-
-    if (selectedId) {
-        selectAnimal(selectedId);
-    }
-
-    console.log(
-        "Tiere aus Supabase geladen:",
-        animals.length
-    );
-}
 
 
 /* =========================================================
    BESTEHENDE TIERE EINMALIG IN SUPABASE SPEICHERN
    ========================================================= */
 
-async function tiereNachSupabaseUebertragen() {
 
-    const daten = animals.map(a => ({
-        id: a.id,
-        name: a.name || "",
-        zeichen: a.zeichen || "",
-        rasse: a.rasse || "",
-        geb: a.geb || null,
-        geschlecht: a.geschlecht || "",
-        punkte: a.punkte || "",
-        vater: a.vater || "",
-        mutter: a.mutter || "",
-        eriz:
-
-    String(a.zeichen || "")
-        .toUpperCase()
-        .includes("EZ")
-        ? "WAHR"
-        : "FALSCH",
-        
-        gewicht40:
-            a.gewicht40 === "" ||
-            a.gewicht40 == null
-                ? null
-                : Number(a.gewicht40)
-    }));
-
-    const { error } = await db
-        .from("animals")
-        .upsert(
-            daten,
-            { onConflict: "id" }
-        );
-
-    if (error) {
-
-        console.error(
-            "Fehler beim Übertragen:",
-            error
-        );
-
-        alert(
-            "Die Tiere konnten nicht gespeichert werden."
-        );
-
-        return;
-    }
-
-    alert(
-        daten.length +
-        " Tiere wurden erfolgreich in Supabase gespeichert."
-    );
-
-    console.log(
-        "Übertragen:",
-        daten
-    );
-}
 
 
 let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYear()-x.getFullYear();if(n.getMonth()<x.getMonth()||(n.getMonth()==x.getMonth()&&n.getDate()<x.getDate()))a--;return a}
@@ -1652,35 +1679,14 @@ details.classList.add("show");
 
 
 
-<button
-    type="button"
-    id="tierBearbeitenButton"
-    onclick="tierBearbeiten('${a.id}')"
-    style="
-        margin:10px 0 15px 0;
-        padding:8px 14px;
-        cursor:pointer;
-    "
->
+<div class="detail-actions">
+  <button type="button" id="tierBearbeitenButton" class="detail-action edit-action" onclick="tierBearbeiten('${a.id}')">
     ✏️ Tier bearbeiten
-</button>
-
-
-<button
-    type="button"
-    onclick="tierEntfernen('${a.id}')"
-    style="
-        margin:0 0 15px 8px;
-        padding:8px 14px;
-        cursor:pointer;
-        background:#b52b2b;
-        color:white;
-        border:none;
-        border-radius:6px;
-    "
->
+  </button>
+  <button type="button" class="detail-action delete-action" onclick="tierEntfernen('${a.id}')">
     🗑️ Tier entfernen
-</button>
+  </button>
+</div>
 
 <span class="badge">${a.geschlecht=='F'?'Mutterschaf':'Widder'}
 
@@ -1757,7 +1763,8 @@ details.classList.add("show");
                         '<div class="animal" ' +
                         'onclick="selectAnimal(\'' + k.id + '\')">' +
                             '<b>' + (k.name || '') + '</b><br>' +
-                            '<small>' + k.id + '</small>' +
+                            '<small>' + k.id + '</small><br>' +
+                            '<small>Geburtsjahr: ' + (k.geb ? String(k.geb).slice(0, 4) : 'unbekannt') + '</small>' +
                         '</div>'
                     );
                 }).join('') +
@@ -1772,7 +1779,10 @@ details.classList.add("show");
 
 
 <div class="section">
-    <h4>Tier-Journal</h4>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <h4>Tier-Journal</h4>
+    </div>
+    <div id="plannedLambing" class="planned-lambing" aria-live="polite"></div>
 
     <div class="journal-form">
 
@@ -2184,6 +2194,78 @@ let tierJournal = [];
 
 
 
+/* Massenmutation und Ablammplanung */
+function openMassBrunst() {
+    const input = document.getElementById("massBrunstDatum");
+    if (input && !input.value) {
+        const d = new Date();
+        input.value = [d.getFullYear(), String(d.getMonth() + 1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+    }
+    renderMassBrunstTiere();
+    document.getElementById("massBrunstModal")?.classList.add("show");
+}
+
+function journalDatumFormatieren(datum) {
+    if (!datum) return "-";
+    const [jahr, monat, tag] = String(datum).slice(0, 10).split("-");
+    if (!jahr || !monat || !tag) return String(datum);
+    return `${tag.padStart(2, "0")}.${monat.padStart(2, "0")}.${jahr}`;
+}
+function closeMassBrunst() { document.getElementById("massBrunstModal")?.classList.remove("show"); }
+function renderMassBrunstTiere() {
+    const list = document.getElementById("massBrunstTierListe");
+    if (!list) return;
+    const previouslyChecked = new Set(Array.from(list.querySelectorAll('input[name="massBrunstTier"]:checked')).map(input => input.value));
+    const ereignis = document.getElementById("massJournalEreignis")?.value || "Brunst";
+    const tiere = (animals || []).filter(a => ereignis !== "Brunst" || String(a.geschlecht || "").toUpperCase() === "F").slice().sort((a,b) => String(a.id || "").localeCompare(String(b.id || ""), "de"));
+    if (!tiere.length) { list.innerHTML = '<div class="empty">Keine passenden Tiere im Bestand gefunden.</div>'; return; }
+    list.innerHTML = tiere.map(a => {
+        const id = String(a.id || a.origNr || "");
+        const checked = previouslyChecked.has(id) ? " checked" : "";
+        return '<label class="mass-animal-option"><input type="checkbox" name="massBrunstTier" value="' + escapeJournalHTML(id) + '"' + checked + '><span><b>' + escapeJournalHTML(id) + '</b> ' + escapeJournalHTML(a.name || "") + '</span></label>';
+    }).join("");
+}
+function massBrunstAlle(checked) {
+    document.querySelectorAll('#massBrunstTierListe input[name="massBrunstTier"]').forEach(input => { input.checked = checked; });
+}
+function letztesBrunstDatum(tierId) {
+    const matches = (tierJournal || []).filter(e => String(e.tier_id).trim() === String(tierId).trim() && String(e.ereignis || "").trim().toLocaleLowerCase("de-CH") === "brunst" && e.datum);
+    matches.sort((a,b) => String(b.datum).localeCompare(String(a.datum)));
+    return matches.length ? String(matches[0].datum).slice(0, 10) : "";
+}
+function plusTage(isoDatum, tage) {
+    if (!isoDatum) return "";
+    const [jahr, monat, tag] = isoDatum.slice(0, 10).split("-").map(Number);
+    if (![jahr, monat, tag].every(Number.isFinite)) return "";
+    const d = new Date(jahr, monat - 1, tag);
+    d.setDate(d.getDate() + tage);
+    return [d.getFullYear(), String(d.getMonth() + 1).padStart(2, "0"), String(d.getDate()).padStart(2, "0")].join("-");
+}
+function aktualisiereAblammung(tierId) {
+    const el = document.getElementById("plannedLambing");
+    if (!el) return;
+    const brunst = letztesBrunstDatum(tierId);
+    if (!brunst) { el.innerHTML = '<strong>Ablammung geplant:</strong> noch kein Brunst-Eintrag'; return; }
+    const ziel = plusTage(brunst, 150);
+    const lokal = iso => new Date(iso + "T00:00:00").toLocaleDateString("de-CH");
+    el.innerHTML = '<strong>Ablammung geplant: ' + escapeJournalHTML(lokal(ziel)) + '</strong><small>150 Tage nach der letzten Brunst (' + escapeJournalHTML(lokal(brunst)) + ').</small>';
+}
+async function massBrunstSpeichern(event) {
+    event.preventDefault();
+    const datum = document.getElementById("massBrunstDatum").value;
+    const bemerkung = document.getElementById("massBrunstBemerkung").value.trim();
+    const ereignis = document.getElementById("massJournalEreignis").value;
+    const ids = Array.from(document.querySelectorAll('#massBrunstTierListe input[name="massBrunstTier"]:checked')).map(input => input.value);
+    if (!datum) { alert("Bitte ein Datum auswählen."); return; }
+    if (!ids.length) { alert("Bitte mindestens ein Tier auswählen."); return; }
+    const rows = ids.map(id => ({ tier_id: String(id), datum, ereignis, bemerkung: bemerkung ? "Massenmutation: " + bemerkung : "Massenmutation" }));
+    const { error } = await db.from("tier_journal").insert(rows);
+    if (error) { console.error("Massenmutation konnte nicht gespeichert werden:", error); alert("Die Journal-Einträge konnten nicht gespeichert werden.\n\n" + error.message); return; }
+    await journalLaden();
+    closeMassBrunst();
+    if (selectedId) journalAnzeigen(selectedId);
+    alert(ereignis + " wurde für " + ids.length + (ids.length === 1 ? " Tier" : " Tiere") + " gespeichert.");
+}
 /* ---------------------------------------------------------
    JOURNAL LADEN
    --------------------------------------------------------- */
@@ -2240,6 +2322,7 @@ async function journalLaden() {
 
 
 function journalAnzeigen(tierId) {
+    aktualisiereAblammung(tierId);
 
     const details = document.getElementById("details");
 
@@ -2287,7 +2370,7 @@ function journalAnzeigen(tierId) {
 
         html +=
             '<div class="journal-date">' +
-            new Date(eintrag.datum).toLocaleDateString("de-CH") +
+            escapeJournalHTML(journalDatumFormatieren(eintrag.datum)) +
             '</div>';
 
         html += '<div class="journal-content">';
