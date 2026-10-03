@@ -1,11 +1,13 @@
 <!DOCTYPE html><html lang="de"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>Herdebuch Management – Suffolk Aebersold</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f2f6ef;color:#243126}
+<title>Herdebuch Management – Suffolk Aebersold</title>
+   
+   <style>
+*{box-sizing:border-box}
+      
+body{margin:0;font-family:Arial,sans-serif;background:#f2f6ef;color:#243126}
 
-color:#fff;padding:18px 24px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;box-shadow:0 3px 12px #315f3633}h1{margin:0}
-
-
+   
 /* =========================================================
    HEADER
    ========================================================= */
@@ -151,35 +153,104 @@ header {
 
 
 
-.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-.form label{font-size:12px}.form input,
-.form select{width:100%;margin-top:4px}
-.full{grid-column:1/-1}@media(max-width:900px){
-
-.layout{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}@media(max-width:550px){.stats,.form{grid-template-columns:1fr}}
-
-
-
-.lamb-box{
-    background:#f3f7f1;
-    border:1px solid #c4d7bd;
-    border-radius:10px;
-    padding:12px;
-    margin-bottom:10px;
+.form{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-.lamb-title{
-    font-size:17px;
-    font-weight:bold;
+.form label{
+    font-size:12px;
+}
+
+.form input,
+.form select{
+    width:100%;
+    margin-top:4px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+
+/* =========================================================
+   STATISTIK
+   ========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:12px;
+    margin-bottom:16px;
+    width:100%;
+}
+
+.stat{
+    background:#fff;
+    border-radius:12px;
+    box-shadow:0 2px 10px #315f3614;
+    border:1px solid #dce8d7;
+    padding:16px;
+    border-top:4px solid #9bcf62;
+    min-width:0;
+}
+
+.stat b{
+    display:block;
+    font-size:25px;
+    margin-top:4px;
     color:#315f36;
-    margin-bottom:10px;
-    padding-bottom:7px;
-    border-bottom:1px solid #dce8d7;
 }
 
 
+/* =========================================================
+   MOBILE / TABLET
+   ========================================================= */
 
+@media(max-width:900px){
+
+    .layout{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .lamb-box{
+        background:#f3f7f1;
+        border:1px solid #c4d7bd;
+        border-radius:10px;
+        padding:12px;
+        margin-bottom:10px;
+    }
+
+    .lamb-title{
+        font-size:17px;
+        font-weight:bold;
+        color:#315f36;
+        margin-bottom:10px;
+        padding-bottom:7px;
+        border-bottom:1px solid #dce8d7;
+    }
+}
+
+
+/* =========================================================
+   KLEINES HANDY
+   ========================================================= */
+
+@media(max-width:550px){
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+
+    .form{
+        grid-template-columns:1fr;
+    }
+}
 /* =========================================================
    TIER-JOURNAL
    ========================================================= */
@@ -198,6 +269,7 @@ header {
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
+    width: 100%;
 }
 
 .journal-form button {
@@ -222,13 +294,6 @@ header {
     background: #fafafa;
 }
 
-.journal-delete {
-    padding: 4px 6px !important;
-    font-size: 11px;
-    width: 65px;
-    min-width: 65px;
-    white-space: nowrap;
-}
 .journal-date {
     font-weight: 600;
 }
@@ -244,11 +309,20 @@ header {
 }
 
 .journal-delete {
-    padding: 6px 10px;
+    padding: 4px 6px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 11px;
+    width: 65px;
+    min-width: 65px;
+    white-space: nowrap;
 }
+
+
+/* =========================================================
+   TIER-JOURNAL – HANDY
+   ========================================================= */
 
 @media (max-width: 800px) {
 
@@ -260,9 +334,11 @@ header {
         grid-template-columns: 1fr;
     }
 
+    .journal-delete {
+        width: 65px;
+        min-width: 65px;
+    }
 }
-
-
 
 
 
@@ -372,17 +448,14 @@ header {
     padding-top: 14px;
 }
 
-
-/* =========================================================
-   VATER / MUTTER BESCHRIFTUNG
-   ========================================================= */
+ /* =========================================================
+    VATER / MUTTER BESCHRIFTUNG
+    ========================================================= */
 
 .pedigree-label {
     font-size: 10px;
     font-weight: bold;
-
     color: #666;
-
     margin-bottom: 4px;
 }
 
@@ -394,7 +467,6 @@ header {
 .pedigree-box {
     width: 100%;
     min-height: 55px;
-
     padding: 7px;
 
     box-sizing: border-box;
@@ -411,10 +483,15 @@ header {
     border-radius: 7px;
 
     box-shadow: 0 2px 4px rgba(0,0,0,.10);
+
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 
-/* ELTERN */
+/* =========================================================
+   ELTERN
+   ========================================================= */
 
 .parent-box {
     min-height: 60px;
@@ -448,11 +525,13 @@ header {
 .pedigree-grandparents {
     display: grid;
 
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 
     gap: 7px;
 
     position: relative;
+
+    min-width: 0;
 }
 
 
@@ -481,6 +560,9 @@ header {
     border: 2px solid #aaa;
 
     font-size: 10px;
+
+    min-width: 0;
+    overflow-wrap: anywhere;
 }
 
 
@@ -492,14 +574,16 @@ header {
 .pedigree-box .ancestor {
     display: block;
 
+    width: 100%;
+
     text-align: center;
 
     line-height: 1.25;
 
     text-decoration: none;
+
+    overflow-wrap: anywhere;
 }
-
-
 
 
 
@@ -512,7 +596,7 @@ header {
     /* =====================================================
        HEADER – HANDY
        ===================================================== */
-
+@media (max-width: 700px) {
     header {
         width: 100%;
         min-height: 105px !important;
@@ -816,7 +900,7 @@ header .logo-wrap {
 
         padding-top: 12px !important;
     }
-
+}
 
     /* =====================================================
        VATER / MUTTER BESCHRIFTUNG
@@ -830,121 +914,77 @@ header .logo-wrap {
     }
 
 
-    /* =====================================================
+       /* =====================================================
        ALLE STAMMBAUM-BOXEN
        ===================================================== */
 
     .pedigree-box {
         width: 100% !important;
-
         min-height: 42px !important;
-
         padding: 4px 3px !important;
 
         box-sizing: border-box !important;
-
         border-radius: 5px !important;
 
         font-size: 9px !important;
-
         line-height: 1.15 !important;
 
         overflow: hidden !important;
-
         word-break: break-word !important;
     }
 
-
-    /* =====================================================
-       ELTERN-BOXEN
-       ===================================================== */
-
     .parent-box {
         min-height: 48px !important;
-
         padding: 4px !important;
-
         border-width: 2px !important;
-
         font-size: 9px !important;
     }
 
-
-    /* =====================================================
-       LINIE ZU GROSS-ELTERN
-       ===================================================== */
-
     .pedigree-branch {
         width: 2px !important;
-
         height: 12px !important;
-
         margin: 0 auto !important;
     }
-
-
-    /* =====================================================
-       GROSS-ELTERN
-       ===================================================== */
 
     .pedigree-grandparents {
         width: 100% !important;
 
         display: grid !important;
-
         grid-template-columns:
             minmax(0, 1fr)
             minmax(0, 1fr) !important;
 
         gap: 3px !important;
-
         position: relative !important;
     }
 
-
-    /* Verbindungslinie Grosseltern */
-
     .pedigree-grandparents::before {
         top: 0 !important;
-
         left: 25% !important;
         right: 25% !important;
-
         height: 2px !important;
     }
 
-
     .grandparent-box {
         min-height: 42px !important;
-
         padding: 3px 2px !important;
 
         border-width: 1px !important;
-
         border-radius: 4px !important;
 
         font-size: 8px !important;
-
         line-height: 1.1 !important;
     }
-
-
-    /* =====================================================
-       STAMMBAUM – TEXT
-       ===================================================== */
 
     .pedigree-box .link,
     .pedigree-box .ancestor {
         display: block !important;
-
         width: 100% !important;
 
         text-align: center !important;
-
         line-height: 1.15 !important;
 
         text-decoration: none !important;
-
         overflow-wrap: anywhere !important;
     }
 
@@ -982,7 +1022,6 @@ header .logo-wrap {
     .modal-content {
         width: 100% !important;
         max-width: 100% !important;
-
         max-height: 90vh !important;
 
         overflow-y: auto !important;
@@ -999,7 +1038,6 @@ header .logo-wrap {
         flex-wrap: wrap !important;
 
         gap: 5px !important;
-
         padding: 8px !important;
     }
 
@@ -1021,8 +1059,6 @@ header .logo-wrap {
         font-size: 12px !important;
         padding: 8px !important;
     }
-
-}
 
 
 
