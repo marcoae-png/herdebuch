@@ -97,6 +97,30 @@ header {
     display:block !important;
     transform:none !important;
 }
+
+
+/* =========================================================
+   TIERLISTE + TIERDETAILS
+   ========================================================= */
+
+.layout {
+    display: grid;
+    grid-template-columns: 380px minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+/* Tierdetails zuerst verstecken */
+#tierDetails {
+    display: none;
+}
+
+/* Sobald ein Tier ausgewählt wurde */
+#tierDetails.show {
+    display: block;
+}
+
+   
     
 .layout{display:grid;grid-template-columns:minmax(0,1fr) 650px;gap:16px}
 
@@ -2591,10 +2615,14 @@ if (!details) {
             <option value="Brunst">
                 Brunst
             </option>
+            
+<option value="Endex 8.75%">
+    Entwurmt – Endex 8.75%
+</option>
 
-            <option value="Entwurmt">
-                Entwurmt
-            </option>
+<option value="Albex 10%">
+    Entwurmt – Albex 10%
+</option>
 
             <option value="Klauenpflege">
                 Klauenpflege
@@ -3065,7 +3093,6 @@ function journalAnzeigen(tierId) {
 
     });
 
-    // Keine Einträge
     if (eintraege.length === 0) {
 
         liste.innerHTML =
@@ -3076,7 +3103,6 @@ function journalAnzeigen(tierId) {
         return;
     }
 
-    // Nach Datum sortieren
     const sortiert = eintraege.slice().sort(function(a, b) {
 
         return new Date(b.datum) - new Date(a.datum);
