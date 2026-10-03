@@ -9,6 +9,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Herdebuch Management – Suffolk Aebersold</title>
+  <link rel="icon" type="image/png" href="herdebuch-favicon.png">
   
 <style>
 
@@ -184,6 +185,22 @@ tr.selected { background: #dcefd2; }
 .section h4 { margin: 0 0 8px; color: var(--green-800); }
 .family { display: flex; flex-wrap: wrap; gap: 8px; }
 .animal { padding: 9px; background: #fafcf9; border: 1px solid #c4d7bd; border-radius: 9px; cursor: pointer; }
+.offspring-card { flex: 0 1 190px; min-width: 145px; padding: 7px; font-size: 13px; line-height: 1.3; cursor: default; }
+.offspring-card small { font-size: 11px; }
+.rearing-metric { padding: 12px; background: #f4f8f1; border: 1px solid var(--line); border-radius: 10px; }
+.rearing-values { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+.rearing-values span { color: var(--muted); font-size: 12px; }
+.rearing-values strong { display: block; color: var(--green-800); font-size: 20px; }
+.rearing-note { margin: 8px 0 0; color: var(--muted); font-size: 12px; }
+.rearing-years { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-top: 10px; }
+.rearing-year { padding: 9px; background: #fff; border: 1px solid var(--line); border-radius: 8px; }
+.rearing-year b { display: block; margin-bottom: 4px; color: var(--green-800); }
+.rearing-year span { display: block; color: var(--muted); font-size: 12px; }
+.rearing-class-row { display: grid; grid-template-columns: 90px repeat(3, minmax(0, 1fr)); gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 12px; }
+.rearing-class-row strong { color: var(--green-800); }
+@media (max-width: 480px) { .rearing-class-row { grid-template-columns: 75px repeat(3, minmax(0, 1fr)); gap: 4px; font-size: 10px; } }
+.offspring-in-stock { background: #dff0d7; border-color: #82b66d; border-left: 5px solid #4f8a45; }
+.offspring-stock-label { display: inline-block; margin-top: 5px; padding: 2px 7px; color: #244a29; background: #c6e5b8; border-radius: 10px; font-size: 11px; font-weight: 700; }
 .animal:hover { background: #eaf4e5; border-color: var(--green-300); }
 .link { color: var(--green-800); font-weight: 700; text-decoration: underline; text-decoration-color: var(--green-300); cursor: pointer; }
 .empty { padding: 25px; color: var(--muted); text-align: center; }
@@ -242,6 +259,8 @@ tr.selected { background: #dcefd2; }
 }
 .journal-form input, .journal-form select { width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; }
 .journal-form button { padding: 8px 14px; border: 0; border-radius: 6px; font-weight: 600; }
+.journal-form .journal-add-button { color: var(--green-900); background: var(--green-100); border: 1px solid #c7ddb9; }
+.journal-form .journal-add-button:hover { background: #d3e9c9; }
 .journal-entry {
   display: grid; grid-template-columns: 100px 140px minmax(180px, 1fr) 65px;
   align-items: center; gap: 8px; margin-bottom: 8px; padding: 8px 10px;
@@ -328,8 +347,13 @@ tr.selected { background: #dcefd2; }
 /* Massenmutation und Ablammplanung */
 .mass-animal-list { max-height: 42vh; overflow-y: auto; margin: 12px 0; padding: 8px; background: #f8faf6; border: 1px solid var(--line); border-radius: 8px; }
 .mass-animal-option { display: flex; align-items: center; gap: 9px; padding: 7px 5px; border-bottom: 1px solid #e7eee3; }
+.mass-animal-option:nth-child(odd) { background: #e3f1dc; }
+.mass-animal-option:nth-child(even) { background: #fff; }
+.mass-animal-option:hover { background: #d4e9c9; }
 .mass-animal-option:last-child { border-bottom: 0; }
 .mass-animal-option input { width: auto; margin: 0; }
+#birthMother option:nth-child(even), #birthFather option:nth-child(even) { background: #e3f1dc; }
+#birthMother option:nth-child(odd), #birthFather option:nth-child(odd) { background: #fff; }
 .mass-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .mass-actions button, .mass-submit { padding: 8px 12px; color: #fff; background: var(--green-700); border: 0; border-radius: 7px; }
 .planned-lambing { margin: 10px 0; padding: 10px 12px; color: var(--green-900); background: var(--green-100); border-left: 4px solid var(--green-500); border-radius: 7px; }
@@ -583,6 +607,16 @@ tr.selected { background: #dcefd2; }
                     name="geb"
                     type="date"
                     required>
+            </label>
+
+            <label>
+                Geburtsgewicht (kg)
+                <input name="geburtsgewicht" type="number" min="0" max="15" step="0.01" placeholder="optional">
+            </label>
+
+            <label>
+                40-Tage-Gewicht (kg)
+                <input name="gewicht40" type="number" min="0" max="50" step="0.01" placeholder="bis 50 Tage nach Geburt">
             </label>
 
             <label>
@@ -893,6 +927,181 @@ map(x => ({
     mutter: x[9] || ""
 }));
 
+// Nachkommen aus den vom Nutzer eingefügten SheepOnline-Stammbäumen.
+// Format: Tier-Nr., Name, Geschlecht, Geburtsdatum, Vater-Nr., Vatername, Mutter-Nr., Muttername, Rasse, Punkte.
+const sheepOnlineNachkommenRoh = [
+  ["2122.5405","MIVETTE","F","2025-02-01","2004.0360","LOGIE","1806.8549","MALEIA","SU",""],
+  ["1996.8256","MANTA","F","2024-04-15","2004.0360","LOGIE G1 MPF","1806.8549","MALEIA","SU","5/5/5"],
+  ["1996.8257","MUSK","M","2024-04-15","2004.0360","LOGIE","1806.8549","MALEIA","SU","1/3/4"],
+  ["1996.8214","MONDAY","M","2023-01-30","2004.0360","LOGIE","1806.8549","MALEIA","SU","4/3/4"],
+  ["1996.8207","MALA","F","2022-03-11","2004.0360","LOGIE","1806.8549","MALEIA","SU","6/5/5"],
+  ["1996.8170","MAXIMUS","M","2020-12-21","1761.4761","BALU","1806.8549","MALEIA","SU",""],
+  ["1996.8171","MAILO","M","2020-12-21","1761.4761","BALU","1806.8549","MALEIA","SU",""],
+  ["1825.4002","MALENIA","F","2020-01-08","1907.7969","ZEUS","1806.8549","MALEIA","SU","6/5/6"],
+  ["1825.4003","MALINA","F","2020-01-08","1907.7969","ZEUS","1806.8549","MALEIA","SU","6/6/6"],
+  ["1825.3968","SILVESTER","M","2019-01-01","1772.4672","FLAVIO","1806.8549","MALEIA","SU","5/5/4"],
+  ["1891.2110","","M","2018-03-10","1772.4672","FLAVIO","1806.8549","MALEIA","SU",""],
+
+  ["1996.8248","","M","2024-03-07","2004.0360","LOGIE","1806.9869","VITA","SM",""],
+  ["1996.8213","","F","2023-01-03","1873.7647","NINO","1806.9869","VITA","SM",""],
+  ["1996.8206","LABOHR M","M","2022-02-28","2004.0360","LOGIE","1806.9869","VITA","SM",""],
+  ["1996.8205","LABOHR W","F","2022-02-28","2004.0360","LOGIE","1806.9869","VITA","SM",""],
+  ["1996.8166","","F","2021-04-03","1825.3968","SILVESTER","1806.9869","VITA","SM",""],
+  ["1825.3987","LABOHR M","M","2020-09-24","1907.7969","ZEUS","1806.9869","VITA","SM",""],
+  ["1825.3998","LABOR M","M","2020-01-17","1907.7969","ZEUS","1806.9869","VITA","SM",""],
+  ["1825.3999","LABOR F","F","2020-01-17","1907.7969","ZEUS","1806.9869","VITA","SM",""],
+
+  ["2122.5438","DADO","M","2026-03-13","2004.0360","LOGIE","1873.7571","DORADA","SU",""],
+  ["2122.5413","DARKO","M","2025-02-28","2004.0360","LOGIE","1873.7571","DORADA","SU",""],
+  ["2122.5414","DODO","M","2025-02-28","2004.0360","LOGIE","1873.7571","DORADA","SU",""],
+  ["1996.8233","DARIUS","M","2023-03-03","2004.0360","LOGIE","1873.7571","DORADA","SU","4/3/4"],
+  ["1996.8208","DELIA","F","2022-03-16","2004.0360","LOGIE","1873.7571","DORADA","SU","5/5/6"],
+  ["1996.8180","DINO","M","2021-03-02","2004.0360","LOGIE","1873.7571","DORADA","SU","3/4/4"],
+  ["1996.8181","DIANA","F","2021-03-02","2004.0360","LOGIE","1873.7571","DORADA","SU","5/5/5"],
+
+  ["2122.5427","MILA","F","2026-01-11","2004.0360","LOGIE","1825.4002","MALENIA","SU",""],
+  ["2122.5402","MACARON","M","2025-01-12","2004.0360","LOGIE","1825.4002","MALENIA","SU","4/3/4"],
+  ["1996.8237","MALUNA","F","2024-01-17","2004.0360","LOGIE","1825.4002","MALENIA","SU",""],
+  ["1996.8230","MAX","M","2023-02-23","1873.7647","NINO","1825.4002","MALENIA","SU",""],
+  ["1996.8197","MELINA","F","2022-02-04","2004.0360","LOGIE","1825.4002","MALENIA","SU",""],
+  ["1996.8196","MAILO","M","2022-02-04","2004.0360","LOGIE","1825.4002","MALENIA","SU",""],
+  ["1996.8198","MELEA","F","2022-02-04","2004.0360","LOGIE","1825.4002","MALENIA","SU","3/2/4"],
+  ["1996.8164","MIA","F","2021-03-22","2004.0360","LOGIE","1825.4002","MALENIA","SU","6/6/6"],
+
+  ["2122.5437","SIMON","M","2026-02-21","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["2122.5436","SAMUELSON","M","2026-02-21","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["2122.5435","SINA","F","2026-02-21","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["2122.5400","SAHRA","F","2025-01-11","2004.0360","LOGIE","1825.4000","SUNA","SU","5/4/5"],
+  ["2122.5401","SALINA","F","2025-01-11","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["1996.8239","SELINA","F","2024-01-23","2004.0360","LOGIE","1825.4000","SUNA","SU","5/4/5"],
+  ["1996.8238","SEREINA","F","2024-01-23","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["1996.8225","SALOME","F","2023-02-08","1873.7647","NINO","1825.4000","SUNA","SU","6/5/6"],
+  ["1996.8224","SALOMON","M","2023-02-08","1873.7647","NINO","1825.4000","SUNA","SU","4/3/4"],
+  ["1996.8202","SÄM","M","2022-02-14","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+  ["1996.8190","SAMIRA","F","2021-05-04","2004.0360","LOGIE","1825.4000","SUNA","SU",""],
+
+  ["2122.5431","FALKE","F","2026-01-15","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+  ["2122.5432","FANNY","F","2026-01-15","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+  ["2122.5416","FELICE","F","2025-03-01","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+  ["2122.5415","FARGA","F","2025-03-01","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+  ["1996.8255","FELIX","M","2024-03-27","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+  ["1996.8254","FAUNA","F","2024-03-27","2099.9876","SUNDAYB","1996.8203","FRIDA","SU",""],
+
+  ["2122.5425","THOR","M","2026-01-07","2099.9876","SUNDAYB","1996.8204","TINA","SU",""],
+  ["2122.5411","TANJA","F","2025-02-18","2099.9876","SUNDAYB","1996.8204","TINA","SU",""],
+  ["2122.5410","TORNADO","M","2025-02-18","2099.9876","SUNDAYB","1996.8204","TINA","SU",""],
+  ["2122.5412","TIKI","F","2025-02-18","2099.9876","SUNDAYB","1996.8204","TINA","SU",""],
+  ["1996.8243","THANDRA","F","2024-02-26","2099.9876","SUNDAYB","1996.8204","TINA","SU",""],
+  ["1996.8242","THUNDRA","F","2024-02-26","2099.9876","SUNDAYB","1996.8204","TINA","SU","5/5/5"],
+
+  ["2122.5422","MELODI","F","2025-12-24","2099.9876","SUNDAYB","1996.8207","MALA","SU",""],
+  ["2122.5421","MELCHIOR","M","2025-12-24","2099.9876","SUNDAYB","1996.8207","MALA","SU",""],
+  ["2122.5403","MASSA","F","2025-01-19","2099.9876","SUNDAYB","1996.8207","MALA","SU","4/4/3"],
+  ["1996.8249","MEL C","F","2024-03-12","2099.9876","SUNDAYB","1996.8207","MALA","SU","5/5/4"],
+  ["1996.8250","MELSA","F","2024-03-12","2099.9876","SUNDAYB","1996.8207","MALA","SU",""],
+
+  ["2122.5417","DORINA","F","2025-03-16","2099.9876","SUNDAYB","1996.8208","DELIA","SU",""],
+  ["1996.8247","DAVINA","F","2024-03-10","2099.9876","SUNDAYB","1996.8208","DELIA","SU",""],
+  ["1996.8246","DARYA","F","2024-03-10","2099.9876","SUNDAYB","1996.8208","DELIA","SU",""],
+
+  ["2122.5439","SANTADOOR","M","2026-03-31","2004.0360","LOGIE","1996.8225","SALOME","SU",""],
+  ["2122.5408","SAMUELSON","M","2025-02-15","2004.0360","LOGIE","1996.8225","SALOME","SU",""],
+  ["2122.5409","SANITA","F","2025-02-15","2004.0360","LOGIE","1996.8225","SALOME","SU",""],
+
+  ["2122.5426","TANK","M","2026-01-08","2099.9876","SUNDAYB","1996.8228","TAMINA","SU",""],
+  ["2122.5418","TAIFUN","M","2025-03-23","2099.9876","SUNDAYB","1996.8228","TAMINA","SU",""],
+
+  ["2122.5434","NUANCE","F","2026-02-06","2004.0360","LOGIE","2099.9877","NUVO","SU",""],
+  ["2122.5433","NILA","F","2026-02-06","2004.0360","LOGIE","2099.9877","NUVO","SU",""],
+
+  ["2122.5428","MUMBAO","M","2026-01-11","2004.0360","LOGIE","1996.8249","MEL C","SU",""],
+
+  ["2122.5424","MELIDA","F","2026-01-01","2099.9876","SUNDAYB","1996.8256","MANTA","SU",""],
+  ["2122.5423","MONTANA","F","2026-01-01","2099.9876","SUNDAYB","1996.8256","MANTA","SU",""],
+
+  ["2122.5430","LENI","F","2026-01-12","2099.9876","SUNDAYB","1996.8259","LENA","SU",""],
+  ["2122.5429","LEO","M","2026-01-12","2099.9876","SUNDAYB","1996.8259","LENA","SU",""]
+];
+
+const sheepOnlineNachkommen = Array.from(new Map(sheepOnlineNachkommenRoh.map(row => [row[0], row])).values()).map(([id,name,geschlecht,geb,vaterId,vaterName,mutterId,mutterName,rasse,punkte]) => ({
+    id, name, geschlecht, geb, rasse, punkte,
+    vater: vaterId + (vaterName ? " " + vaterName : ""),
+    mutter: mutterId + (mutterName ? " " + mutterName : "")
+}));
+const sheepOnlineGewichte = {
+    "1806.8549": { geburtsgewicht: 6.1, gewicht40: 15.38 },
+    "1873.7571": { geburtsgewicht: 5.6, gewicht40: 24.98 },
+    "1825.4002": { geburtsgewicht: 5.1, gewicht40: 20.5 },
+    "1825.4000": { geburtsgewicht: 5.1, gewicht40: 18.0 },
+    "1891.2110": { geburtsgewicht: 5.8, gewicht40: "", gewichtstyp: "Wurfmittel" },
+    "1825.3968": { geburtsgewicht: 5.0, gewicht40: 23.11, gewichtstyp: "Wurfmittel" },
+    "1825.4003": { geburtsgewicht: 5.0, gewicht40: 18.5, gewichtstyp: "Wurfmittel" },
+    "1996.8170": { geburtsgewicht: 5.5, gewicht40: 22.85, gewichtstyp: "Wurfmittel" },
+    "1996.8171": { geburtsgewicht: 5.5, gewicht40: 22.85, gewichtstyp: "Wurfmittel" },
+    "1996.8207": { geburtsgewicht: 5.5, gewicht40: 21.9, gewichtstyp: "Wurfmittel" },
+    "1996.8214": { geburtsgewicht: 5.0, gewicht40: 25.2, gewichtstyp: "Wurfmittel" },
+    "1996.8256": { geburtsgewicht: 5.5, gewicht40: 18.95, gewichtstyp: "Wurfmittel" },
+    "1996.8257": { geburtsgewicht: 5.5, gewicht40: 18.95, gewichtstyp: "Wurfmittel" },
+    "2122.5405": { geburtsgewicht: 5.5, gewicht40: 22.3, gewichtstyp: "Wurfmittel" },
+    "1996.8203": { geburtsgewicht: 4.0, gewicht40: 15.76 },
+    "1996.8204": { geburtsgewicht: 5.0, gewicht40: 19.0 },
+    "1996.8207": { geburtsgewicht: 5.5, gewicht40: 21.9 },
+    "1996.8208": { geburtsgewicht: 6.5, gewicht40: 25.7 },
+    "1996.8225": { geburtsgewicht: 5.0, gewicht40: 18.18 },
+    "1996.8228": { geburtsgewicht: 5.5, gewicht40: 18.34 }
+};
+sheepOnlineNachkommen.forEach(t => Object.assign(t, sheepOnlineGewichte[String(t.id)] || {}));
+
+const geburtsgewichtSpeicherKey = "herdebuch-geburtsgewichte-v1";
+function geburtsgewichteLokalLaden() {
+    try { return JSON.parse(localStorage.getItem(geburtsgewichtSpeicherKey) || "{}"); }
+    catch (_) { return {}; }
+}
+function geburtsgewichtLokalSpeichern(id, wert) {
+    try {
+        const daten = geburtsgewichteLokalLaden();
+        if (wert === "" || wert == null) delete daten[String(id)];
+        else daten[String(id)] = Number(wert);
+        localStorage.setItem(geburtsgewichtSpeicherKey, JSON.stringify(daten));
+    } catch (error) { console.warn("Geburtsgewicht konnte lokal nicht gespeichert werden:", error); }
+}
+function geburtsgewichteAufBestandAnwenden(bestand) {
+    const daten = geburtsgewichteLokalLaden();
+    return (bestand || []).map(t => ({
+        ...t,
+        geburtsgewicht: daten[String(t.id)] ?? t.geburtsgewicht ?? ""
+    }));
+}
+
+const originaleBestandsIDs = new Set(animals.map(t => String(t.id)));
+const nurAbstammungsIDs = new Set(sheepOnlineNachkommen
+    .map(t => String(t.id))
+    .filter(id => !originaleBestandsIDs.has(id)));
+
+function sheepOnlineStammdatenAufBestandAnwenden(bestand) {
+    const stammById = new Map(sheepOnlineNachkommen.map(t => [String(t.id), t]));
+    return (bestand || []).map(tier => {
+        const stamm = stammById.get(String(tier.id));
+        const gewichte = sheepOnlineGewichte[String(tier.id)];
+        if (!stamm && !gewichte) return tier;
+        return {
+            ...tier,
+            ...(stamm ? {
+                name: stamm.name || tier.name || "",
+                geb: stamm.geb || tier.geb || "",
+                geschlecht: stamm.geschlecht || tier.geschlecht || "",
+                rasse: stamm.rasse || tier.rasse || "",
+                punkte: stamm.punkte || tier.punkte || "",
+                vater: stamm.vater,
+                mutter: stamm.mutter
+            } : {}),
+            geburtsgewicht: gewichte?.geburtsgewicht ?? tier.geburtsgewicht ?? "",
+            gewicht40: gewichte?.gewicht40 ?? tier.gewicht40 ?? "",
+            gewichtstyp: gewichte?.gewichtstyp || tier.gewichtstyp || ""
+        };
+    });
+}
+
 
 /* =========================================================
    SUPABASE – TIERE LADEN
@@ -909,6 +1118,7 @@ map(x => ({
 
 
 let selectedId=null;function age(d){let x=new Date(d),n=new Date(),a=n.getFullYear()-x.getFullYear();if(n.getMonth()<x.getMonth()||(n.getMonth()==x.getMonth()&&n.getDate()<x.getDate()))a--;return a}
+function tageSeitGeburt(d){if(!d)return null;const geb=new Date(d+'T00:00:00'),heute=new Date();heute.setHours(0,0,0,0);if(Number.isNaN(geb.getTime()))return null;return Math.floor((heute-geb)/86400000)}
    
 function fmt(d){
     if(!d) return "-";
@@ -1523,7 +1733,11 @@ function findeTierNachNr(wert) {
         return tier;
     }
 
-    // 2. In der gespeicherten Abstammung suchen
+    // 2. In den separat gehaltenen Nachkommen suchen (nicht Teil des Bestands)
+    const bekannterNachkomme = sheepOnlineNachkommen.find(t => String(t.id) === tierNr);
+    if (bekannterNachkomme) return bekannterNachkomme;
+
+    // 3. In der gespeicherten Abstammung suchen
     const stamm = abstammung[tierNr];
 
     if (stamm) {
@@ -1666,12 +1880,86 @@ await journalLaden();
     // NACHKOMMEN ERMITTELN
     // =========================================================
 
-let kids = animals.filter(
-    x =>
+const nachkommenKatalog = new Map();
+sheepOnlineNachkommen.forEach(t => nachkommenKatalog.set(String(t.id), t));
+animals.forEach(t => nachkommenKatalog.set(String(t.id), t));
+let kids = Array.from(nachkommenKatalog.values())
+    .filter(x =>
         String(x.vater || "").startsWith(a.id + " ") ||
         String(x.mutter || "").startsWith(a.id + " ")
-);
-const inzucht = inzuchtAuswertung(a);
+    )
+    .map(x => ({ ...x, imBestand: animals.some(t => String(t.id) === String(x.id)) }))
+    .sort((x, y) => String(x.geb || "9999-99-99").localeCompare(String(y.geb || "9999-99-99")));
+
+// 40-Tage-Zunahme als Hinweis auf die mütterliche Aufzuchtleistung.
+// Wurfmittel werden je Wurf nur einmal gezählt, damit Geschwister nicht doppelt eingehen.
+const aufzuchtwerte = new Map();
+if (a.geschlecht === "F") {
+    kids.forEach(lamm => {
+        const geburtsgewicht = Number(lamm.geburtsgewicht);
+        const gewicht40 = Number(lamm.gewicht40);
+        if (!Number.isFinite(geburtsgewicht) || !Number.isFinite(gewicht40) || geburtsgewicht <= 0 || gewicht40 <= 0) return;
+        const key = lamm.gewichtstyp === "Wurfmittel" && lamm.geb
+            ? "wurf:" + lamm.geb
+            : "lamm:" + String(lamm.id);
+        if (!aufzuchtwerte.has(key)) aufzuchtwerte.set(key, { geburtsgewicht, gewicht40 });
+    });
+}
+const aufzuchtListe = Array.from(aufzuchtwerte.values());
+const aufzucht40Mittel = aufzuchtListe.length
+    ? aufzuchtListe.reduce((sum, x) => sum + x.gewicht40, 0) / aufzuchtListe.length
+    : null;
+const aufzuchtZunahme = aufzuchtListe.length
+    ? aufzuchtListe.reduce((sum, x) => sum + ((x.gewicht40 - x.geburtsgewicht) * 1000 / 40), 0) / aufzuchtListe.length
+    : null;
+
+const jahresLeistung = new Map();
+if (a.geschlecht === "F") {
+    kids.forEach(lamm => {
+        const jahr = String(lamm.geb || "").slice(0, 4);
+        if (!/^\d{4}$/.test(jahr)) return;
+        if (!jahresLeistung.has(jahr)) jahresLeistung.set(jahr, { wuerfe: new Set(), laemmer: new Set(), gewichte: new Map() });
+        const statistik = jahresLeistung.get(jahr);
+        // Alle Lämmer derselben Mutter und desselben Geburtstags gehören zu einem Wurf.
+        const wurfId = String(lamm.geb);
+        statistik.wuerfe.add(wurfId);
+        statistik.laemmer.add(String(lamm.id));
+        const gewicht40 = Number(lamm.gewicht40);
+        if (!Number.isFinite(gewicht40) || gewicht40 <= 0) return;
+        const gewichtId = lamm.gewichtstyp === "Wurfmittel" ? "wurf:" + wurfId : "lamm:" + String(lamm.id);
+        if (!statistik.gewichte.has(gewichtId)) statistik.gewichte.set(gewichtId, gewicht40);
+    });
+}
+const jahresLeistungListe = Array.from(jahresLeistung.entries()).sort((x, y) => y[0].localeCompare(x[0]));
+
+const wuerfeNachDatum = new Map();
+if (a.geschlecht === "F") kids.forEach(lamm => {
+    if (!lamm.geb) return;
+    const wurfId = String(lamm.geb);
+    if (!wuerfeNachDatum.has(wurfId)) wuerfeNachDatum.set(wurfId, []);
+    wuerfeNachDatum.get(wurfId).push(lamm);
+});
+const wurfGroessenStatistik = new Map();
+Array.from(wuerfeNachDatum.values()).forEach(wurf => {
+    const anzahl = wurf.length;
+    const klasse = anzahl === 1 ? "Einling" : anzahl === 2 ? "Zwillinge" : "Mehrlinge";
+    if (!wurfGroessenStatistik.has(klasse)) wurfGroessenStatistik.set(klasse, { wuerfe: 0, werte: [] });
+    const statistik = wurfGroessenStatistik.get(klasse);
+    statistik.wuerfe++;
+    const mittel = wurf.find(l => l.gewichtstyp === "Wurfmittel" && Number(l.gewicht40) > 0);
+    const messungen = mittel ? [mittel] : wurf.filter(l => Number(l.gewicht40) > 0);
+    messungen.forEach(lamm => {
+        const gewicht40 = Number(lamm.gewicht40);
+        const geburtsgewicht = Number(lamm.geburtsgewicht);
+        statistik.werte.push({
+            gewicht40,
+            zunahme: Number.isFinite(geburtsgewicht) && geburtsgewicht > 0 ? (gewicht40 - geburtsgewicht) * 1000 / 40 : null
+        });
+    });
+});
+const wurfGroessenListe = ["Einling", "Zwillinge", "Mehrlinge"]
+    .filter(klasse => wurfGroessenStatistik.has(klasse))
+    .map(klasse => [klasse, wurfGroessenStatistik.get(klasse)]);
 
    const details = document.getElementById("details");
 
@@ -1723,6 +2011,16 @@ details.classList.add("show");
 </div>
 
 <div class="field">
+    <span>Geburtsgewicht</span>
+    <span id="editGeburtsgewicht">${a.geburtsgewicht !== "" && a.geburtsgewicht != null ? String(a.geburtsgewicht).replace(".", ",") + " kg" : "-"}</span>
+</div>
+
+<div class="field">
+    <span>40-Tage-Gewicht</span>
+    <span id="editGewicht40">${a.gewicht40 !== "" && a.gewicht40 != null ? String(a.gewicht40).replace(".", ",") + " kg" : (tageSeitGeburt(a.geb) >= 0 && tageSeitGeburt(a.geb) <= 50 ? '<span class="muted">Noch nicht erfasst</span>' : "-")}</span>
+</div>
+
+<div class="field">
     <span>Alter</span>
     <span id="editAlter">${age(a.geb)} Jahre</span>
 </div>
@@ -1749,6 +2047,34 @@ details.classList.add("show");
 
 
 <div class="section">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
+        <h4>Tier-Journal</h4>
+    </div>
+    <div id="plannedLambing" class="planned-lambing" aria-live="polite"></div>
+
+    <div class="journal-form">
+
+        <input type="date" id="journalDatum">
+
+        <select id="journalEreignis">
+            <option value="Brunst">Brunst</option>
+            <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
+            <option value="Albex 10%">Entwurmt – Albex 10%</option>
+            <option value="Klauenpflege">Klauenpflege</option>
+        </select>
+
+        <input type="text" id="journalBemerkung" placeholder="Bemerkung">
+
+        <button class="journal-add-button" type="button" onclick="journalEintragHinzufuegen('${a.id}')">+ Eintrag</button>
+
+    </div>
+
+    <div id="journalListe"></div>
+
+</div>
+
+
+<div class="section">
     <h4>Abstammung</h4>
 
     <div class="animal">
@@ -1763,15 +2089,34 @@ details.classList.add("show");
 </div>
 
 
+${a.geschlecht === "F" ? `
 <div class="section">
-    <h4>Inzucht-Auswertung</h4>
-    <div class="animal">
-        <strong>Geschätzter Inzuchtkoeffizient:</strong>
-        <span>${inzucht.wert === null ? "nicht berechenbar" : (inzucht.wert * 100).toLocaleString("de-CH", { minimumFractionDigits: 1, maximumFractionDigits: 2 }) + " %"}</span>
-        <small style="display:block;margin-top:5px;color:var(--muted)">${inzucht.hinweis}</small>
+    <h4>Milch- und Aufzuchtleistung · Schätzwert</h4>
+    <div class="rearing-metric">
+        ${aufzuchtListe.length ? `
+        <div class="rearing-values">
+            <div><span>Ø Gewicht mit 40 Tagen</span><strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong></div>
+            <div><span>Ø tägliche Zunahme ab Geburt</span><strong>${aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 })} g/Tag</strong></div>
+            <div><span>Erfasste Würfe/Lämmer</span><strong>${aufzuchtListe.length}</strong></div>
+        </div>
+        <p class="rearing-note">Berechnet aus den erfassten Geburts- und 40-Tage-Gewichten. Höhere Zunahmen können auf gute Milch- und Aufzuchtleistung hindeuten; Wurfgrösse, Lämmergesundheit und Haltung beeinflussen den Wert ebenfalls.</p>
+        ` : '<p class="rearing-note">Noch keine Nachkommen mit Geburts- und 40-Tage-Gewicht erfasst.</p>'}
+        ${jahresLeistungListe.length ? '<div class="rearing-years">' + jahresLeistungListe.map(([jahr, statistik]) => {
+            const gw = Array.from(statistik.gewichte.values());
+            const durchschnitt40 = gw.length ? gw.reduce((sum, gewicht) => sum + gewicht, 0) / gw.length : null;
+            return '<div class="rearing-year"><b>' + jahr + '</b><span>Würfe: ' + statistik.wuerfe.size + ' · erfasste Lämmer: ' + statistik.laemmer.size + '</span><span>40-Tage-Gewichte: ' + gw.length + (durchschnitt40 === null ? '' : ' · Ø ' + durchschnitt40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg') + '</span></div>';
+        }).join('') + '</div>' : ''}
+        ${wurfGroessenListe.length ? '<div style="margin-top:12px"><strong>40-Tage-Vergleich nach erfasster Wurfgrösse</strong><div class="rearing-class-row"><strong>Wurfgrösse</strong><strong>Würfe</strong><strong>Ø 40 Tage</strong><strong>Ø Zunahme</strong></div>' + wurfGroessenListe.map(([klasse, statistik]) => {
+            const gewichte = statistik.werte.map(x => x.gewicht40);
+            const zunahmen = statistik.werte.filter(x => x.zunahme !== null).map(x => x.zunahme);
+            const mw = gewichte.length ? (gewichte.reduce((sum, x) => sum + x, 0) / gewichte.length).toLocaleString("de-CH", { maximumFractionDigits: 2 }) + " kg" : "–";
+            const mz = zunahmen.length ? (zunahmen.reduce((sum, x) => sum + x, 0) / zunahmen.length).toLocaleString("de-CH", { maximumFractionDigits: 0 }) + " g/Tag" : "–";
+            return '<div class="rearing-class-row"><span>' + klasse + '</span><span>' + statistik.wuerfe + '</span><span>' + mw + '</span><span>' + mz + '</span></div>';
+        }).join('') + '</div>' : ''}
+        <p class="rearing-note">Jahreszahlen zählen die bekannten Nachkommen. Ein fehlendes 40-Tage-Gewicht bedeutet „nicht erfasst“, nicht „verendet“.</p>
     </div>
 </div>
-
+` : ""}
 
 <div class="section">
 
@@ -1781,12 +2126,18 @@ details.classList.add("show");
         kids.length
             ? '<div class="family">' +
                 kids.map(function(k) {
+                    const klasse = k.imBestand ? 'animal offspring-card offspring-in-stock' : 'animal offspring-card';
+                    const klick = k.imBestand ? 'onclick="selectAnimal(\'' + k.id + '\')"' : '';
+                    const gewichtsinfo = (k.geburtsgewicht !== "" && k.geburtsgewicht != null) || (k.gewicht40 !== "" && k.gewicht40 != null)
+                        ? '<br><small>Geburt: ' + gewichtAnzeigen(k.geburtsgewicht) + ' · 40 Tage: ' + gewichtAnzeigen(k.gewicht40) + '</small>'
+                        : '';
                     return (
-                        '<div class="animal" ' +
-                        'onclick="selectAnimal(\'' + k.id + '\')">' +
+                        '<div class="' + klasse + '" ' + klick + '>' +
                             '<b>' + (k.name || '') + '</b><br>' +
                             '<small>' + k.id + '</small><br>' +
                             '<small>Geburtsjahr: ' + (k.geb ? String(k.geb).slice(0, 4) : 'unbekannt') + '</small>' +
+                            gewichtsinfo +
+                            (k.imBestand ? '<br><span class="offspring-stock-label">Im Bestand</span>' : '') +
                         '</div>'
                     );
                 }).join('') +
@@ -1796,56 +2147,6 @@ details.classList.add("show");
                 'Keine Nachkommen in dieser Tierliste.' +
               '</div>'
     }
-
-</div>
-
-
-<div class="section">
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
-        <h4>Tier-Journal</h4>
-    </div>
-    <div id="plannedLambing" class="planned-lambing" aria-live="polite"></div>
-
-    <div class="journal-form">
-
-        <input
-            type="date"
-            id="journalDatum">
-
-        <select id="journalEreignis">
-
-            <option value="Brunst">
-                Brunst
-            </option>
-            
-<option value="Endex 8.75%">
-    Entwurmt – Endex 8.75%
-</option>
-
-<option value="Albex 10%">
-    Entwurmt – Albex 10%
-</option>
-
-            <option value="Klauenpflege">
-                Klauenpflege
-            </option>
-
-        </select>
-
-        <input
-            type="text"
-            id="journalBemerkung"
-            placeholder="Bemerkung">
-
-        <button
-            type="button"
-            onclick="journalEintragHinzufuegen('${a.id}')">
-            + Eintrag
-        </button>
-
-    </div>
-
-    <div id="journalListe"></div>
 
 </div>
 
@@ -1987,6 +2288,21 @@ addForm.onsubmit = async e => {
         return;
     }
 
+    if (o.gewicht40 !== "" && (tageSeitGeburt(o.geb) < 0 || tageSeitGeburt(o.geb) > 50)) {
+        alert("Das 40-Tage-Gewicht kann nur bis einschließlich zum 50. Lebenstag erfasst werden.");
+        return;
+    }
+
+    if (o.gewicht40 !== "" && (!Number.isFinite(Number(o.gewicht40)) || Number(o.gewicht40) < 0 || Number(o.gewicht40) > 50)) {
+        alert("Bitte ein gültiges Gewicht zwischen 0 und 50 kg eingeben.");
+        return;
+    }
+
+    if (o.geburtsgewicht !== "" && (!Number.isFinite(Number(o.geburtsgewicht)) || Number(o.geburtsgewicht) <= 0 || Number(o.geburtsgewicht) > 15)) {
+        alert("Bitte ein gültiges Geburtsgewicht zwischen 0 und 15 kg eingeben.");
+        return;
+    }
+
 
     /* =====================================================
        DATEN FÜR SUPABASE
@@ -2058,6 +2374,8 @@ const tier = {
        ===================================================== */
 
     animals.push(tier);
+    tier.geburtsgewicht = o.geburtsgewicht === "" || o.geburtsgewicht == null ? "" : Number(o.geburtsgewicht);
+    geburtsgewichtLokalSpeichern(tier.id, tier.geburtsgewicht);
 
 
     closeModal();
@@ -2230,6 +2548,11 @@ function openMassBrunst() {
     document.getElementById("massBrunstModal")?.classList.add("show");
 }
 
+function gewichtAnzeigen(wert) {
+    if (wert === "" || wert == null) return "-";
+    return Number(wert).toLocaleString("de-CH", { maximumFractionDigits: 2 }) + " kg";
+}
+
 function geburtsInzuchtAktualisieren() {
     const info = document.getElementById('birthInbreeding');
     const motherId = document.getElementById('birthMother')?.value;
@@ -2239,6 +2562,7 @@ function geburtsInzuchtAktualisieren() {
         info.textContent = 'Wähle Mutter und Bock aus, um den erwarteten Inzuchtgrad der Lämmer zu sehen.';
         return;
     }
+
     const result = inzuchtAuswertung({ vater: fatherId, mutter: motherId });
     if (result.wert === null) {
         info.textContent = 'Der Inzuchtgrad kann mit den erfassten Abstammungsdaten nicht berechnet werden.';
@@ -2812,10 +3136,10 @@ function buildLambFields() {
                 '</label>' +
 
                 '<label>' +
-                    '40-Tage-Gewicht' +
+                    'Geburtsgewicht (kg)' +
                     '<input type="number" ' +
-                    'name="lamb_gewicht40_' + i + '" ' +
-                    'step="0.1" min="0" placeholder="kg">' +
+                    'name="lamb_geburtsgewicht_' + i + '" ' +
+                    'step="0.01" min="0" max="15" placeholder="optional">' +
                 '</label>' +
 
                 '<label>' +
@@ -2922,10 +3246,15 @@ document
                         '[name="lamb_punkte_' + i + '"]'
                     ).value.trim();
 
-                const gewicht40 =
+                const geburtsgewicht =
                     document.querySelector(
-                        '[name="lamb_gewicht40_' + i + '"]'
+                        '[name="lamb_geburtsgewicht_' + i + '"]'
                     ).value.trim();
+
+                if (geburtsgewicht !== '' && (!Number.isFinite(Number(geburtsgewicht)) || Number(geburtsgewicht) <= 0 || Number(geburtsgewicht) > 15)) {
+                    alert('Bitte ein gültiges Geburtsgewicht für Lamm ' + i + ' eingeben (max. 15 kg).');
+                    return;
+                }
 
                 if (!id) {
 
@@ -2986,10 +3315,12 @@ document
                             (mother.name || '')
                         ).trim(),
 
-                    gewicht40:
-                        gewicht40 === ''
+                    geburtsgewicht:
+                        geburtsgewicht === ''
                             ? ''
-                            : Number(gewicht40)
+                            : Number(geburtsgewicht),
+
+                    gewicht40: ''
                 });
             }
 
@@ -3068,15 +3399,15 @@ document
                 ...neueLaemmer
             );
 
+            neueLaemmer.forEach(lamm => geburtsgewichtLokalSpeichern(lamm.id, lamm.geburtsgewicht));
+
             closeBirth();
 
             render();
 
             if (neueLaemmer.length) {
 
-                selectAnimal(
-                    neueLaemmer[0].id
-                );
+                await selectAnimal(motherId);
             }
 
             alert(
@@ -3284,6 +3615,14 @@ function tierBearbeiten(id) {
             'type="text" ' +
             'value="' + (a.punkte || '') + '">';
 
+    document.getElementById("editGeburtsgewicht").innerHTML =
+        '<input id="editGeburtsgewichtInput" class="edit-field" type="number" min="0" max="15" step="0.01" placeholder="kg" value="' + (a.geburtsgewicht ?? '') + '">';
+
+    const gewicht40Feld = document.getElementById("editGewicht40");
+    if (gewicht40Feld && tageSeitGeburt(a.geb) >= 0 && tageSeitGeburt(a.geb) <= 50) {
+        gewicht40Feld.innerHTML = '<input id="editGewicht40Input" class="edit-field" type="number" min="0" max="50" step="0.01" placeholder="kg" value="' + (a.gewicht40 ?? '') + '"><small>Eintrag bis zum 50. Lebenstag</small>';
+    }
+
     // ==========================================
     // ALTER BLEIBT AUTOMATISCH
     // ==========================================
@@ -3345,6 +3684,10 @@ async function tierBearbeitungSpeichern(alteId) {
 
     const neuePunkte =
         document.getElementById("editPunkteInput").value.trim();
+    const neuesGeburtsgewicht = document.getElementById("editGeburtsgewichtInput").value.trim();
+    const gewicht40Input = document.getElementById("editGewicht40Input");
+    const neuesGewicht40 = gewicht40Input ? gewicht40Input.value.trim() : a.gewicht40;
+    const gewichtsDatenGeaendert = String(neuesGeburtsgewicht) !== String(a.geburtsgewicht ?? "") || (gewicht40Input && String(neuesGewicht40) !== String(a.gewicht40 ?? ""));
 
 
     // ==========================================
@@ -3353,6 +3696,16 @@ async function tierBearbeitungSpeichern(alteId) {
 
     if (!neueId) {
         alert("Die Orig.-Nr. darf nicht leer sein.");
+        return;
+    }
+
+    if (neuesGeburtsgewicht !== '' && (!Number.isFinite(Number(neuesGeburtsgewicht)) || Number(neuesGeburtsgewicht) <= 0 || Number(neuesGeburtsgewicht) > 15)) {
+        alert("Bitte ein gültiges Geburtsgewicht zwischen 0 und 15 kg eingeben.");
+        return;
+    }
+
+    if (gewicht40Input && neuesGewicht40 !== '' && (!Number.isFinite(Number(neuesGewicht40)) || Number(neuesGewicht40) < 0 || Number(neuesGewicht40) > 50)) {
+        alert("Bitte ein gültiges 40-Tage-Gewicht zwischen 0 und 50 kg eingeben.");
         return;
     }
 
@@ -3365,6 +3718,7 @@ async function tierBearbeitungSpeichern(alteId) {
     a.zeichen = neuesZeichen;
     a.geb = neuesGeb;
     a.punkte = neuePunkte;
+    if (gewicht40Input) a.gewicht40 = neuesGewicht40 === '' ? '' : Number(neuesGewicht40);
 
 
     // Eriz automatisch aus Zeichen
@@ -3386,6 +3740,7 @@ async function tierBearbeitungSpeichern(alteId) {
             zeichen: a.zeichen || "",
             geb: a.geb || null,
             punkte: a.punkte || "",
+            gewicht40: a.gewicht40 === "" || a.gewicht40 == null ? null : Number(a.gewicht40),
             eriz: a.eriz || ""
         })
         .eq("id", alteId);
@@ -3496,6 +3851,10 @@ async function tierBearbeitungSpeichern(alteId) {
         }
     }
 
+    a.geburtsgewicht = neuesGeburtsgewicht === '' ? '' : Number(neuesGeburtsgewicht);
+    if (String(alteId) !== String(neueId)) geburtsgewichtLokalSpeichern(alteId, "");
+    geburtsgewichtLokalSpeichern(neueId, a.geburtsgewicht);
+
 
     // ==========================================
     // LOKAL AKTUALISIEREN
@@ -3512,7 +3871,9 @@ async function tierBearbeitungSpeichern(alteId) {
 
     await tiereAusSupabaseLaden();
 
-    await selectAnimal(neueId);
+    const mutterId = String(a.mutter || "").trim().split(/\s+/)[0];
+    const mutterImBestand = animals.find(t => String(t.id) === mutterId && t.geschlecht === "F");
+    await selectAnimal(gewichtsDatenGeaendert && mutterImBestand ? mutterId : neueId);
 
 
     console.log(
@@ -3561,6 +3922,7 @@ async function tiereAusSupabaseLaden() {
         console.log(
             "Supabase ist noch leer – bestehende Tiere bleiben zunächst lokal."
         );
+        animals = geburtsgewichteAufBestandAnwenden(sheepOnlineStammdatenAufBestandAnwenden(animals));
         return;
     }
 
@@ -3580,7 +3942,8 @@ async function tiereAusSupabaseLaden() {
         vater: a.vater || "",
         mutter: a.mutter || "",
         gewicht40: a.gewicht40 ?? ""
-    }));
+    })).filter(a => !nurAbstammungsIDs.has(String(a.id)));
+    animals = geburtsgewichteAufBestandAnwenden(sheepOnlineStammdatenAufBestandAnwenden(animals));
     
     console.log(
         "Tiere aus Supabase geladen:",
