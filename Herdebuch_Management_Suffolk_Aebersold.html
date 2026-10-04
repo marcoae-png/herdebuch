@@ -472,7 +472,7 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
         </button>
 <button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
 <button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
-<button type="button" id="browserReminderButton" onclick="browserErinnerungAktivieren()" title="Browser-Benachrichtigungen für fällige 40-Tage-Wägungen einschalten">🔔 Wägungserinnerung</button>
+<button type="button" onclick="kalender40TageExportieren()" title="Kalendertermine für noch ausstehende 40-Tage-Wägungen herunterladen">📅 Kalendertermine</button>
 
     </div>
 
@@ -2082,14 +2082,12 @@ function filtered(){let q=document.getElementById('search').value.toLowerCase(),
 </tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size;render40DayReminder()}
 
 function render40DayReminder() {
-    browserErinnerungsButtonAktualisieren();
     const box = document.getElementById("weigh40Reminder");
     if (!box) return;
     const due = animals.filter(tier => {
         const tage = tageSeitGeburt(tier.geb);
         return tage >= 40 && tage <= 50 && !(Number(tier.gewicht40) > 0);
     }).sort((a, b) => String(a.geb).localeCompare(String(b.geb)) || String(a.id).localeCompare(String(b.id)));
-    browserErinnerungenSenden(due);
     if (!due.length) {
         box.classList.remove("show");
         box.innerHTML = "";
@@ -2100,58 +2098,73 @@ function render40DayReminder() {
     box.querySelectorAll("[data-weigh40-id]").forEach(button => button.addEventListener("click", () => selectAnimal(button.dataset.weigh40Id)));
 }
 
-const browserErinnerungsKey = "herdebuch-40tage-browser-erinnerungen-v1";
-function browserErinnerungenLaden() {
-    try { return JSON.parse(localStorage.getItem(browserErinnerungsKey) || "{}"); }
-    catch (_) { return {}; }
+function kalenderTextEscapen(wert) {
+    return String(wert || "").replace(/\\/g, "\\\\").replace(/\r?\n/g, "\\n").replace(/,/g, "\\,").replace(/;/g, "\\;");
 }
-function browserErinnerungsButtonAktualisieren() {
-    const button = document.getElementById("browserReminderButton");
-    if (!button) return;
-    if (!("Notification" in window)) button.textContent = "🔔 Browser-Popup nicht verfügbar";
-    else if (Notification.permission === "granted") button.textContent = "🔔 Erinnerung aktiviert";
-    else button.textContent = "🔔 Wägungserinnerung";
+function kalenderDatum(date) {
+    return String(date.getFullYear()) + String(date.getMonth() + 1).padStart(2, "0") + String(date.getDate()).padStart(2, "0");
 }
-function browserErinnerungenSenden(due) {
-    if (!("Notification" in window) || Notification.permission !== "granted") return;
-    const gesendet = browserErinnerungenLaden();
-    const jetzt = new Date();
-    const heute = jetzt.getFullYear() + "-" + String(jetzt.getMonth() + 1).padStart(2, "0") + "-" + String(jetzt.getDate()).padStart(2, "0");
-    due.forEach(tier => {
-        const id = String(tier.id);
-        if (gesendet[id] === heute) return;
-        const notification = new Notification("40-Tage-Wägung fällig", {
-            body: (tier.name || "Lamm") + " · " + id + " ist " + tageSeitGeburt(tier.geb) + " Tage alt. Bitte bis Tag 50 wiegen.",
-            tag: "herdebuch-40tage-" + id
-        });
-        notification.onclick = () => {
-            window.focus();
-            selectAnimal(id);
-            notification.close();
-        };
-        gesendet[id] = heute;
+function kalender40TageExportieren() {
+    const heute = new Date();
+    heute.setHours(0, 0, 0, 0);
+    const gruppen = new Map();
+    animals.forEach(lamm => {
+        const alter = tageSeitGeburt(lamm.geb);
+        if (alter == null || alter < 0 || alter > 50 || Number(lamm.gewicht40) > 0) return;
+        const mutterId = String(lamm.mutter || "").trim().split(/\s+/)[0];
+        const key = mutterId + "|" + lamm.geb;
+        if (!gruppen.has(key)) gruppen.set(key, { mutterId, geb: lamm.geb, laemmer: [] });
+        gruppen.get(key).laemmer.push(lamm);
     });
-    try { localStorage.setItem(browserErinnerungsKey, JSON.stringify(gesendet)); }
-    catch (error) { console.warn("Browser-Erinnerungsstatus konnte nicht gespeichert werden:", error); }
-}
-async function browserErinnerungAktivieren() {
-    if (!("Notification" in window)) {
-        alert("Dieser Browser unterstützt keine Desktop-Benachrichtigungen. Die Erinnerung erscheint weiterhin im Herdebuch, solange die Seite geöffnet ist.");
+    if (!gruppen.size) {
+        alert("Es gibt keine offenen 40-Tage-Wägungen für Lämmer bis zum 50. Lebenstag.");
         return;
     }
-    try {
-        const erlaubnis = Notification.permission === "default" ? await Notification.requestPermission() : Notification.permission;
-        browserErinnerungsButtonAktualisieren();
-        if (erlaubnis === "granted") {
-            alert("Browser-Erinnerung ist aktiviert. Bei fälligen Wägungen erscheint ein Popup, solange das Herdebuch geöffnet ist.");
-            render40DayReminder();
-        } else if (erlaubnis === "denied") {
-            alert("Benachrichtigungen sind für diese Seite im Browser gesperrt. Erlaube sie in den Website-Einstellungen des Browsers.");
+    const stamp = new Date().toISOString().replace(/[-:]/g, "").replace(/\.\d{3}/, "");
+    const events = Array.from(gruppen.values()).map(gruppe => {
+        const geburt = new Date(gruppe.geb + "T12:00:00");
+        geburt.setDate(geburt.getDate() + 40);
+        const terminTag = new Date(geburt);
+        if (terminTag <= heute) {
+            terminTag.setTime(heute.getTime());
+            terminTag.setDate(terminTag.getDate() + 1);
         }
-    } catch (error) {
-        console.warn("Browser-Erinnerung konnte nicht aktiviert werden:", error);
-        alert("Der Browser konnte die Benachrichtigung nicht aktivieren. Prüfe die Berechtigung für diese Seite.");
-    }
+        const start = kalenderDatum(terminTag) + "T090000";
+        const endeDate = new Date(terminTag);
+        endeDate.setHours(9, 30, 0, 0);
+        const ende = kalenderDatum(endeDate) + "T093000";
+        const mutter = animals.find(tier => String(tier.id) === String(gruppe.mutterId));
+        const mutterLabel = mutter ? (mutter.name || "Mutterschaf") + " · " + mutter.id : (gruppe.mutterId || "Mutter unbekannt");
+        const namen = gruppe.laemmer.map(lamm => (lamm.name || "Lamm") + " (" + lamm.id + ")");
+        const ids = gruppe.laemmer.map(lamm => String(lamm.id)).sort().join("-");
+        const beschreibung = "Geburt: " + gruppe.geb + "\\nMutter: " + mutterLabel + "\\nLämmer: " + namen.join(", ") + "\\nBitte 40-Tage-Gewicht erfassen.";
+        return [
+            "BEGIN:VEVENT",
+            "UID:herdebuch-40tage-" + encodeURIComponent(ids) + "@aebersold",
+            "DTSTAMP:" + stamp,
+            "DTSTART:" + start,
+            "DTEND:" + ende,
+            "SUMMARY:" + kalenderTextEscapen("40-Tage-Wägung · " + mutterLabel),
+            "DESCRIPTION:" + kalenderTextEscapen(beschreibung),
+            "BEGIN:VALARM",
+            "TRIGGER:PT0M",
+            "ACTION:DISPLAY",
+            "DESCRIPTION:40-Tage-Wägung der Lämmer",
+            "END:VALARM",
+            "END:VEVENT"
+        ].join("\r\n");
+    });
+    const ics = "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Herdebuch Aebersold//40-Tage-Waegung//DE\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n" + events.join("\r\n") + "\r\nEND:VCALENDAR\r\n";
+    const blob = new Blob(["\uFEFF", ics], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "herdebuch-40-tage-waegungen-" + kalenderDatum(heute) + ".ics";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    alert("Kalenderdatei mit " + gruppen.size + " Wägungstermin(en) erstellt. Öffne die heruntergeladene .ics-Datei auf dem Handy und füge die Termine deinem Kalender hinzu.");
 }
 setInterval(render40DayReminder, 15 * 60 * 1000);
 
