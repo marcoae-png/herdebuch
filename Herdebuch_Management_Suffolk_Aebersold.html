@@ -95,12 +95,6 @@ header {
 }
 .header-buttons button:active { transform: translateY(0); }
 .header-buttons button:focus-visible { outline: 3px solid #d9f29a; outline-offset: 2px; }
-.header-buttons button:nth-child(3) {
-  color: #284c24;
-  background: linear-gradient(180deg, #f8fbe9, #e4efc8);
-  border-color: #e4efc8;
-}
-.header-buttons button:nth-child(3):hover { background: linear-gradient(180deg, #fbfde9, #dcebb4); }
 
 /* Seitenaufbau */
 .container { width: min(100% - 32px, 1500px); margin: 20px auto; }
@@ -470,9 +464,9 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
         <button onclick="openAdd()">
             ＋ Tier hinzufügen
         </button>
-<button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
-<button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
-<button type="button" onclick="kalender40TageExportieren()" title="Kalendertermine für noch ausstehende 40-Tage-Wägungen herunterladen">📅 Kalendertermine</button>
+        <button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
+        <button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
+        <button type="button" onclick="kalender40TageExportieren()" title="Kalendertermine für noch ausstehende 40-Tage-Wägungen herunterladen">📅 Kalendertermine</button>
 
     </div>
 
