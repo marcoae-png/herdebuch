@@ -264,8 +264,9 @@ tr.selected { background: #dcefd2; }
 .journal-entry {
   display: grid; grid-template-columns: 100px 140px minmax(180px, 1fr) 65px;
   align-items: center; gap: 8px; margin-bottom: 8px; padding: 8px 10px;
-  background: #fafafa; border: 1px solid #ddd; border-radius: 7px;
+  background: #f1f7ee; border: 1px solid #d9e8d1; border-radius: 7px;
 }
+.journal-entry:hover { background:#eaf3e5; border-color:#c6dcba; }
 .journal-date { font-weight: 600; }
 .journal-content { min-width: 0; }
 .journal-content strong { display: block; }
@@ -402,8 +403,52 @@ tr.selected { background: #dcefd2; }
 }
 .detail-action:hover { transform: translateY(-1px); box-shadow: 0 5px 12px rgb(0 0 0 / 18%); filter: brightness(1.04); }
 .detail-action:focus-visible { outline: 3px solid #9bcf62; outline-offset: 2px; }
-.edit-action { background: linear-gradient(135deg, #4f8a45, #315f36); border-color: #315f36; }
+.edit-action { background: linear-gradient(135deg, #72ad68, #5f9855); border-color: #5f9855; }
 .delete-action { background: linear-gradient(135deg, #cf5550, #a92f2a); border-color: #a92f2a; }
+button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px solid #5e9257; }
+.info-modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.info-modal-head h2 { margin: 0; padding: 0; color: var(--green-800); background: none; border: 0; font-size: 22px; }
+.info-modal-close { width: 38px; height: 38px; flex: 0 0 auto; color: var(--green-900); background: var(--green-100); border: 1px solid var(--line); border-radius: 9px; font-size: 20px; }
+.rank-card { margin-bottom: 14px; padding: 14px; background: #eff7eb; border: 1px solid #cfe2c5; border-radius: 10px; }
+.rank-card strong { display: block; color: var(--green-800); font-size: 20px; }
+.rank-card span { color: var(--muted); font-size: 13px; }
+.rank-card-button { display:block; width:100%; text-align:left; font:inherit; cursor:pointer; transition:background .15s,border-color .15s,transform .15s; }
+.rank-card-button:hover { background:#e4f1dd; border-color:#9fc58e; transform:translateY(-1px); }
+.rank-card-button:focus-visible { outline:3px solid #9bcf62; outline-offset:2px; }
+.rank-list-modal { z-index:25; }
+.rank-list-modal .modal-box { max-width:760px; }
+.rank-group { margin-top:14px; }
+.rank-group-title { margin:0; padding:8px 11px; color:var(--green-900); background:#edf5e9; border:1px solid var(--line); border-bottom:0; border-radius:9px 9px 0 0; font-size:15px; }
+.rank-group .rank-list { border-radius:0 0 9px 9px; }
+.rank-list { max-height:62vh; overflow:auto; border:1px solid var(--line); border-radius:9px; }
+.rank-row { display:grid; grid-template-columns:58px minmax(0,1fr) 105px; gap:10px; align-items:center; padding:9px 12px; border-bottom:1px solid #e8eee5; }
+.rank-row:last-child { border-bottom:0; }
+.rank-row-current { color:var(--green-900); background:#eaf4e5; font-weight:700; }
+.rank-row small { display:block; color:var(--muted); font-weight:400; }
+.rank-row-weight { text-align:right; white-space:nowrap; }
+.linear-score { display:flex; align-items:center; justify-content:space-between; gap:14px; margin:10px 0 14px; padding:16px 18px; background:linear-gradient(120deg,#e8f3e2,#f5f9f2); border:1px solid #cfe2c5; border-radius:12px; }
+.linear-score-button { width:100%; color:inherit; font:inherit; text-align:left; cursor:pointer; transition:background .15s,border-color .15s,transform .15s; }
+.linear-score-button:hover { background:linear-gradient(120deg,#deeed6,#eef6e9); border-color:#a9c99a; transform:translateY(-1px); }
+.linear-score-button:focus-visible { outline:3px solid #9bcf62; outline-offset:2px; }
+.linear-score-label { color:var(--green-800); font-size:14px; font-weight:700; }
+.linear-score-value { color:var(--green-900); font-size:42px; line-height:1; font-weight:800; letter-spacing:-1px; }
+.linear-score-date { color:var(--muted); font-size:13px; text-align:right; }
+.linear-info { margin-top: 14px; padding: 14px; background: #fbfdf9; border: 1px solid var(--line); border-radius: 10px; }
+.linear-variations { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 12px; }
+.linear-variations span { padding: 5px 9px; color: var(--green-900); background: var(--green-100); border-radius: 7px; font-size: 13px; }
+.linear-block { margin-top: 10px; }
+.linear-block h5 { margin: 0 0 5px; color: var(--green-800); font-size: 14px; }
+.linear-grid { display: grid; grid-template-columns: minmax(0, 1fr) 80px 55px; border: 1px solid var(--line); border-radius: 7px; overflow: hidden; font-size: 12px; }
+.linear-grid > * { padding: 5px 7px; border-bottom: 1px solid #e8eee5; }
+.linear-grid > strong { color: var(--green-900); background: #edf5e9; }
+.linear-grid > :nth-child(3n + 2), .linear-grid > :nth-child(3n + 3) { text-align: center; }
+.weigh-reminder { display:none; margin:0 0 14px; padding:14px 16px; color:#344d31; background:#eef7e9; border:1px solid #b9d5af; border-radius:10px; }
+.weigh-reminder.show { display:block; }
+.weigh-reminder h2 { margin:0 0 5px; color:#426a3d; font-size:17px; }
+.weigh-reminder p { margin:0 0 8px; }
+.weigh-reminder-list { display:flex; flex-wrap:wrap; gap:7px; }
+.weigh-reminder-list button { padding:6px 10px; color:#315b2e; background:#dcefd5; border:1px solid #a9c99c; border-radius:7px; cursor:pointer; }
+.weigh-reminder-list button:hover { background:#cde5c3; }
 @media (max-width: 550px) { .detail-action { flex: 1 1 140px; min-width: 0; } }
 </style>
 </head>
@@ -425,8 +470,9 @@ tr.selected { background: #dcefd2; }
         <button onclick="openAdd()">
             ＋ Tier hinzufügen
         </button>
-        <button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
+<button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
 <button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
+<button type="button" id="browserReminderButton" onclick="browserErinnerungAktivieren()" title="Browser-Benachrichtigungen für fällige 40-Tage-Wägungen einschalten">🔔 Wägungserinnerung</button>
 
     </div>
 
@@ -497,6 +543,8 @@ tr.selected { background: #dcefd2; }
 
     </div>
 
+
+    <section id="weigh40Reminder" class="weigh-reminder" role="status" aria-live="polite"></section>
 
     <!-- =========================
          HAUPTBEREICH
@@ -1040,7 +1088,6 @@ const sheepOnlineGewichte = {
     "1996.8171": { geburtsgewicht: 5.5, gewicht40: 22.85, gewichtstyp: "Wurfmittel" },
     "1996.8207": { geburtsgewicht: 5.5, gewicht40: 21.9, gewichtstyp: "Wurfmittel" },
     "1996.8214": { geburtsgewicht: 5.0, gewicht40: 25.2, gewichtstyp: "Wurfmittel" },
-    "1996.8256": { geburtsgewicht: 5.5, gewicht40: 18.95, gewichtstyp: "Wurfmittel" },
     "1996.8257": { geburtsgewicht: 5.5, gewicht40: 18.95, gewichtstyp: "Wurfmittel" },
     "2122.5405": { geburtsgewicht: 5.5, gewicht40: 22.3, gewichtstyp: "Wurfmittel" },
     "1996.8203": { geburtsgewicht: 4.0, gewicht40: 15.76 },
@@ -1048,7 +1095,219 @@ const sheepOnlineGewichte = {
     "1996.8207": { geburtsgewicht: 5.5, gewicht40: 21.9 },
     "1996.8208": { geburtsgewicht: 6.5, gewicht40: 25.7 },
     "1996.8225": { geburtsgewicht: 5.0, gewicht40: 18.18 },
-    "1996.8228": { geburtsgewicht: 5.5, gewicht40: 18.34 }
+    "1996.8228": { geburtsgewicht: 5.5, gewicht40: 18.34 },
+    "1996.8242": { geburtsgewicht: 5.0, gewicht40: 15.89 },
+    "1996.8256": { geburtsgewicht: 5.5, gewicht40: 19.3 },
+    "1996.8259": { geburtsgewicht: 5.0, gewicht40: 17.06 },
+    "2122.5401": { geburtsgewicht: 5.2, gewicht40: 17.44 },
+    "2122.5403": { geburtsgewicht: 5.0, gewicht40: 19.7 },
+    "1996.8249": { geburtsgewicht: 5.5, gewicht40: 17.24 }
+};
+// Leistungs- und Einstufungsdaten aus den vom Nutzer gelieferten Herdebuchauszügen.
+const sheepOnlineLeistungsInfo = {
+    "1806.9869": { geburtsgewichtMittel: 5.1, wuerfe: 6, laemmer: 8,
+        // Vita: Geburtsgewichte sind erfasst, 40-Tage-Gewichte fehlen im Auszug.
+        wurfleistungen: [
+            { datum: "2020-01-17", anzahl: 2, geburtsgewicht: 4.75 },
+            { datum: "2020-09-24", anzahl: 1, geburtsgewicht: 5.5 },
+            { datum: "2021-04-03", anzahl: 1, geburtsgewicht: 5.5 },
+            { datum: "2022-02-28", anzahl: 2, geburtsgewicht: 5.0 },
+            { datum: "2023-01-03", anzahl: 1, geburtsgewicht: 4.0 },
+            { datum: "2024-03-07", anzahl: 1, geburtsgewicht: 6.0 }
+        ] },
+    "1873.7571": { geburtsgewichtMittel: 6.0, gewicht40Mittel: 22.73, wuerfe: 5, laemmer: 8,
+        wurfleistungen: [
+            { datum: "2021-03-02", anzahl: 2, geburtsgewicht: 5.75, gewicht40: 18.6 },
+            { datum: "2022-03-16", anzahl: 1, geburtsgewicht: 6.5, gewicht40: 25.7 },
+            { datum: "2023-03-03", anzahl: 2, geburtsgewicht: 8.0, gewicht40: 25.9 },
+            { datum: "2025-02-28", anzahl: 2, geburtsgewicht: 5.25, gewicht40: 20.5 },
+            { datum: "2026-03-13", anzahl: 1, geburtsgewicht: 5.2, gewicht40: 27.1 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 92, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 92, merkmale: [["Gesamtlänge", "92 cm", "8"], ["Widerristhöhe", "76 cm", "7"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "90 mm", "7"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "4"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 90, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "6"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "2"]] },
+            { name: "Wolle", note: 95, merkmale: [["Stapel", "–", "5"], ["Feinheit", "–", "6"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 97, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1825.4002": { geburtsgewichtMittel: 5.3, gewicht40Mittel: 17.76, wuerfe: 6, laemmer: 9,
+        wurfleistungen: [
+            { datum: "2021-03-22", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 19.5 },
+            { datum: "2022-02-04", anzahl: 3, geburtsgewicht: 4.67, gewicht40: 15.13 },
+            { datum: "2023-02-23", anzahl: 1, geburtsgewicht: 5.2, gewicht40: 17.5 },
+            { datum: "2024-01-17", anzahl: 1, geburtsgewicht: 5.2, gewicht40: 16.0 },
+            { datum: "2025-01-12", anzahl: 2, geburtsgewicht: 5.5, gewicht40: 17.4 },
+            { datum: "2026-01-11", anzahl: 1, geburtsgewicht: 7.2, gewicht40: 26.3 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 94, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 94, merkmale: [["Gesamtlänge", "93 cm", "8"], ["Widerristhöhe", "72 cm", "6"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "80 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "5"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 93, merkmale: [["Gigot", "–", "8"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 95, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "6"], ["Vlies", "–", "8"]] },
+            { name: "Fundament", note: 97, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "5"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1806.8549": { geburtsgewichtMittel: 5.3, gewicht40Mittel: 21.31, wuerfe: 8, laemmer: 11,
+        wurfleistungen: [
+            { datum: "2018-03-10", anzahl: 1, geburtsgewicht: 5.8 },
+            { datum: "2019-01-01", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 23.11 },
+            { datum: "2020-01-08", anzahl: 2, geburtsgewicht: 5.0, gewicht40: 18.5 },
+            { datum: "2020-12-21", anzahl: 2, geburtsgewicht: 5.5, gewicht40: 22.85 },
+            { datum: "2022-03-11", anzahl: 1, geburtsgewicht: 5.5, gewicht40: 21.9 },
+            { datum: "2023-01-30", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 25.2 },
+            { datum: "2024-04-15", anzahl: 2, geburtsgewicht: 5.5, gewicht40: 18.95 },
+            { datum: "2025-02-01", anzahl: 1, geburtsgewicht: 5.5, gewicht40: 22.3 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 94, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 94, merkmale: [["Gesamtlänge", "86 cm", "5"], ["Widerristhöhe", "70 cm", "5"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "80 mm", "6"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "6"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 97, merkmale: [["Gigot", "–", "8"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "5"]] },
+            { name: "Wolle", note: 93, merkmale: [["Stapel", "–", "5"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 93, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "4"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: [] } },
+    "1825.4000": { geburtsgewichtMittel: 5.1, gewicht40Mittel: 17.65, wuerfe: 6, laemmer: 11,
+        wurfleistungen: [
+            { datum: "2021-05-04", anzahl: 1, geburtsgewicht: 6.0 },
+            { datum: "2022-02-14", anzahl: 1, geburtsgewicht: 5.5 },
+            { datum: "2023-02-08", anzahl: 2, geburtsgewicht: 4.9, gewicht40: 19.43 },
+            { datum: "2024-01-23", anzahl: 2, geburtsgewicht: 4.9, gewicht40: 17.59 },
+            { datum: "2025-01-11", anzahl: 2, geburtsgewicht: 5.25, gewicht40: 19.64 },
+            { datum: "2026-02-21", anzahl: 3, geburtsgewicht: 4.8, gewicht40: 15.17 }
+        ],
+        // Gesamtmittel 17.65 kg bei 11 Lämmern abzüglich der neun einzeln
+        // erfassten Lämmer ergibt für die zwei Einlinge Ø 17.66 kg.
+        wurfklassenSchaetzungen: { "Einling": { gewicht40: 17.66, geburtsgewicht: 5.75 } },
+        linear: { datum: "07.03.2026", gesamtnote: 90, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 90, merkmale: [["Gesamtlänge", "94 cm", "8"], ["Widerristhöhe", "74 cm", "7"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "80 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 88, merkmale: [["Gigot", "–", "6"], ["Lenden/Rücken", "–", "5"], ["Schulter", "–", "5"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 93, merkmale: [["Stapel", "–", "5"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 93, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "3"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8203": { geburtsgewichtMittel: 4.7, gewicht40Mittel: 17.04, wuerfe: 3, laemmer: 6,
+        // Wurfgrösse = insgesamt geborene Lämmer; Gewichte = erfasste Mittelwerte.
+        wurfleistungen: [
+            { datum: "2024-03-27", anzahl: 2, geburtsgewicht: 4.75, gewicht40: 15.28 },
+            { datum: "2025-03-01", anzahl: 2, geburtsgewicht: 4.75, gewicht40: 16.49 },
+            { datum: "2026-01-15", anzahl: 2, geburtsgewicht: 4.6, gewicht40: 19.36 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 92, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 89, merkmale: [["Gesamtlänge", "89 cm", "6"], ["Widerristhöhe", "68 cm", "4"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "80 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "5"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 90, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "6"], ["Schulter", "–", "5"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 95, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 97, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "5"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8204": { geburtsgewichtMittel: 5.0, gewicht40Mittel: 15.29, wuerfe: 3, laemmer: 6,
+        wurfleistungen: [
+            { datum: "2024-02-26", anzahl: 2, geburtsgewicht: 5.0, gewicht40: 15.89 },
+            { datum: "2025-02-18", anzahl: 3, geburtsgewicht: 4.83, gewicht40: 11.49 },
+            { datum: "2026-01-07", anzahl: 1, geburtsgewicht: 5.5, gewicht40: 26.09 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 96, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 95, merkmale: [["Gesamtlänge", "88 cm", "6"], ["Widerristhöhe", "69 cm", "5"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "85 mm", "6"], ["Beckenneigung", "–", "7"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "5"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 95, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "4"]] },
+            { name: "Wolle", note: 98, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "6"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 98, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "5"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8207": { geburtsgewichtMittel: 4.9, gewicht40Mittel: 18.72, wuerfe: 3, laemmer: 5,
+        wurfleistungen: [
+            { datum: "2024-03-12", anzahl: 2, geburtsgewicht: 5.5, gewicht40: 17.04 },
+            { datum: "2025-01-19", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 19.7 },
+            { datum: "2025-12-24", anzahl: 2, geburtsgewicht: 4.35, gewicht40: 19.9 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 92, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 92, merkmale: [["Gesamtlänge", "88 cm", "6"], ["Widerristhöhe", "72 cm", "6"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "85 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "6"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 92, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "6"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 93, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "7"], ["Vlies", "–", "8"]] },
+            { name: "Fundament", note: 93, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "4"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8208": { geburtsgewichtMittel: 4.9, gewicht40Mittel: 16.37, wuerfe: 2, laemmer: 4,
+        // 2025: zwei geborene Lämmer, davon eines mit erfasstem 40-Tage-Gewicht.
+        wurfleistungen: [
+            { datum: "2024-03-10", anzahl: 2, geburtsgewicht: 4.9, gewicht40: 15.66 },
+            { datum: "2025-03-16", anzahl: 2, geburtsgewicht: 5.0, gewicht40: 17.8 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 88, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 87, merkmale: [["Gesamtlänge", "94 cm", "8"], ["Widerristhöhe", "74 cm", "7"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "85 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "3"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "5"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 89, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "6"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "4"]] },
+            { name: "Wolle", note: 90, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "6"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 89, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "4"], ["Beinstellung hinten", "–", "6"]] }
+        ], fehler: [] } },
+    "1996.8225": { geburtsgewichtMittel: 5.2, gewicht40Mittel: 22.55, wuerfe: 2, laemmer: 3,
+        wurfleistungen: [
+            { datum: "2025-02-15", anzahl: 2, geburtsgewicht: 5.25, gewicht40: 19.3 },
+            { datum: "2026-03-31", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 25.8 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 87, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 86, merkmale: [["Gesamtlänge", "94 cm", "8"], ["Widerristhöhe", "76 cm", "7"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "85 mm", "6"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 90, merkmale: [["Gigot", "–", "8"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "4"]] },
+            { name: "Wolle", note: 89, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 88, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "3"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: [] } },
+    "1996.8228": { geburtsgewichtMittel: 5.0, gewicht40Mittel: 21.35, wuerfe: 2, laemmer: 2,
+        wurfleistungen: [
+            { datum: "2025-03-23", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 16.7 },
+            { datum: "2026-01-08", anzahl: 1, geburtsgewicht: 5.0, gewicht40: 25.99 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 87, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 87, merkmale: [["Gesamtlänge", "85 cm", "5"], ["Widerristhöhe", "69 cm", "5"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "80 mm", "6"], ["Beckenneigung", "–", "7"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "6"], ["Widerrist", "–", "4"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 87, merkmale: [["Gigot", "–", "8"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 89, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 88, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "5"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8249": { geburtsgewichtMittel: 4.5, gewicht40Mittel: 25.0, wuerfe: 1, laemmer: 1,
+        wurfleistungen: [
+            { datum: "2026-01-11", anzahl: 1, geburtsgewicht: 4.5, gewicht40: 25.0 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 85, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 84, merkmale: [["Gesamtlänge", "84 cm", "5"], ["Widerristhöhe", "68 cm", "4"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "75 mm", "6"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "5"], ["Widerrist", "–", "4"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 85, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "5"], ["Schulter", "–", "5"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 89, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+            { name: "Fundament", note: 87, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "7"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8242": { linear: { datum: "07.03.2026", gesamtnote: 85, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+        { name: "Format", note: 85, merkmale: [["Gesamtlänge", "86 cm", "6"], ["Widerristhöhe", "70 cm", "5"], ["Brustbreite", "15 cm", "5"], ["Beckenbreite", "85 mm", "7"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "6"], ["Widerrist", "–", "5"], ["Kopfbewollung", "–", "1"]] },
+        { name: "Bemuskelung", note: 86, merkmale: [["Gigot", "–", "8"], ["Lenden/Rücken", "–", "8"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "5"]] },
+        { name: "Wolle", note: 86, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+        { name: "Fundament", note: 85, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "5"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "4"]] }
+    ], fehler: [] } },
+    "2099.9877": { geburtsgewichtMittel: 4.9, gewicht40Mittel: 20.85, wuerfe: 1, laemmer: 2,
+        wurfleistungen: [
+            { datum: "2026-02-06", anzahl: 2, geburtsgewicht: 4.85, gewicht40: 20.85 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 88, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+        { name: "Format", note: 88, merkmale: [["Gesamtlänge", "89 cm", "6"], ["Widerristhöhe", "72 cm", "6"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "85 mm", "6"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "7"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "2"]] },
+        { name: "Bemuskelung", note: 88, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "3"]] },
+        { name: "Wolle", note: 89, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+        { name: "Fundament", note: 90, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "5"], ["Beinstellung hinten", "–", "4"]] }
+    ], fehler: [] } },
+    "1996.8256": { geburtsgewichtMittel: 4.8, gewicht40Mittel: 16.42, wuerfe: 1, laemmer: 2,
+        wurfleistungen: [
+            { datum: "2026-01-01", anzahl: 2, geburtsgewicht: 4.75, gewicht40: 16.42 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 85, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 85, merkmale: [["Gesamtlänge", "85 cm", "6"], ["Widerristhöhe", "68 cm", "5"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "80 mm", "7"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "5"], ["Widerrist", "–", "4"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 84, merkmale: [["Gigot", "–", "6"], ["Lenden/Rücken", "–", "5"], ["Schulter", "–", "5"], ["Fettabdeckung", "–", "3"]] },
+            { name: "Wolle", note: 87, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "7"], ["Vlies", "–", "8"]] },
+            { name: "Fundament", note: 86, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "5"], ["Sprunggelenkwinkelung", "–", "6"], ["Beinstellung vorne", "–", "7"], ["Beinstellung hinten", "–", "5"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "1996.8259": { geburtsgewichtMittel: 4.5, gewicht40Mittel: 13.34, wuerfe: 1, laemmer: 2,
+        wurfleistungen: [
+            { datum: "2026-01-12", anzahl: 2, geburtsgewicht: 4.5, gewicht40: 13.34 }
+        ],
+        linear: { datum: "07.03.2026", gesamtnote: 84, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+            { name: "Format", note: 82, merkmale: [["Gesamtlänge", "81 cm", "4"], ["Widerristhöhe", "70 cm", "5"], ["Brustbreite", "13 cm", "4"], ["Beckenbreite", "80 mm", "7"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "5"], ["Widerrist", "–", "3"], ["Kopfbewollung", "–", "1"]] },
+            { name: "Bemuskelung", note: 84, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "6"], ["Schulter", "–", "5"], ["Fettabdeckung", "–", "2"]] },
+            { name: "Wolle", note: 87, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "7"], ["Vlies", "–", "8"]] },
+            { name: "Fundament", note: 88, merkmale: [["Gliedmassen", "–", "4"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "6"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "4"]] }
+        ], fehler: ["Hinter Schulter schwach"] } },
+    "2122.5401": { linear: { datum: "07.03.2026", gesamtnote: 81, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+        { name: "Format", note: 79, merkmale: [["Gesamtlänge", "77 cm", "4"], ["Widerristhöhe", "63 cm", "4"], ["Brustbreite", "14 cm", "5"], ["Beckenbreite", "80 mm", "7"], ["Beckenneigung", "–", "6"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "5"], ["Widerrist", "–", "6"], ["Kopfbewollung", "–", "1"]] },
+        { name: "Bemuskelung", note: 84, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "6"], ["Fettabdeckung", "–", "3"]] },
+        { name: "Wolle", note: 86, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "5"], ["Vlies", "–", "7"]] },
+        { name: "Fundament", note: 82, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "5"], ["Sprunggelenkwinkelung", "–", "5"], ["Beinstellung vorne", "–", "7"], ["Beinstellung hinten", "–", "3"]] }
+    ], fehler: ["Hinter Schulter schwach"] } },
+    "2122.5403": { linear: { datum: "07.03.2026", gesamtnote: 84, varia: [["Stapel", "normal"], ["Schwanz", "kupiert"]], bloecke: [
+        { name: "Format", note: 83, merkmale: [["Gesamtlänge", "79 cm", "5"], ["Widerristhöhe", "65 cm", "4"], ["Brustbreite", "17 cm", "7"], ["Beckenbreite", "80 mm", "7"], ["Beckenneigung", "–", "5"], ["Obere Linie", "–", "5"], ["Flankentiefe", "–", "6"], ["Widerrist", "–", "5"], ["Kopfbewollung", "–", "1"]] },
+        { name: "Bemuskelung", note: 87, merkmale: [["Gigot", "–", "7"], ["Lenden/Rücken", "–", "7"], ["Schulter", "–", "7"], ["Fettabdeckung", "–", "5"]] },
+        { name: "Wolle", note: 86, merkmale: [["Stapel", "–", "6"], ["Feinheit", "–", "6"], ["Vlies", "–", "8"]] },
+        { name: "Fundament", note: 83, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "4"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "3"]] }
+    ], fehler: [] } },
 };
 sheepOnlineNachkommen.forEach(t => Object.assign(t, sheepOnlineGewichte[String(t.id)] || {}));
 
@@ -1820,7 +2079,81 @@ function filtered(){let q=document.getElementById('search').value.toLowerCase(),
 
 
 
-</tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size}
+</tr>`).join('')||'<tr><td colspan="11" class="empty">Keine Tiere gefunden.</td></tr>';count.textContent=animals.length;female.textContent=animals.filter(a=>a.geschlecht=='F').length;male.textContent=animals.filter(a=>a.geschlecht=='M').length;years.textContent=new Set(animals.map(a=>a.geb.slice(0,4))).size;render40DayReminder()}
+
+function render40DayReminder() {
+    browserErinnerungsButtonAktualisieren();
+    const box = document.getElementById("weigh40Reminder");
+    if (!box) return;
+    const due = animals.filter(tier => {
+        const tage = tageSeitGeburt(tier.geb);
+        return tage >= 40 && tage <= 50 && !(Number(tier.gewicht40) > 0);
+    }).sort((a, b) => String(a.geb).localeCompare(String(b.geb)) || String(a.id).localeCompare(String(b.id)));
+    browserErinnerungenSenden(due);
+    if (!due.length) {
+        box.classList.remove("show");
+        box.innerHTML = "";
+        return;
+    }
+    box.innerHTML = '<h2>⚖️ 40-Tage-Wägung fällig</h2><p>' + due.length + (due.length === 1 ? ' Lamm wartet' : ' Lämmer warten') + ' auf die Wägung. Bitte bis zum 50. Lebenstag erfassen:</p><div class="weigh-reminder-list">' + due.map(tier => '<button type="button" data-weigh40-id="' + escapeJournalHTML(tier.id) + '">' + escapeJournalHTML(tier.name || 'Lamm') + ' · ' + escapeJournalHTML(tier.id) + ' · Tag ' + tageSeitGeburt(tier.geb) + '</button>').join('') + '</div>';
+    box.classList.add("show");
+    box.querySelectorAll("[data-weigh40-id]").forEach(button => button.addEventListener("click", () => selectAnimal(button.dataset.weigh40Id)));
+}
+
+const browserErinnerungsKey = "herdebuch-40tage-browser-erinnerungen-v1";
+function browserErinnerungenLaden() {
+    try { return JSON.parse(localStorage.getItem(browserErinnerungsKey) || "{}"); }
+    catch (_) { return {}; }
+}
+function browserErinnerungsButtonAktualisieren() {
+    const button = document.getElementById("browserReminderButton");
+    if (!button) return;
+    if (!("Notification" in window)) button.textContent = "🔔 Browser-Popup nicht verfügbar";
+    else if (Notification.permission === "granted") button.textContent = "🔔 Erinnerung aktiviert";
+    else button.textContent = "🔔 Wägungserinnerung";
+}
+function browserErinnerungenSenden(due) {
+    if (!("Notification" in window) || Notification.permission !== "granted") return;
+    const gesendet = browserErinnerungenLaden();
+    const jetzt = new Date();
+    const heute = jetzt.getFullYear() + "-" + String(jetzt.getMonth() + 1).padStart(2, "0") + "-" + String(jetzt.getDate()).padStart(2, "0");
+    due.forEach(tier => {
+        const id = String(tier.id);
+        if (gesendet[id] === heute) return;
+        const notification = new Notification("40-Tage-Wägung fällig", {
+            body: (tier.name || "Lamm") + " · " + id + " ist " + tageSeitGeburt(tier.geb) + " Tage alt. Bitte bis Tag 50 wiegen.",
+            tag: "herdebuch-40tage-" + id
+        });
+        notification.onclick = () => {
+            window.focus();
+            selectAnimal(id);
+            notification.close();
+        };
+        gesendet[id] = heute;
+    });
+    try { localStorage.setItem(browserErinnerungsKey, JSON.stringify(gesendet)); }
+    catch (error) { console.warn("Browser-Erinnerungsstatus konnte nicht gespeichert werden:", error); }
+}
+async function browserErinnerungAktivieren() {
+    if (!("Notification" in window)) {
+        alert("Dieser Browser unterstützt keine Desktop-Benachrichtigungen. Die Erinnerung erscheint weiterhin im Herdebuch, solange die Seite geöffnet ist.");
+        return;
+    }
+    try {
+        const erlaubnis = Notification.permission === "default" ? await Notification.requestPermission() : Notification.permission;
+        browserErinnerungsButtonAktualisieren();
+        if (erlaubnis === "granted") {
+            alert("Browser-Erinnerung ist aktiviert. Bei fälligen Wägungen erscheint ein Popup, solange das Herdebuch geöffnet ist.");
+            render40DayReminder();
+        } else if (erlaubnis === "denied") {
+            alert("Benachrichtigungen sind für diese Seite im Browser gesperrt. Erlaube sie in den Website-Einstellungen des Browsers.");
+        }
+    } catch (error) {
+        console.warn("Browser-Erinnerung konnte nicht aktiviert werden:", error);
+        alert("Der Browser konnte die Benachrichtigung nicht aktivieren. Prüfe die Berechtigung für diese Seite.");
+    }
+}
+setInterval(render40DayReminder, 15 * 60 * 1000);
 
 
 
@@ -1830,6 +2163,54 @@ function filtered(){let q=document.getElementById('search').value.toLowerCase(),
 
 
 
+
+function tierInfoOeffnen() {
+    const info = document.getElementById("tierInfoModal");
+    if (!info) return;
+    // Aus der Detailkarte herausnehmen, damit deren overflow:hidden den Dialog nicht abschneidet.
+    document.body.appendChild(info);
+    info.classList.add("show");
+}
+
+function tierInfoSchliessen() {
+    tierRanglisteSchliessen();
+    tierLinearranglisteSchliessen();
+    const info = document.getElementById("tierInfoModal");
+    if (!info) return;
+    info.classList.remove("show");
+    const details = document.getElementById("details");
+    if (details && info.parentElement !== details) details.appendChild(info);
+}
+
+function tierRanglisteOeffnen() {
+    const modal = document.getElementById("tierRankModal");
+    if (!modal) return;
+    document.body.appendChild(modal);
+    modal.classList.add("show");
+}
+
+function tierRanglisteSchliessen() {
+    const modal = document.getElementById("tierRankModal");
+    if (!modal) return;
+    modal.classList.remove("show");
+    const info = document.getElementById("tierInfoModal");
+    if (info && modal.parentElement !== info) info.appendChild(modal);
+}
+
+function tierLinearRanglisteOeffnen() {
+    const modal = document.getElementById("tierLinearRankModal");
+    if (!modal) return;
+    document.body.appendChild(modal);
+    modal.classList.add("show");
+}
+
+function tierLinearranglisteSchliessen() {
+    const modal = document.getElementById("tierLinearRankModal");
+    if (!modal) return;
+    modal.classList.remove("show");
+    const info = document.getElementById("tierInfoModal");
+    if (info && modal.parentElement !== info) info.appendChild(modal);
+}
 
 async function selectAnimal(id) {
 
@@ -1890,6 +2271,7 @@ let kids = Array.from(nachkommenKatalog.values())
     )
     .map(x => ({ ...x, imBestand: animals.some(t => String(t.id) === String(x.id)) }))
     .sort((x, y) => String(x.geb || "9999-99-99").localeCompare(String(y.geb || "9999-99-99")));
+const tierBericht = sheepOnlineLeistungsInfo[String(a.id)] || {};
 
 // 40-Tage-Zunahme als Hinweis auf die mütterliche Aufzuchtleistung.
 // Wurfmittel werden je Wurf nur einmal gezählt, damit Geschwister nicht doppelt eingehen.
@@ -1906,12 +2288,12 @@ if (a.geschlecht === "F") {
     });
 }
 const aufzuchtListe = Array.from(aufzuchtwerte.values());
-const aufzucht40Mittel = aufzuchtListe.length
-    ? aufzuchtListe.reduce((sum, x) => sum + x.gewicht40, 0) / aufzuchtListe.length
-    : null;
-const aufzuchtZunahme = aufzuchtListe.length
-    ? aufzuchtListe.reduce((sum, x) => sum + ((x.gewicht40 - x.geburtsgewicht) * 1000 / 40), 0) / aufzuchtListe.length
-    : null;
+const aufzucht40Mittel = Number.isFinite(Number(tierBericht.gewicht40Mittel))
+    ? Number(tierBericht.gewicht40Mittel)
+    : (aufzuchtListe.length ? aufzuchtListe.reduce((sum, x) => sum + x.gewicht40, 0) / aufzuchtListe.length : null);
+const aufzuchtZunahme = Number.isFinite(Number(tierBericht.gewicht40Mittel)) && Number.isFinite(Number(tierBericht.geburtsgewichtMittel))
+    ? (Number(tierBericht.gewicht40Mittel) - Number(tierBericht.geburtsgewichtMittel)) * 1000 / 40
+    : (aufzuchtListe.length ? aufzuchtListe.reduce((sum, x) => sum + ((x.gewicht40 - x.geburtsgewicht) * 1000 / 40), 0) / aufzuchtListe.length : null);
 
 const jahresLeistung = new Map();
 if (a.geschlecht === "F") {
@@ -1942,7 +2324,7 @@ if (a.geschlecht === "F") kids.forEach(lamm => {
 const wurfGroessenStatistik = new Map();
 Array.from(wuerfeNachDatum.values()).forEach(wurf => {
     const anzahl = wurf.length;
-    const klasse = anzahl === 1 ? "Einling" : anzahl === 2 ? "Zwillinge" : "Mehrlinge";
+    const klasse = anzahl === 1 ? "Einling" : anzahl === 2 ? "Zwillinge" : anzahl === 3 ? "Drillinge" : "4+ Lämmer";
     if (!wurfGroessenStatistik.has(klasse)) wurfGroessenStatistik.set(klasse, { wuerfe: 0, werte: [] });
     const statistik = wurfGroessenStatistik.get(klasse);
     statistik.wuerfe++;
@@ -1957,9 +2339,142 @@ Array.from(wuerfeNachDatum.values()).forEach(wurf => {
         });
     });
 });
-const wurfGroessenListe = ["Einling", "Zwillinge", "Mehrlinge"]
+// Wo der Herdebuchauszug pro Wurf ein 40-Tage-Mittel liefert, hat dieses Vorrang
+// vor unvollständigen Einzeltiergewichten aus der Tierliste.
+if (Array.isArray(tierBericht.wurfleistungen) && tierBericht.wurfleistungen.length) {
+    wurfGroessenStatistik.clear();
+    tierBericht.wurfleistungen.forEach(wurf => {
+        const n = Number(wurf.anzahl);
+        const gewicht40 = Number(wurf.gewicht40);
+        if (!Number.isFinite(n) || n < 1) return;
+        const klasse = n === 1 ? "Einling" : n === 2 ? "Zwillinge" : n === 3 ? "Drillinge" : "Mehrlinge";
+        if (!wurfGroessenStatistik.has(klasse)) wurfGroessenStatistik.set(klasse, { wuerfe: 0, werte: [] });
+        const statistik = wurfGroessenStatistik.get(klasse);
+        statistik.wuerfe++;
+        if (!Number.isFinite(gewicht40) || gewicht40 <= 0) return;
+        const geburtsgewicht = Number(wurf.geburtsgewicht ?? tierBericht.geburtsgewichtMittel);
+        const zunahme = Number.isFinite(geburtsgewicht) && geburtsgewicht > 0
+            ? (gewicht40 - geburtsgewicht) * 1000 / 40
+            : null;
+        statistik.werte.push({ gewicht40, zunahme });
+    });
+}
+const wurfGroessenListe = ["Einling", "Zwillinge", "Drillinge", "4+ Lämmer"]
     .filter(klasse => wurfGroessenStatistik.has(klasse))
     .map(klasse => [klasse, wurfGroessenStatistik.get(klasse)]);
+
+// Kennzeichnet unvollständige Herdebuchimporte offen, statt einen Teilbestand
+// wie eine vollständige Grundlage aussehen zu lassen.
+const wurfImportStatus = (() => {
+    const wuerfe = Array.isArray(tierBericht.wurfleistungen) ? tierBericht.wurfleistungen : [];
+    const erwartet = Number(tierBericht.wuerfe);
+    const gewicht40Anzahl = wuerfe.filter(w => Number.isFinite(Number(w.gewicht40)) && Number(w.gewicht40) > 0).length;
+    const geburtsgewichtAnzahl = wuerfe.filter(w => Number.isFinite(Number(w.geburtsgewicht)) && Number(w.geburtsgewicht) > 0).length;
+    const einzelwuerfeVollstaendig = Number.isFinite(erwartet) && erwartet > 0 && wuerfe.length === erwartet;
+    const gewicht40Vollstaendig = einzelwuerfeVollstaendig && gewicht40Anzahl === erwartet;
+    return { wuerfe, erwartet, gewicht40Anzahl, geburtsgewichtAnzahl, einzelwuerfeVollstaendig, gewicht40Vollstaendig };
+})();
+
+function mutterschafDurchschnitt40(tier) {
+    const bericht = sheepOnlineLeistungsInfo[String(tier.id)] || {};
+    if (Number.isFinite(Number(bericht.gewicht40Mittel)) && Number(bericht.gewicht40Mittel) > 0) return Number(bericht.gewicht40Mittel);
+    const messungen = new Map();
+    nachkommenKatalog.forEach(lamm => {
+        if (String(lamm.mutter || "").split(/\s+/)[0] !== String(tier.id)) return;
+        const gewicht = Number(lamm.gewicht40);
+        if (!Number.isFinite(gewicht) || gewicht <= 0) return;
+        const key = lamm.gewichtstyp === "Wurfmittel" && lamm.geb ? "wurf:" + lamm.geb : "lamm:" + lamm.id;
+        if (!messungen.has(key)) messungen.set(key, gewicht);
+    });
+    return messungen.size ? Array.from(messungen.values()).reduce((sum, x) => sum + x, 0) / messungen.size : null;
+}
+function mutterschafKlassenwerte40(tier) {
+    const bericht = sheepOnlineLeistungsInfo[String(tier.id)] || {};
+    if (Array.isArray(bericht.wurfleistungen) && bericht.wurfleistungen.length) {
+        const berichtKlassen = new Map();
+        bericht.wurfleistungen.forEach(wurf => {
+            const n = Number(wurf.anzahl), gewicht = Number(wurf.gewicht40);
+            if (!Number.isFinite(n) || n < 1 || !Number.isFinite(gewicht) || gewicht <= 0) return;
+            const klasse = n === 1 ? "Einling" : n === 2 ? "Zwillinge" : n === 3 ? "Drillinge" : "4+ Lämmer";
+            if (!berichtKlassen.has(klasse)) berichtKlassen.set(klasse, []);
+            berichtKlassen.get(klasse).push(gewicht);
+        });
+        if (berichtKlassen.size) return new Map(Array.from(berichtKlassen, ([klasse, werte]) => [klasse, werte.reduce((sum, x) => sum + x, 0) / werte.length]));
+    }
+    const wuerfe = new Map();
+    nachkommenKatalog.forEach(lamm => {
+        if (String(lamm.mutter || "").split(/\s+/)[0] !== String(tier.id) || !lamm.geb) return;
+        if (!wuerfe.has(String(lamm.geb))) wuerfe.set(String(lamm.geb), []);
+        wuerfe.get(String(lamm.geb)).push(lamm);
+    });
+    const klassen = new Map();
+    wuerfe.forEach(wurf => {
+        const n = wurf.length;
+        const klasse = n === 1 ? "Einling" : n === 2 ? "Zwillinge" : n === 3 ? "Drillinge" : "4+ Lämmer";
+        const wurfmittel = wurf.find(l => l.gewichtstyp === "Wurfmittel" && Number(l.gewicht40) > 0);
+        const messungen = wurfmittel ? [wurfmittel] : wurf.filter(l => Number(l.gewicht40) > 0);
+        if (!messungen.length) return;
+        if (!klassen.has(klasse)) klassen.set(klasse, []);
+        messungen.forEach(lamm => klassen.get(klasse).push(Number(lamm.gewicht40)));
+    });
+    if (klassen.size) return new Map(Array.from(klassen, ([klasse, werte]) => [klasse, werte.reduce((s, x) => s + x, 0) / werte.length]));
+    const aggregate = mutterschafDurchschnitt40(tier);
+    return Number.isFinite(aggregate) && aggregate > 0 ? new Map([["Gesamt", aggregate]]) : new Map();
+}
+const eigeneKlassenwerte40 = a.geschlecht === "F" ? mutterschafKlassenwerte40(a) : null;
+// Wurfgrösse fliesst nur in die Bereinigung des Gewichts ein. Gerankt wird
+// anschliessend eine gemeinsame Liste: jedes Mutterschaf erscheint genau einmal.
+const mutterschafRohwerte40 = animals.filter(tier => tier.geschlecht === "F").map(tier => ({
+    tier,
+    klassenwerte: mutterschafKlassenwerte40(tier)
+}));
+const wurfklassenMittel40 = new Map();
+mutterschafRohwerte40.forEach(eintrag => eintrag.klassenwerte.forEach((gewicht, klasse) => {
+    if (klasse === "Gesamt") return;
+    if (!wurfklassenMittel40.has(klasse)) wurfklassenMittel40.set(klasse, []);
+    wurfklassenMittel40.get(klasse).push(gewicht);
+}));
+const wurfklassenMittelwerte40 = new Map(Array.from(wurfklassenMittel40, ([klasse, werte]) => [
+    klasse,
+    werte.reduce((summe, gewicht) => summe + gewicht, 0) / werte.length
+]));
+const herdenMittel40Werte = Array.from(wurfklassenMittel40.values()).flat();
+const herdenMittel40 = herdenMittel40Werte.length
+    ? herdenMittel40Werte.reduce((summe, gewicht) => summe + gewicht, 0) / herdenMittel40Werte.length
+    : null;
+const gewichtWurfgroessenBereinigt = klassenwerte => {
+    if (!klassenwerte || !klassenwerte.size) return null;
+    if (klassenwerte.size === 1 && klassenwerte.has("Gesamt")) return klassenwerte.get("Gesamt");
+    if (herdenMittel40 === null) return null;
+    const abweichungen = Array.from(klassenwerte, ([klasse, gewicht]) => {
+        const klassenmittel = wurfklassenMittelwerte40.get(klasse);
+        return Number.isFinite(klassenmittel) ? gewicht - klassenmittel : null;
+    }).filter(Number.isFinite);
+    if (!abweichungen.length) return null;
+    return herdenMittel40 + abweichungen.reduce((summe, abweichung) => summe + abweichung, 0) / abweichungen.length;
+};
+const vergleichswerte40 = a.geschlecht === "F"
+    ? mutterschafRohwerte40.map(eintrag => ({ tier: eintrag.tier, gewicht: gewichtWurfgroessenBereinigt(eintrag.klassenwerte) }))
+        .filter(eintrag => Number.isFinite(eintrag.gewicht) && eintrag.gewicht > 0)
+    : animals.map(tier => ({ tier, gewicht: Number(tier.gewicht40) })).filter(eintrag => Number.isFinite(eintrag.gewicht) && eintrag.gewicht > 0);
+const eigeneLeistung40 = a.geschlecht === "F"
+    ? gewichtWurfgroessenBereinigt(eigeneKlassenwerte40)
+    : Number(a.gewicht40);
+const rangliste40 = [...vergleichswerte40].sort((x,y) => y.gewicht - x.gewicht || String(x.tier.name).localeCompare(String(y.tier.name)));
+const rangliste40Alle = a.geschlecht === "F"
+    ? mutterschafRohwerte40.map(eintrag => ({ tier: eintrag.tier, gewicht: gewichtWurfgroessenBereinigt(eintrag.klassenwerte) }))
+    : animals.map(tier => ({ tier, gewicht: Number(tier.gewicht40) }));
+const linearRangliste = animals.map(tier => {
+    const linear = (sheepOnlineLeistungsInfo[String(tier.id)] || {}).linear;
+    const note = linear ? Number(linear.gesamtnote) : null;
+    return { tier, note: Number.isFinite(note) ? note : null };
+}).sort((x,y) => (y.note ?? -Infinity) - (x.note ?? -Infinity) || String(x.tier.name).localeCompare(String(y.tier.name)));
+const rang40 = Number.isFinite(eigeneLeistung40) && eigeneLeistung40 > 0
+    ? vergleichswerte40.filter(eintrag => eintrag.gewicht > eigeneLeistung40).length + 1
+    : null;
+const rangHinweis = a.geschlecht === "F"
+    ? "Wurfgrösse beeinflusst nur den berechneten Vergleichswert; die Rangliste zeigt alle Tiere gemeinsam. Gleiche Werte teilen den Rang."
+    : "Verglichen werden Bestandstiere mit erfasstem eigenem 40-Tage-Gewicht. Gleiche Werte teilen den Rang.";
 
    const details = document.getElementById("details");
 
@@ -1985,6 +2500,9 @@ details.classList.add("show");
   </button>
   <button type="button" class="detail-action delete-action" onclick="tierEntfernen('${a.id}')">
     🗑️ Tier entfernen
+  </button>
+  <button type="button" class="detail-action info-action" onclick="tierInfoOeffnen()">
+    ℹ️ Info
   </button>
 </div>
 
@@ -2089,23 +2607,42 @@ details.classList.add("show");
 </div>
 
 
-${a.geschlecht === "F" ? `
+<div id="tierInfoModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="tierInfoTitel" onclick="if(event.target===this)tierInfoSchliessen()">
+  <div class="modal-box">
+    <div class="info-modal-head">
+      <h2 id="tierInfoTitel">Info · ${a.name}</h2>
+      <button type="button" class="info-modal-close" aria-label="Schliessen" onclick="tierInfoSchliessen()">×</button>
+    </div>
+    <button type="button" class="rank-card rank-card-button" onclick="tierRanglisteOeffnen()" aria-haspopup="dialog" aria-controls="tierRankModal">
+      ${rang40 === null
+        ? '<strong>Rang noch nicht verfügbar</strong><span>Für dieses Tier liegen noch keine passenden 40-Tage-Daten vor. Klicken, um die verfügbare Rangliste zu öffnen.</span>'
+        : '<strong>Rang ' + rang40 + ' von ' + vergleichswerte40.length + '</strong><span>Ø ' + eigeneLeistung40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg mit 40 Tagen · ' + rangHinweis + ' · Rangliste ansehen →</span>'}
+    </button>
+    ${a.geschlecht === "F" ? `
 <div class="section">
     <h4>Milch- und Aufzuchtleistung · Schätzwert</h4>
     <div class="rearing-metric">
-        ${aufzuchtListe.length ? `
+        ${aufzucht40Mittel !== null ? `
         <div class="rearing-values">
             <div><span>Ø Gewicht mit 40 Tagen</span><strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong></div>
-            <div><span>Ø tägliche Zunahme ab Geburt</span><strong>${aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 })} g/Tag</strong></div>
-            <div><span>Erfasste Würfe/Lämmer</span><strong>${aufzuchtListe.length}</strong></div>
+            <div><span>Ø tägliche Zunahme ab Geburt</span><strong>${aufzuchtZunahme === null ? '–' : aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 }) + ' g/Tag'}</strong></div>
+            <div><span>Würfe</span><strong>${tierBericht.wuerfe ?? wuerfeNachDatum.size}</strong></div>
+            <div><span>Nachkommen</span><strong>${tierBericht.laemmer ?? kids.length}</strong></div>
         </div>
-        <p class="rearing-note">Berechnet aus den erfassten Geburts- und 40-Tage-Gewichten. Höhere Zunahmen können auf gute Milch- und Aufzuchtleistung hindeuten; Wurfgrösse, Lämmergesundheit und Haltung beeinflussen den Wert ebenfalls.</p>
-        ` : '<p class="rearing-note">Noch keine Nachkommen mit Geburts- und 40-Tage-Gewicht erfasst.</p>'}
+        <p class="rearing-note">${tierBericht.gewicht40Mittel ? 'Durchschnitt aus dem Herdebuchauszug.' : 'Schätzwert aus den bekannten Gewichten der Nachkommen.'} Höhere Zunahmen können auf gute Milch- und Aufzuchtleistung hindeuten; Wurfgrösse, Lämmergesundheit und Haltung beeinflussen den Wert ebenfalls.</p>
+        ` : '<p class="rearing-note">Noch keine Nachkommen mit 40-Tage-Gewichten erfasst.</p>'}
         ${jahresLeistungListe.length ? '<div class="rearing-years">' + jahresLeistungListe.map(([jahr, statistik]) => {
             const gw = Array.from(statistik.gewichte.values());
             const durchschnitt40 = gw.length ? gw.reduce((sum, gewicht) => sum + gewicht, 0) / gw.length : null;
             return '<div class="rearing-year"><b>' + jahr + '</b><span>Würfe: ' + statistik.wuerfe.size + ' · erfasste Lämmer: ' + statistik.laemmer.size + '</span><span>40-Tage-Gewichte: ' + gw.length + (durchschnitt40 === null ? '' : ' · Ø ' + durchschnitt40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg') + '</span></div>';
         }).join('') + '</div>' : ''}
+        <p class="rearing-note"><strong>Datengrundlage:</strong> ${wurfImportStatus.einzelwuerfeVollstaendig
+            ? `${wurfImportStatus.wuerfe.length} von ${wurfImportStatus.erwartet} Würfen als Einzelwürfe erfasst; ${wurfImportStatus.gewicht40Anzahl} davon mit 40-Tage-Gewicht.`
+            : wurfImportStatus.wuerfe.length
+                ? `${wurfImportStatus.wuerfe.length}${Number.isFinite(wurfImportStatus.erwartet) ? ` von ${wurfImportStatus.erwartet}` : ''} Würfe als Einzelwürfe erfasst; der Import ist unvollständig.`
+                : 'Noch keine Einzelwürfe aus dem Herdebuchauszug übernommen; die Auswertung kann unvollständig sein.'}
+            ${wurfImportStatus.gewicht40Vollstaendig ? ' Alle erfassten Würfe haben ein 40-Tage-Gewicht.' : ''}
+        </p>
         ${wurfGroessenListe.length ? '<div style="margin-top:12px"><strong>40-Tage-Vergleich nach erfasster Wurfgrösse</strong><div class="rearing-class-row"><strong>Wurfgrösse</strong><strong>Würfe</strong><strong>Ø 40 Tage</strong><strong>Ø Zunahme</strong></div>' + wurfGroessenListe.map(([klasse, statistik]) => {
             const gewichte = statistik.werte.map(x => x.gewicht40);
             const zunahmen = statistik.werte.filter(x => x.zunahme !== null).map(x => x.zunahme);
@@ -2116,7 +2653,47 @@ ${a.geschlecht === "F" ? `
         <p class="rearing-note">Jahreszahlen zählen die bekannten Nachkommen. Ein fehlendes 40-Tage-Gewicht bedeutet „nicht erfasst“, nicht „verendet“.</p>
     </div>
 </div>
-` : ""}
+` : '<div class="section"><h4>Milch- und Aufzuchtleistung · Schätzwert</h4><p class="rearing-note">Diese Auswertung ist für Mutterschafe vorgesehen und basiert auf den Gewichten ihrer Nachkommen.</p></div>'}
+    ${tierBericht.linear ? '<div class="section linear-info"><h4>Lineare Beschreibung und Einstufung</h4><button type="button" class="linear-score linear-score-button" onclick="tierLinearRanglisteOeffnen()" aria-haspopup="dialog" aria-controls="tierLinearRankModal"><div><div class="linear-score-label">Gesamtnote</div><div class="linear-score-value">' + tierBericht.linear.gesamtnote + '</div></div><div class="linear-score-date">Beurteilung<br><strong>' + tierBericht.linear.datum + '</strong><br>Rangliste ansehen →</div></button>' +
+        '<div class="linear-variations">' + tierBericht.linear.varia.map(([label, wert]) => '<span><b>' + label + ':</b> ' + wert + '</span>').join('') + '</div>' +
+        tierBericht.linear.bloecke.map(block => '<div class="linear-block"><h5>' + block.name + ' · Blocknote ' + block.note + '</h5><div class="linear-grid"><strong>Merkmal</strong><strong>Mass</strong><strong>Note</strong>' +
+            block.merkmale.map(([name, mass, note]) => '<span>' + name + '</span><span>' + mass + '</span><span>' + note + '</span>').join('') + '</div></div>').join('') +
+        (tierBericht.linear.fehler?.length ? '<p class="rearing-note"><b>Bemerkungen:</b> ' + tierBericht.linear.fehler.join(', ') + '</p>' : '') + '</div>' : ''}
+</div>
+</div>
+
+<div id="tierLinearRankModal" class="modal rank-list-modal" role="dialog" aria-modal="true" aria-labelledby="tierLinearRankTitel" onclick="if(event.target===this)tierLinearranglisteSchliessen()">
+  <div class="modal-box">
+    <div class="info-modal-head">
+      <h2 id="tierLinearRankTitel">Rangliste · Gesamtnote</h2>
+      <button type="button" class="info-modal-close" aria-label="Rangliste schliessen" onclick="tierLinearranglisteSchliessen()">×</button>
+    </div>
+    <p class="rearing-note">Alle Bestandstiere sind aufgeführt. Erfasste Gesamtnoten sind absteigend sortiert; Tiere ohne lineare Einstufung stehen am Ende ohne Rang.</p>
+    <div class="rank-list">
+      ${linearRangliste.length ? linearRangliste.map(eintrag => {
+          const platz = eintrag.note === null ? "–" : linearRangliste.filter(x => x.note !== null && x.note > eintrag.note).length + 1;
+          const aktuell = String(eintrag.tier.id) === String(a.id);
+          return '<div class="rank-row' + (aktuell ? ' rank-row-current' : '') + '"><span>' + (eintrag.note === null ? '–' : '#' + platz) + '</span><span>' + eintrag.tier.name + '<small>' + eintrag.tier.id + (aktuell ? ' · ausgewähltes Tier' : '') + (eintrag.note === null ? ' · keine lineare Note' : '') + '</small></span><span class="rank-row-weight">' + (eintrag.note === null ? '–' : eintrag.note) + '</span></div>';
+      }).join('') : '<div class="rank-row"><span>–</span><span>Keine linearen Gesamtnoten erfasst.</span><span></span></div>'}
+    </div>
+  </div>
+</div>
+
+<div id="tierRankModal" class="modal rank-list-modal" role="dialog" aria-modal="true" aria-labelledby="tierRankTitel" onclick="if(event.target===this)tierRanglisteSchliessen()">
+  <div class="modal-box">
+    <div class="info-modal-head">
+      <h2 id="tierRankTitel">Rangliste · 40-Tage-Gewicht</h2>
+      <button type="button" class="info-modal-close" aria-label="Rangliste schliessen" onclick="tierRanglisteSchliessen()">×</button>
+    </div>
+    <p class="rearing-note">Alle Mutterschafe stehen gemeinsam in dieser Rangliste. Bei der Berechnung des Vergleichsgewichts wird berücksichtigt, ob die gemessenen Lämmer aus Einlings-, Zwillings- oder Mehrlingswürfen stammen. Tiere ohne Gewichtsdaten bleiben sichtbar und erhalten keinen Rang.</p>
+    <div class="rank-list">${[...rangliste40Alle].sort((x,y) => (y.gewicht ?? -Infinity) - (x.gewicht ?? -Infinity) || String(x.tier.name).localeCompare(String(y.tier.name))).map(eintrag => {
+        const hatGewicht = Number.isFinite(eintrag.gewicht) && eintrag.gewicht > 0;
+        const platz = hatGewicht ? rangliste40Alle.filter(x => Number.isFinite(x.gewicht) && x.gewicht > eintrag.gewicht).length + 1 : null;
+        const aktuell = String(eintrag.tier.id) === String(a.id);
+        return '<div class="rank-row' + (aktuell ? ' rank-row-current' : '') + '"><span>' + (platz === null ? '–' : '#' + platz) + '</span><span>' + eintrag.tier.name + '<small>' + eintrag.tier.id + (aktuell ? ' · ausgewähltes Tier' : '') + '</small></span><span class="rank-row-weight">' + (hatGewicht ? eintrag.gewicht.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg' : '–') + '</span></div>';
+    }).join('')}</div>
+  </div>
+</div>
 
 <div class="section">
 
@@ -3139,7 +3716,7 @@ function buildLambFields() {
                     'Geburtsgewicht (kg)' +
                     '<input type="number" ' +
                     'name="lamb_geburtsgewicht_' + i + '" ' +
-                    'step="0.01" min="0" max="15" placeholder="optional">' +
+                    'step="0.01" min="0.1" max="15" placeholder="z. B. 5,0" required>' +
                 '</label>' +
 
                 '<label>' +
@@ -3251,8 +3828,8 @@ document
                         '[name="lamb_geburtsgewicht_' + i + '"]'
                     ).value.trim();
 
-                if (geburtsgewicht !== '' && (!Number.isFinite(Number(geburtsgewicht)) || Number(geburtsgewicht) <= 0 || Number(geburtsgewicht) > 15)) {
-                    alert('Bitte ein gültiges Geburtsgewicht für Lamm ' + i + ' eingeben (max. 15 kg).');
+                if (geburtsgewicht === '' || !Number.isFinite(Number(geburtsgewicht)) || Number(geburtsgewicht) <= 0 || Number(geburtsgewicht) > 15) {
+                    alert('Bitte das Geburtsgewicht für Lamm ' + i + ' eingeben (grösser als 0 und höchstens 15 kg).');
                     return;
                 }
 
