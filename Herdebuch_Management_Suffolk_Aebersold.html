@@ -265,6 +265,7 @@ tr.selected { background: #dcefd2; }
 .journal-content { min-width: 0; }
 .journal-content strong { display: block; }
 .journal-note { margin-top: 3px; color: #666; font-size: 13px; }
+.points-history { display: block; margin-top: 4px; color: var(--muted); font-size: 11px; line-height: 1.35; }
 .journal-delete { width: 65px; min-width: 65px; padding: 4px 6px; border: 0; border-radius: 5px; font-size: 11px; white-space: nowrap; }
 
 /* Tablet */
@@ -351,8 +352,13 @@ tr.selected { background: #dcefd2; }
 #birthMother option:nth-child(odd), #birthFather option:nth-child(odd) { background: #fff; }
 .mass-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0; }
 .mass-actions button, .mass-submit { padding: 8px 12px; color: #fff; background: var(--green-700); border: 0; border-radius: 7px; }
-.planned-lambing { margin: 10px 0; padding: 10px 12px; color: var(--green-900); background: var(--green-100); border-left: 4px solid var(--green-500); border-radius: 7px; }
+.planned-lambing { display:block; width:100%; margin:10px 0; padding:10px 12px; color:var(--green-900); background:var(--green-100); border:0; border-left:4px solid var(--green-500); border-radius:7px; font:inherit; text-align:left; cursor:pointer; }
+.planned-lambing:hover { background:#e4f0dd; }
 .planned-lambing small { display: block; margin-top: 3px; color: var(--muted); }
+.lambing-overview-row { display:grid; grid-template-columns:minmax(0,1fr) 125px 145px; gap:10px; align-items:center; padding:10px 12px; border-bottom:1px solid #e8eee5; }
+.lambing-overview-row:last-child { border-bottom:0; }
+.lambing-overview-row small { display:block; color:var(--muted); }
+@media (max-width:600px) { .lambing-overview-row { grid-template-columns:1fr 1fr; } .lambing-overview-row strong { grid-column:1/-1; } }
 
 /* Formulare in den Dialogen */
 .modal { backdrop-filter: blur(4px); }
@@ -1303,6 +1309,25 @@ const sheepOnlineLeistungsInfo = {
         { name: "Fundament", note: 83, merkmale: [["Gliedmassen", "–", "5"], ["Fesseln", "–", "4"], ["Sprunggelenkwinkelung", "–", "4"], ["Beinstellung vorne", "–", "6"], ["Beinstellung hinten", "–", "3"]] }
     ], fehler: [] } },
 };
+// Bisherige Exterieur-Punktierungen aus den vom Nutzer gelieferten Auszügen.
+// Datumskürzel: Monat, zweistelliges Jahr, Ort/Beurteilungsart.
+const sheepOnlineExterieurInfo = {
+    "1873.7571": [{ datum: "09 19 MC", punkte: "4/4/4" }, { datum: "09 19 S", punkte: "4/4/4" }, { datum: "10 20 S", punkte: "5/5/5" }, { datum: "10 21 S", punkte: "6/6/6" }],
+    "1806.8549": [{ datum: "09 17 MC", punkte: "4/3/4" }, { datum: "10 17 S", punkte: "4/3/4" }, { datum: "10 18 S", punkte: "5/4/5" }, { datum: "09 19 S", punkte: "6/5/6" }, { datum: "10 21 S", punkte: "6/6/6" }],
+    "1825.4000": [{ datum: "10 20 S", punkte: "4/3/4" }, { datum: "10 21 S", punkte: "5/5/5" }, { datum: "09 22 MC", punkte: "6/6/6" }],
+    "1825.4002": [{ datum: "10 20 S", punkte: "4/4/4" }, { datum: "10 21 S", punkte: "5/5/5" }, { datum: "10 22 S", punkte: "5/5/6" }, { datum: "10 23 S", punkte: "6/5/6" }, { datum: "10 24 S", punkte: "6/5/6" }],
+    "1996.8225": [{ datum: "10 23 S", punkte: "3/3/4" }, { datum: "09 24 MC", punkte: "5/5/5" }, { datum: "10 25 S", punkte: "6/5/6" }],
+    "1996.8207": [{ datum: "09 22 MC", punkte: "4/4/4" }, { datum: "03 23 MC", punkte: "5/5/5" }, { datum: "10 24 S", punkte: "6/5/5" }, { datum: "03 25 S", punkte: "6/5/5" }],
+    "1996.8228": [{ datum: "10 23 S", punkte: "4/3/4" }, { datum: "09 24 MC", punkte: "5/5/5" }, { datum: "10 25 S", punkte: "6/5/6" }],
+    "2099.9877": [{ datum: "09 23 MC", punkte: "4/4/3" }, { datum: "09 24 MC", punkte: "5/4/5" }, { datum: "10 24 S", punkte: "5/4/5" }, { datum: "10 25 S", punkte: "6/6/6" }],
+    "1996.8203": [{ datum: "09 22 MC", punkte: "4/4/4" }, { datum: "10 23 S", punkte: "5/5/5" }, { datum: "10 24 S", punkte: "6/6/5" }],
+    "1996.8204": [{ datum: "10 22 S", punkte: "4/4/4" }, { datum: "03 23 MC", punkte: "5/5/5" }, { datum: "09 23 MC", punkte: "5/5/5" }, { datum: "10 24 S", punkte: "6/6/6" }],
+    "1996.8208": [{ datum: "10 22 S", punkte: "4/4/4" }, { datum: "09 23 MC", punkte: "5/5/5" }, { datum: "10 24 S", punkte: "5/5/6" }],
+    "1996.8256": [{ datum: "09 24 MC", punkte: "4/4/4" }, { datum: "10 25 S", punkte: "5/5/5" }],
+    "1996.8259": [{ datum: "10 24 S", punkte: "2/3/4" }, { datum: "03 25 S", punkte: "4/3/4" }, { datum: "10 25 S", punkte: "5/4/5" }],
+    "1996.8249": [{ datum: "09 24 MC", punkte: "4/4/4" }, { datum: "10 25 S", punkte: "5/5/4" }],
+    "1996.8242": [{ datum: "03 25 S", punkte: "5/4/4" }, { datum: "10 25 S", punkte: "5/5/5" }]
+};
 sheepOnlineNachkommen.forEach(t => Object.assign(t, sheepOnlineGewichte[String(t.id)] || {}));
 
 const geburtsgewichtSpeicherKey = "herdebuch-geburtsgewichte-v1";
@@ -2245,12 +2270,9 @@ async function selectAnimal(id) {
     selectedId = id;
 
 
-
-// Journal online laden
-await journalLaden();
-
-
-
+// Das Journal wurde beim Laden der Herde abgefragt. Beim Tierwechsel die
+// gespeicherten Einträge verwenden, damit die Detailansicht nicht auf das
+// Netzwerk warten muss.
 
     // =========================================================
     // TIER ERMITTELN
@@ -2561,6 +2583,7 @@ details.classList.add("show");
 <div class="field">
     <span>Punkte</span>
     <span id="editPunkte">${a.punkte || '-'}</span>
+    <small id="punkteVerlauf" class="points-history">${punktVerlaufHTML(a)}</small>
 </div><div class="field">
     <span>Eriz</span>
     ${
@@ -2583,7 +2606,7 @@ details.classList.add("show");
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
         <h4>Tier-Journal</h4>
     </div>
-    <div id="plannedLambing" class="planned-lambing" aria-live="polite"></div>
+    <button type="button" id="plannedLambing" class="planned-lambing" aria-live="polite" onclick="ablammUebersichtOeffnen()"></button>
 
     <div class="journal-form">
 
@@ -2591,12 +2614,13 @@ details.classList.add("show");
 
         <select id="journalEreignis">
             <option value="Brunst">Brunst</option>
+            <option value="Punktierung">Punktierung</option>
             <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
             <option value="Albex 10%">Entwurmt – Albex 10%</option>
             <option value="Klauenpflege">Klauenpflege</option>
         </select>
 
-        <input type="text" id="journalBemerkung" placeholder="Bemerkung">
+        <input type="text" id="journalBemerkung" placeholder="Bemerkung, z. B. jährig · 4/4/4">
 
         <button class="journal-add-button" type="button" onclick="journalEintragHinzufuegen('${a.id}')">+ Eintrag</button>
 
@@ -3267,10 +3291,35 @@ function aktualisiereAblammung(tierId) {
     const el = document.getElementById("plannedLambing");
     if (!el) return;
     const brunst = letztesBrunstDatum(tierId);
-    if (!brunst) { el.innerHTML = '<strong>Ablammung geplant:</strong> noch kein Brunst-Eintrag'; return; }
+    if (!brunst) { el.innerHTML = '<strong>Ablammung geplant:</strong> noch kein Brunst-Eintrag<small>Klicken für die Herdenübersicht</small>'; return; }
     const ziel = plusTage(brunst, 150);
     const lokal = iso => new Date(iso + "T00:00:00").toLocaleDateString("de-CH");
-    el.innerHTML = '<strong>Ablammung geplant: ' + escapeJournalHTML(lokal(ziel)) + '</strong><small>150 Tage nach der letzten Brunst (' + escapeJournalHTML(lokal(brunst)) + ').</small>';
+    el.innerHTML = '<strong>Ablammung geplant: ' + escapeJournalHTML(lokal(ziel)) + '</strong><small>Klicken für die Herdenübersicht · letzte Brunst ' + escapeJournalHTML(lokal(brunst)) + '</small>';
+}
+function ablammUebersichtOeffnen() {
+    let modal = document.getElementById("ablammUebersichtModal");
+    if (!modal) {
+        document.body.insertAdjacentHTML("beforeend", '<div id="ablammUebersichtModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="ablammUebersichtTitel" onclick="if(event.target===this)ablammUebersichtSchliessen()"><div class="modal-box"><div class="info-modal-head"><h2 id="ablammUebersichtTitel">Geplante Ablammungen</h2><button type="button" class="info-modal-close" aria-label="Übersicht schliessen" onclick="ablammUebersichtSchliessen()">×</button></div><p class="rearing-note">Berechnet mit 150 Tagen ab dem letzten erfassten Brunst-Datum.</p><div id="ablammUebersichtListe"></div></div></div>');
+        modal = document.getElementById("ablammUebersichtModal");
+    }
+    const liste = animals.filter(tier => String(tier.geschlecht || "").toUpperCase() === "F").map(tier => {
+        const brunst = letztesBrunstDatum(tier.id);
+        return brunst ? { tier, brunst, ablammen: plusTage(brunst, 150) } : null;
+    }).filter(Boolean).sort((a, b) => a.ablammen.localeCompare(b.ablammen));
+    const heuteDatum = new Date();
+    const heute = `${heuteDatum.getFullYear()}-${String(heuteDatum.getMonth() + 1).padStart(2, "0")}-${String(heuteDatum.getDate()).padStart(2, "0")}`;
+    const ziel = document.getElementById("ablammUebersichtListe");
+    ziel.innerHTML = liste.length
+        ? '<div class="lambing-overview-row"><b>Mutterschaf</b><b>Letzte Brunst</b><b>Ablammung geplant</b></div>' + liste.map(eintrag => {
+            const lokal = datum => new Date(datum + "T00:00:00").toLocaleDateString("de-CH");
+            const status = eintrag.ablammen < heute ? '<small>Termin vergangen</small>' : '';
+            return '<div class="lambing-overview-row"><strong>' + escapeJournalHTML(eintrag.tier.name || "Mutterschaf") + '<small>' + escapeJournalHTML(eintrag.tier.id) + '</small></strong><span>' + escapeJournalHTML(lokal(eintrag.brunst)) + '</span><span>' + escapeJournalHTML(lokal(eintrag.ablammen)) + status + '</span></div>';
+        }).join("")
+        : '<div class="empty">Noch keine Brunst-Daten im Tier-Journal erfasst.</div>';
+    modal.classList.add("show");
+}
+function ablammUebersichtSchliessen() {
+    document.getElementById("ablammUebersichtModal")?.classList.remove("show");
 }
 async function massBrunstSpeichern(event) {
     event.preventDefault();
@@ -3461,6 +3510,16 @@ async function journalEintragHinzufuegen(tierId) {
             "journalBemerkung"
         ).value.trim();
 
+    let punktSatz = null;
+    if (ereignis === "Punktierung") {
+        const treffer = bemerkung.match(/(^|\D)([1-6])\s*\/\s*([1-6])\s*\/\s*([1-6])($|\D)/);
+        if (!treffer) {
+            alert("Bitte die drei Punktwerte in der Bemerkung angeben, z. B. «Jährig · 4/4/4».");
+            return;
+        }
+        punktSatz = `${treffer[2]}/${treffer[3]}/${treffer[4]}`;
+    }
+
 
     if (!datum) {
 
@@ -3512,6 +3571,24 @@ async function journalEintragHinzufuegen(tierId) {
             data
         );
 
+        if (punktSatz) {
+            const { error: tierError } = await db
+                .from("animals")
+                .update({ punkte: punktSatz })
+                .eq("id", String(tierId));
+
+            if (tierError) {
+                console.error("Aktuelle Punkte konnten nicht aktualisiert werden:", tierError);
+                alert("Die Punktierung ist im Tier-Journal gespeichert, aber die aktuellen Punkte oben konnten nicht aktualisiert werden.\n\n" + tierError.message);
+            } else {
+                const tier = animals.find(t => String(t.id) === String(tierId));
+                if (tier) tier.punkte = punktSatz;
+                const punkteAnzeige = document.getElementById("editPunkte");
+                if (punkteAnzeige) punkteAnzeige.textContent = punktSatz;
+                render();
+            }
+        }
+
 
         document.getElementById(
             "journalBemerkung"
@@ -3526,6 +3603,8 @@ async function journalEintragHinzufuegen(tierId) {
         await journalLaden();
 
         journalAnzeigen(tierId);
+        const verlaufAnzeige = document.getElementById("punkteVerlauf");
+        if (verlaufAnzeige) verlaufAnzeige.innerHTML = punktVerlaufHTML(animals.find(t => String(t.id) === String(tierId)) || { id: tierId });
 
 
     } catch (fehler) {
@@ -3648,6 +3727,42 @@ function escapeJournalHTML(text) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+}
+
+function punktVerlaufHTML(tier) {
+    const id = String(tier?.id || "");
+    const geburtsjahr = Number(String(tier?.geb || "").slice(0, 4));
+    const eintraege = (sheepOnlineExterieurInfo[id] || []).map(eintrag => {
+        const match = String(eintrag.datum).match(/^(\d{2})\s+(\d{2})/);
+        const monat = match ? Number(match[1]) : 1;
+        const jahr = match ? 2000 + Number(match[2]) : null;
+        return { monat, jahr, punkte: eintrag.punkte, alter: null };
+    });
+    (tierJournal || []).filter(eintrag => String(eintrag.tier_id) === id && String(eintrag.ereignis).toLowerCase() === "punktierung").forEach(eintrag => {
+        const notiz = String(eintrag.bemerkung || "");
+        const punkteMatch = notiz.match(/(^|\D)([1-6])\s*\/\s*([1-6])\s*\/\s*([1-6])($|\D)/);
+        if (!punkteMatch) return;
+        const alterMatch = notiz.match(/(\d+)\s*[- ]?jährig/i);
+        const jahrMatch = String(eintrag.datum || "").match(/^(\d{4})-(\d{2})/);
+        eintraege.push({
+            monat: jahrMatch ? Number(jahrMatch[2]) : 1,
+            jahr: jahrMatch ? Number(jahrMatch[1]) : null,
+            punkte: `${punkteMatch[2]}/${punkteMatch[3]}/${punkteMatch[4]}`,
+            alter: alterMatch ? Number(alterMatch[1]) : (/\bjährig\b/i.test(notiz) ? 1 : null)
+        });
+    });
+    const gesehen = new Set();
+    const verlauf = eintraege.filter(eintrag => {
+        const key = `${eintrag.jahr}-${eintrag.monat}-${eintrag.punkte}`;
+        if (gesehen.has(key)) return false;
+        gesehen.add(key);
+        return true;
+    }).sort((a, b) => (a.jahr ?? 9999) - (b.jahr ?? 9999) || a.monat - b.monat);
+    return verlauf.map(eintrag => {
+        const alter = eintrag.alter ?? (Number.isFinite(geburtsjahr) && Number.isFinite(eintrag.jahr) ? Math.max(1, eintrag.jahr - geburtsjahr + 1) : null);
+        const altersText = alter === null ? "Punktierung" : alter === 1 ? "Jährig" : `${alter}-jährig`;
+        return escapeJournalHTML(`${altersText} ${eintrag.punkte}`);
+    }).join(" · ");
 }
 
 
