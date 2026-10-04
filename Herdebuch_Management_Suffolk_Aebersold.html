@@ -2467,6 +2467,18 @@ const vergleichswerte40 = a.geschlecht === "F"
 const eigeneLeistung40 = a.geschlecht === "F"
     ? gewichtWurfgroessenBereinigt(eigeneKlassenwerte40)
     : Number(a.gewicht40);
+const aufzuchtIndexBasis = a.geschlecht === "F"
+    ? vergleichswerte40.map(eintrag => eintrag.gewicht).filter(Number.isFinite)
+    : [];
+const aufzuchtIndexMittel = aufzuchtIndexBasis.length
+    ? aufzuchtIndexBasis.reduce((summe, wert) => summe + wert, 0) / aufzuchtIndexBasis.length
+    : null;
+const aufzuchtIndexSd = aufzuchtIndexMittel === null ? null : Math.sqrt(
+    aufzuchtIndexBasis.reduce((summe, wert) => summe + Math.pow(wert - aufzuchtIndexMittel, 2), 0) / aufzuchtIndexBasis.length
+);
+const aufzuchtIndex = a.geschlecht === "F" && Number.isFinite(eigeneLeistung40) && aufzuchtIndexSd > 0
+    ? Math.round(100 + 10 * (eigeneLeistung40 - aufzuchtIndexMittel) / aufzuchtIndexSd)
+    : null;
 const rangliste40 = [...vergleichswerte40].sort((x,y) => y.gewicht - x.gewicht || String(x.tier.name).localeCompare(String(y.tier.name)));
 const rangliste40Alle = a.geschlecht === "F"
     ? mutterschafRohwerte40.map(eintrag => ({ tier: eintrag.tier, gewicht: gewichtWurfgroessenBereinigt(eintrag.klassenwerte) }))
@@ -2479,10 +2491,6 @@ const linearRangliste = animals.map(tier => {
 const rang40 = Number.isFinite(eigeneLeistung40) && eigeneLeistung40 > 0
     ? vergleichswerte40.filter(eintrag => eintrag.gewicht > eigeneLeistung40).length + 1
     : null;
-const rangHinweis = a.geschlecht === "F"
-    ? "Wurfgrösse beeinflusst nur den berechneten Vergleichswert; die Rangliste zeigt alle Tiere gemeinsam. Gleiche Werte teilen den Rang."
-    : "Verglichen werden Bestandstiere mit erfasstem eigenem 40-Tage-Gewicht. Gleiche Werte teilen den Rang.";
-
    const details = document.getElementById("details");
 
 if (!details) {
@@ -2622,8 +2630,8 @@ details.classList.add("show");
     </div>
     <button type="button" class="rank-card rank-card-button" onclick="tierRanglisteOeffnen()" aria-haspopup="dialog" aria-controls="tierRankModal">
       ${rang40 === null
-        ? '<strong>Rang noch nicht verfügbar</strong><span>Für dieses Tier liegen noch keine passenden 40-Tage-Daten vor. Klicken, um die verfügbare Rangliste zu öffnen.</span>'
-        : '<strong>Rang ' + rang40 + ' von ' + vergleichswerte40.length + '</strong><span>Ø ' + eigeneLeistung40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg mit 40 Tagen · ' + rangHinweis + ' · Rangliste ansehen →</span>'}
+        ? '<strong>Rang nicht verfügbar</strong><span>Keine passenden 40-Tage-Daten · Rangliste ansehen →</span>'
+        : '<strong>Rang ' + rang40 + ' von ' + vergleichswerte40.length + '</strong><span>' + (a.geschlecht === "F" ? 'Vergleichswert ' : '40-Tage-Gewicht ') + eigeneLeistung40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg' + (a.geschlecht === "F" ? ' · wurfgrössenbereinigt' : '') + ' · Rangliste →</span>'}
     </button>
     ${a.geschlecht === "F" ? `
 <div class="section">
@@ -2631,12 +2639,19 @@ details.classList.add("show");
     <div class="rearing-metric">
         ${aufzucht40Mittel !== null ? `
         <div class="rearing-values">
-            <div><span>Ø Gewicht mit 40 Tagen</span><strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong></div>
+            <div><span>Ø erfasstes 40-Tage-Gewicht</span><strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong></div>
             <div><span>Ø tägliche Zunahme ab Geburt</span><strong>${aufzuchtZunahme === null ? '–' : aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 }) + ' g/Tag'}</strong></div>
             <div><span>Würfe</span><strong>${tierBericht.wuerfe ?? wuerfeNachDatum.size}</strong></div>
             <div><span>Nachkommen</span><strong>${tierBericht.laemmer ?? kids.length}</strong></div>
         </div>
-        <p class="rearing-note">${tierBericht.gewicht40Mittel ? 'Durchschnitt aus dem Herdebuchauszug.' : 'Schätzwert aus den bekannten Gewichten der Nachkommen.'} Höhere Zunahmen können auf gute Milch- und Aufzuchtleistung hindeuten; Wurfgrösse, Lämmergesundheit und Haltung beeinflussen den Wert ebenfalls.</p>
+        <p class="rearing-note">Rohdurchschnitt der erfassten 40-Tage-Gewichte; für die Rangliste wird nach Wurfgrösse bereinigt.</p>
+        <div class="rearing-values">
+            <div><span>Betrieblicher Aufzuchtindex · Schätzwert</span><strong>${aufzuchtIndex === null ? '–' : aufzuchtIndex}</strong></div>
+        </div>
+        <p class="rearing-note">${aufzuchtIndex === null
+            ? 'Mit den vorhandenen Vergleichsdaten nicht berechenbar.'
+            : `100 = Herdenmittel (n=${aufzuchtIndexBasis.length}); 10 Punkte = 1 Standardabweichung.`}
+            Betriebsindex aus wurfgrössenbereinigten 40-Tage-Gewichten; kein offizieller Zuchtwert.</p>
         ` : '<p class="rearing-note">Noch keine Nachkommen mit 40-Tage-Gewichten erfasst.</p>'}
         ${jahresLeistungListe.length ? '<div class="rearing-years">' + jahresLeistungListe.map(([jahr, statistik]) => {
             const gw = Array.from(statistik.gewichte.values());
@@ -2692,7 +2707,7 @@ details.classList.add("show");
       <h2 id="tierRankTitel">Rangliste · 40-Tage-Gewicht</h2>
       <button type="button" class="info-modal-close" aria-label="Rangliste schliessen" onclick="tierRanglisteSchliessen()">×</button>
     </div>
-    <p class="rearing-note">Alle Mutterschafe stehen gemeinsam in dieser Rangliste. Bei der Berechnung des Vergleichsgewichts wird berücksichtigt, ob die gemessenen Lämmer aus Einlings-, Zwillings- oder Mehrlingswürfen stammen. Tiere ohne Gewichtsdaten bleiben sichtbar und erhalten keinen Rang.</p>
+    <p class="rearing-note">Alle Mutterschafe stehen gemeinsam in dieser Rangliste. Die angezeigten Werte sind nach Wurfgrösse bereinigte Vergleichswerte (keine Rohdurchschnitte der erfassten 40-Tage-Gewichte). Tiere ohne Gewichtsdaten bleiben sichtbar und erhalten keinen Rang.</p>
     <div class="rank-list">${[...rangliste40Alle].sort((x,y) => (y.gewicht ?? -Infinity) - (x.gewicht ?? -Infinity) || String(x.tier.name).localeCompare(String(y.tier.name))).map(eintrag => {
         const hatGewicht = Number.isFinite(eintrag.gewicht) && eintrag.gewicht > 0;
         const platz = hatGewicht ? rangliste40Alle.filter(x => Number.isFinite(x.gewicht) && x.gewicht > eintrag.gewicht).length + 1 : null;
