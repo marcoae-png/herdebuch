@@ -2223,13 +2223,13 @@ async function selectAnimal(id) {
 
     setTimeout(() => {
 
-        const details = document.getElementById("details");
+        const details = document.getElementById("detailsCard");
 
         if (!details) return;
 
         details.scrollIntoView({
             behavior: "smooth",
-            block: "center"
+            block: "start"
         });
 
     }, 500);
