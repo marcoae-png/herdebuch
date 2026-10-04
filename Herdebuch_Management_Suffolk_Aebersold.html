@@ -1101,7 +1101,12 @@ const sheepOnlineGewichte = {
     "1996.8259": { geburtsgewicht: 5.0, gewicht40: 17.06 },
     "2122.5401": { geburtsgewicht: 5.2, gewicht40: 17.44 },
     "2122.5403": { geburtsgewicht: 5.0, gewicht40: 19.7 },
-    "1996.8249": { geburtsgewicht: 5.5, gewicht40: 17.24 }
+    "1996.8249": { geburtsgewicht: 5.5, gewicht40: 17.24 },
+    "2122.5434": { geburtsgewicht: 5.0, gewicht40: 25.99 }, // NUANCE
+    "2122.5431": { geburtsgewicht: 4.7, gewicht40: 21.5 },  // FALKE
+    "2122.5427": { geburtsgewicht: 4.5, gewicht40: 21.36 }, // MILA
+    "2122.5422": { geburtsgewicht: 7.2, gewicht40: 26.3 },  // MELODI
+    "2122.5426": { geburtsgewicht: 4.5, gewicht40: 21.5 }   // THANK
 };
 // Leistungs- und Einstufungsdaten aus den vom Nutzer gelieferten Herdebuchauszügen.
 const sheepOnlineLeistungsInfo = {
@@ -2610,9 +2615,9 @@ details.classList.add("show");
 
     <div class="journal-form">
 
-        <input type="date" id="journalDatum">
+        <input type="date" id="journalDatum" onchange="journalPunkteEingabeFormatieren()">
 
-        <select id="journalEreignis">
+        <select id="journalEreignis" onchange="journalPunkteEingabeFormatieren()">
             <option value="Brunst">Brunst</option>
             <option value="Punktierung">Punktierung</option>
             <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
@@ -2620,7 +2625,8 @@ details.classList.add("show");
             <option value="Klauenpflege">Klauenpflege</option>
         </select>
 
-        <input type="text" id="journalBemerkung" placeholder="Bemerkung, z. B. jährig · 4/4/4">
+        <input type="text" id="journalBemerkung" placeholder="Bemerkung" oninput="journalPunkteEingabeFormatieren()">
+        <small id="journalPunkteHinweis" class="muted" hidden>Das Alter wird automatisch aus Geburts- und Punktierungsdatum berechnet.</small>
 
         <button class="journal-add-button" type="button" onclick="journalEintragHinzufuegen('${a.id}')">+ Eintrag</button>
 
@@ -3493,6 +3499,34 @@ function journalAnzeigen(tierId) {
    EINTRAG HINZUFÜGEN – ONLINE
    --------------------------------------------------------- */
 
+function journalPunkteEingabeFormatieren() {
+    const ereignis = document.getElementById("journalEreignis");
+    const bemerkung = document.getElementById("journalBemerkung");
+    const hinweis = document.getElementById("journalPunkteHinweis");
+    if (!ereignis || !bemerkung) return;
+    const punktierung = ereignis.value === "Punktierung";
+    if (hinweis) hinweis.hidden = !punktierung;
+    bemerkung.placeholder = punktierung ? "Punkte als drei Ziffern, z. B. 444" : "Bemerkung";
+    bemerkung.inputMode = punktierung ? "numeric" : "text";
+    bemerkung.maxLength = punktierung ? 3 : 500;
+    bemerkung.pattern = punktierung ? "[1-6]{3}" : "";
+    bemerkung.title = punktierung ? "Drei Noten von 1 bis 6 eingeben, z. B. 444" : "";
+    if (punktierung) bemerkung.value = bemerkung.value.replace(/[^1-6]/g, "").slice(0, 3);
+}
+
+function punktierungsBemerkungErstellen(tierId, punktSatz, datum) {
+    const tier = animals.find(t => String(t.id) === String(tierId));
+    if (!tier || !tier.geb) return punktSatz;
+    const geburt = new Date(String(tier.geb).slice(0, 10) + "T00:00:00");
+    const punktierung = new Date(String(datum).slice(0, 10) + "T00:00:00");
+    if (!Number.isFinite(geburt.getTime()) || !Number.isFinite(punktierung.getTime())) return punktSatz;
+    let alter = punktierung.getFullYear() - geburt.getFullYear();
+    if (punktierung.getMonth() < geburt.getMonth() || (punktierung.getMonth() === geburt.getMonth() && punktierung.getDate() < geburt.getDate())) alter--;
+    if (alter < 0) return punktSatz;
+    const altersText = alter === 1 ? "Jährig" : `${alter}-jährig`;
+    return `${altersText} · ${punktSatz}`;
+}
+
 async function journalEintragHinzufuegen(tierId) {
 
     const datum =
@@ -3505,19 +3539,19 @@ async function journalEintragHinzufuegen(tierId) {
             "journalEreignis"
         ).value;
 
-    const bemerkung =
+    let bemerkung =
         document.getElementById(
             "journalBemerkung"
         ).value.trim();
 
     let punktSatz = null;
     if (ereignis === "Punktierung") {
-        const treffer = bemerkung.match(/(^|\D)([1-6])\s*\/\s*([1-6])\s*\/\s*([1-6])($|\D)/);
+        const treffer = bemerkung.match(/^([1-6])([1-6])([1-6])$/);
         if (!treffer) {
-            alert("Bitte die drei Punktwerte in der Bemerkung angeben, z. B. «Jährig · 4/4/4».");
+            alert("Bitte genau drei Punktwerte von 1 bis 6 eingeben, z. B. 444 oder 555.");
             return;
         }
-        punktSatz = `${treffer[2]}/${treffer[3]}/${treffer[4]}`;
+        punktSatz = `${treffer[1]}/${treffer[2]}/${treffer[3]}`;
     }
 
 
@@ -4417,6 +4451,8 @@ async function tierBearbeitungSpeichern(alteId) {
         alert("Bitte ein gültiges Geburtsgewicht zwischen 0 und 15 kg eingeben.");
         return;
     }
+
+    if (punktSatz) bemerkung = punktierungsBemerkungErstellen(tierId, punktSatz, datum);
 
     if (gewicht40Input && neuesGewicht40 !== '' && (!Number.isFinite(Number(neuesGewicht40)) || Number(neuesGewicht40) < 0 || Number(neuesGewicht40) > 50)) {
         alert("Bitte ein gültiges 40-Tage-Gewicht zwischen 0 und 50 kg eingeben.");
