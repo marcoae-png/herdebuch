@@ -856,10 +856,9 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
       <label style="display:block;margin-top:10px">Ereignis
         <select id="massJournalEreignis" onchange="renderMassBrunstTiere()" style="width:100%;margin-top:4px;padding:8px;border:1px solid #cfdcc9;border-radius:6px">
           <option value="Brunst">Brunst</option>
-          <option value="Entwurmt Endex 8.75%">Entwurmt – Endex 8.75%</option>
-          <option value="Entwurmt Albex 10%">Entwurmt – Albex 10%</option>
+          <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
+          <option value="Albex 10%">Entwurmt – Albex 10%</option>
           <option value="Klauenpflege">Klauenpflege</option>
-          <option value="Diverses">Div.</option>
         </select>
       </label>
       <label style="display:block;margin-top:10px">Bemerkung (optional)
@@ -2621,14 +2620,13 @@ details.classList.add("show");
         <select id="journalEreignis" onchange="journalPunkteEingabeFormatieren()">
             <option value="Brunst">Brunst</option>
             <option value="Punktierung">Punktierung</option>
-            <option value="Entwurmt Endex 8.75%">Entwurmt – Endex 8.75%</option>
-            <option value="Entwurmt Albex 10%">Entwurmt – Albex 10%</option>
+            <option value="Endex 8.75%">Entwurmt – Endex 8.75%</option>
+            <option value="Albex 10%">Entwurmt – Albex 10%</option>
             <option value="Klauenpflege">Klauenpflege</option>
-            <option value="Diverses">Div.</option>
         </select>
 
         <input type="text" id="journalBemerkung" placeholder="Bemerkung" oninput="journalPunkteEingabeFormatieren()">
-        
+        <small id="journalPunkteHinweis" class="muted" hidden>Das Alter wird automatisch aus Geburts- und Punktierungsdatum berechnet.</small>
 
         <button class="journal-add-button" type="button" onclick="journalEintragHinzufuegen('${a.id}')">+ Eintrag</button>
 
@@ -3554,6 +3552,27 @@ async function journalEintragHinzufuegen(tierId) {
             return;
         }
         punktSatz = `${treffer[1]}/${treffer[2]}/${treffer[3]}`;
+
+        try {
+            const { error } = await db
+                .from("animals")
+                .update({ punkte: punktSatz })
+                .eq("id", String(tierId));
+
+            if (error) throw error;
+
+            const tier = animals.find(t => String(t.id) === String(tierId));
+            if (tier) tier.punkte = punktSatz;
+            const punkteAnzeige = document.getElementById("editPunkte");
+            if (punkteAnzeige) punkteAnzeige.textContent = punktSatz;
+            document.getElementById("journalBemerkung").value = "";
+            document.getElementById("journalDatum").value = "";
+            render();
+        } catch (fehler) {
+            console.error("Aktuelle Punkte konnten nicht aktualisiert werden:", fehler);
+            alert("Die Punkte konnten nicht aktualisiert werden.\n\n" + (fehler.message || "Unbekannter Fehler"));
+        }
+        return;
     }
 
 
@@ -3606,25 +3625,6 @@ async function journalEintragHinzufuegen(tierId) {
             "Journal-Eintrag online gespeichert:",
             data
         );
-
-        if (punktSatz) {
-            const { error: tierError } = await db
-                .from("animals")
-                .update({ punkte: punktSatz })
-                .eq("id", String(tierId));
-
-            if (tierError) {
-                console.error("Aktuelle Punkte konnten nicht aktualisiert werden:", tierError);
-                alert("Die Punktierung ist im Tier-Journal gespeichert, aber die aktuellen Punkte oben konnten nicht aktualisiert werden.\n\n" + tierError.message);
-            } else {
-                const tier = animals.find(t => String(t.id) === String(tierId));
-                if (tier) tier.punkte = punktSatz;
-                const punkteAnzeige = document.getElementById("editPunkte");
-                if (punkteAnzeige) punkteAnzeige.textContent = punktSatz;
-                render();
-            }
-        }
-
 
         document.getElementById(
             "journalBemerkung"
@@ -4453,8 +4453,6 @@ async function tierBearbeitungSpeichern(alteId) {
         alert("Bitte ein gültiges Geburtsgewicht zwischen 0 und 15 kg eingeben.");
         return;
     }
-
-    if (punktSatz) bemerkung = punktierungsBemerkungErstellen(tierId, punktSatz, datum);
 
     if (gewicht40Input && neuesGewicht40 !== '' && (!Number.isFinite(Number(neuesGewicht40)) || Number(neuesGewicht40) < 0 || Number(neuesGewicht40) > 50)) {
         alert("Bitte ein gültiges 40-Tage-Gewicht zwischen 0 und 50 kg eingeben.");
