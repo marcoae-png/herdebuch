@@ -158,7 +158,28 @@ table { width: 100%; min-width: 900px; border-collapse: collapse; }
 th, td { padding: 9px; text-align: left; white-space: nowrap; border-bottom: 1px solid #e3ebe0; }
 th { position: sticky; top: 0; z-index: 1; color: #fff; background: var(--green-700); }
 tbody tr:hover { background: #f2f8ee; }
-tr.selected { background: #dcefd2; }
+
+
+
+/* Ausgewähltes Tier bleibt hellgrün markiert */
+#animalBody tr.selected td {
+    background-color: #e5f5e9 !important;
+}
+
+/* Dezenter grüner Rand links */
+#animalBody tr.selected td:first-child {
+    box-shadow: inset 4px 0 0 #65a878;
+}
+
+/* Beim Darüberfahren etwas dunkler */
+#animalBody tr:hover td {
+    background-color: #f2f8ee;
+}
+
+#animalBody tr.selected:hover td {
+    background-color: #dcefd2 !important;
+}
+
 
 /* Tierdetails */
 .detail { padding: 16px; }
@@ -632,6 +653,257 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
     }
 }
 
+
+
+
+/* Aufzuchtleistung übersichtlich darstellen */
+.rearing-values {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.rearing-values > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 7px;
+    padding: 14px;
+    background: #f4f8f4;
+    border: 1px solid #dce9dd;
+    border-radius: 12px;
+}
+
+.rearing-values span {
+    color: #526357;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.rearing-values strong {
+    color: #245c38;
+    font-size: 21px;
+    font-weight: 750;
+}
+
+.rearing-index {
+    margin-top: 16px;
+    padding: 16px;
+    background: #f7f8fa;
+    border: 1px solid #e0e5e9;
+    border-radius: 14px;
+}
+
+.rearing-index-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.rearing-index-label {
+    font-size: 15px;
+    font-weight: 750;
+    color: #263b2d;
+}
+
+.rearing-index-head p {
+    margin: 5px 0 0;
+    color: #68736c;
+    font-size: 13px;
+}
+
+.rearing-index-score {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 64px;
+    min-height: 58px;
+    padding: 8px 12px;
+    background: #e1efe3;
+    color: #245c38;
+    border-radius: 12px;
+    font-size: 27px;
+    font-weight: 800;
+}
+
+.rearing-note {
+    margin: 14px 0 0;
+    color: #5e6861;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+@media (max-width: 420px) {
+    .rearing-values {
+        gap: 8px;
+    }
+
+    .rearing-values > div {
+        padding: 11px;
+    }
+
+    .rearing-values strong {
+        font-size: 18px;
+    }
+
+    .rearing-index {
+        padding: 12px;
+    }
+}
+
+
+
+
+
+.rearing-index-score-button {
+    font-family: inherit;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.rearing-index-score-button:hover {
+    background: #cce5d1;
+    transform: scale(1.05);
+}
+
+.rearing-index-score-button:focus-visible {
+    outline: 3px solid #388454;
+    outline-offset: 3px;
+}
+
+
+
+<!-- Rangliste Betriebsinterner Aufzuchtindex -->
+<div id="tierAufzuchtindexRankModal"
+     class="rank-modal"
+     style="display:none;">
+
+    <div class="rank-modal-content">
+        <div class="rank-modal-header">
+            <h2>Betriebsinterner Aufzuchtindex</h2>
+            <button type="button"
+                    onclick="tierAufzuchtindexRanglisteSchliessen()"
+                    aria-label="Rangliste schliessen">
+                ✕
+            </button>
+        </div>
+
+        <p>Rangliste aller Mutterschafe nach Aufzuchtindex</p>
+
+        <div class="rank-row rank-row-header">
+            <span>Rang</span>
+            <span>Mutterschaf</span>
+            <span>Index</span>
+        </div>
+
+        <div id="tierAufzuchtindexRankListe"></div>
+    </div>
+</div>
+
+<style>
+#tierAufzuchtindexRankModal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.65);
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    overflow-y: auto;
+}
+
+#tierAufzuchtindexRankModal .rank-modal-content {
+    background: white;
+    color: #222;
+    width: 100%;
+    max-width: 700px;
+    max-height: 85vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 14px;
+}
+
+#tierAufzuchtindexRankModal .rank-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+#tierAufzuchtindexRankModal .rank-modal-header h2 {
+    margin: 0;
+    font-size: 1.25rem;
+}
+
+#tierAufzuchtindexRankModal .rank-modal-header button {
+    font-size: 1.3rem;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+#tierAufzuchtindexRankModal .rank-row {
+    display: grid;
+    grid-template-columns: 55px minmax(0, 1fr) 65px;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 6px;
+    border-bottom: 1px solid #ddd;
+}
+
+#tierAufzuchtindexRankModal .rank-row-header {
+    font-weight: bold;
+    background: #f0f4f0;
+}
+
+#tierAufzuchtindexRankModal .rank-row small {
+    display: block;
+    color: #666;
+    margin-top: 3px;
+}
+
+#tierAufzuchtindexRankModal .rank-row-weight {
+    text-align: right;
+    font-weight: bold;
+}
+
+#tierAufzuchtindexRankModal .rank-row-current {
+    background: #e2f3e5;
+}
+
+
+
+
+#tierAufzuchtindexRankModal .rank-row-current {
+    background: #d9f5df;
+    border: 2px solid #278344;
+    border-radius: 8px;
+    font-weight: 700;
+}
+
+#tierAufzuchtindexRankModal .rank-row-current small {
+    color: #216b36;
+    font-weight: 600;
+}
+
+
+
+
+.stat-filter {
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.stat-filter:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.12);
+}
+
+
+
+
 </style>
 
 
@@ -733,29 +1005,36 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
     <!-- =========================
          STATISTIK
          ========================= -->
-    <div class="stats">
 
-        <div class="stat">
-            Tiere
-            <b id="count">0</b>
-        </div>
 
-        <div class="stat">
-            Mutterschafe
-            <b id="female">0</b>
-        </div>
+<div class="stats">
 
-        <div class="stat">
-            Widder
-            <b id="male">0</b>
-        </div>
-
-        <div class="stat">
-            Jahrgänge
-            <b id="years">0</b>
-        </div>
-
+    <div class="stat stat-filter"
+         onclick="document.getElementById('sexFilter').value=''; document.getElementById('yearFilter').value=''; render();">
+        Tiere
+        <b id="count">0</b>
     </div>
+
+    <div class="stat stat-filter"
+         onclick="document.getElementById('sexFilter').value='F'; document.getElementById('yearFilter').value=''; render();">
+        Mutterschafe
+        <b id="female">0</b>
+    </div>
+
+    <div class="stat stat-filter"
+         onclick="document.getElementById('sexFilter').value='M'; document.getElementById('yearFilter').value=''; render();">
+        Widder
+        <b id="male">0</b>
+    </div>
+
+    <div class="stat stat-filter"
+         onclick="document.getElementById('yearFilter').focus();">
+        Jahrgänge
+        <b id="years">0</b>
+    </div>
+
+</div>
+
 
 
     <section id="weigh40Reminder" class="weigh-reminder" role="status" aria-live="polite"></section>
@@ -2342,6 +2621,9 @@ function findeTierNachNr(wert) {
 
 
 
+
+
+
 function getEltern(tier) {
 
     if (!tier) {
@@ -2383,7 +2665,7 @@ function renderYears() {
 }
    
 
-function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${selectedId==a.id?'selected':''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td>
+function filtered(){let q=document.getElementById('search').value.toLowerCase(),sex=document.getElementById('sexFilter').value,yr=document.getElementById('yearFilter').value;return animals.filter(a=>(!q||[a.id,a.name,a.vater,a.mutter,a.zeichen].join(' ').toLowerCase().includes(q))&&(!sex||a.geschlecht==sex)&&(!yr||a.geb.startsWith(yr)))}function render(){renderYears();let l=filtered();document.getElementById('animalBody').innerHTML=l.map(a=>`<tr class="${String(selectedId) === String(a.id) ? 'selected' : ''}" onclick="selectAnimal('${a.id}')"><td class="link">${a.id}</td><td>${a.zeichen}</td><td><b>${a.name}</b></td><td>${a.rasse}</td>
 <td>${fmt(a.geb)}</td><td>${age(a.geb)}</td>
 
 <td>${a.geschlecht}</td><td>${a.punkte||'-'}</td><td>${parent(a.vater)}</td><td>${parent(a.mutter)}</td>
@@ -2496,7 +2778,13 @@ setInterval(render40DayReminder, 15 * 60 * 1000);
 
 
 
-
+function tierAufzuchtindexRanglisteSchliessen() {
+    const modal = document.getElementById("tierAufzuchtindexRankModal");
+    if (modal) {
+        modal.classList.remove("open");
+        modal.style.display = "none";
+    }
+}
 
 
 
@@ -2552,10 +2840,15 @@ function tierLinearranglisteSchliessen() {
 
 async function selectAnimal(id) {
 
+    // Ausgewähltes Tier speichern
+    selectedId = String(id);
+
+    // Tierliste sofort neu zeichnen, damit die Markierung grün bleibt
+    render();
+
     document
         .getElementById("detailsCard")
         .classList.add("mobile-open");
-
     // Auf dem Handy direkt zur Tierdetails-Karte scrollen
   if (window.innerWidth <= 700) {
 
@@ -2710,6 +3003,12 @@ const wurfImportStatus = (() => {
     return { wuerfe, erwartet, gewicht40Anzahl, geburtsgewichtAnzahl, einzelwuerfeVollstaendig, gewicht40Vollstaendig };
 })();
 
+
+
+
+
+
+
 function mutterschafDurchschnitt40(tier) {
     const bericht = sheepOnlineLeistungsInfo[String(tier.id)] || {};
     if (Number.isFinite(Number(bericht.gewicht40Mittel)) && Number(bericht.gewicht40Mittel) > 0) return Number(bericht.gewicht40Mittel);
@@ -2723,6 +3022,10 @@ function mutterschafDurchschnitt40(tier) {
     });
     return messungen.size ? Array.from(messungen.values()).reduce((sum, x) => sum + x, 0) / messungen.size : null;
 }
+
+
+
+
 function mutterschafKlassenwerte40(tier) {
     const bericht = sheepOnlineLeistungsInfo[String(tier.id)] || {};
     if (Array.isArray(bericht.wurfleistungen) && bericht.wurfleistungen.length) {
@@ -2827,6 +3130,141 @@ if (!details) {
 }
 
 details.classList.add("show");
+
+
+
+
+
+const aufzuchtindexRangliste = (() => {
+    const werte = mutterschafRohwerte40.map(eintrag => ({
+        tier: eintrag.tier,
+        gewicht: gewichtWurfgroessenBereinigt(eintrag.klassenwerte)
+    }));
+
+    const gueltigeWerte = werte
+        .map(eintrag => eintrag.gewicht)
+        .filter(gewicht => Number.isFinite(gewicht) && gewicht > 0);
+
+    const mittel = gueltigeWerte.length
+        ? gueltigeWerte.reduce((summe, wert) => summe + wert, 0)
+            / gueltigeWerte.length
+        : null;
+
+    const sd = mittel === null
+        ? null
+        : Math.sqrt(
+            gueltigeWerte.reduce(
+                (summe, wert) => summe + Math.pow(wert - mittel, 2),
+                0
+            ) / gueltigeWerte.length
+        );
+
+    return werte
+        .map(eintrag => {
+            const index = Number.isFinite(eintrag.gewicht)
+                && eintrag.gewicht > 0
+                && sd > 0
+                ? Math.round(100 + 10 * (eintrag.gewicht - mittel) / sd)
+                : null;
+
+            return {
+                tier: eintrag.tier,
+                index
+            };
+        })
+        .sort((x, y) =>
+            (y.index ?? -Infinity) - (x.index ?? -Infinity)
+            || String(x.tier.name).localeCompare(String(y.tier.name))
+        );
+})();
+
+// Daten für die Ranglisten-Funktionen bereitstellen
+window.tierAufzuchtindexRanglisteDaten = aufzuchtindexRangliste;
+
+
+
+
+
+
+
+
+
+window.tierAufzuchtindexRanglisteOeffnen = function () {
+    const modal = document.getElementById("tierAufzuchtindexRankModal");
+    const liste = document.getElementById("tierAufzuchtindexRankListe");
+
+    if (!modal) {
+        console.error("Aufzuchtindex: Modal nicht gefunden.");
+        alert("Das Ranglistenfenster wurde nicht gefunden.");
+        return;
+    }
+
+    const daten = window.tierAufzuchtindexRanglisteDaten || [];
+
+    if (liste) {
+        if (!daten.length) {
+            liste.innerHTML = `
+                <div class="rank-row">
+                    <span>–</span>
+                    <span>Keine Ranglistendaten verfügbar.</span>
+                    <span>–</span>
+                </div>`;
+        } else {
+
+liste.innerHTML = daten.map((eintrag, i) => {
+    const aktuell =
+        typeof selectedId !== "undefined" &&
+        String(eintrag.tier?.id) === String(selectedId);
+
+    return `
+        <div class="rank-row${aktuell ? " rank-row-current" : ""}">
+            <span>${eintrag.index == null ? "–" : "#" + (i + 1)}</span>
+            <span>
+                ${eintrag.tier?.name || "Unbenannt"}
+                <small>
+                    ${eintrag.tier?.id ?? ""}
+                    ${aktuell ? " · ✓ Ausgewähltes Tier" : ""}
+                </small>
+            </span>
+            <span class="rank-row-weight">
+                ${eintrag.index == null ? "–" : eintrag.index}
+            </span>
+        </div>
+    `;
+}).join("");
+
+        }
+    }
+
+    modal.style.setProperty("display", "flex", "important");
+    modal.style.setProperty("z-index", "999999", "important");
+    modal.classList.add("open");
+};
+
+window.tierAufzuchtindexRanglisteSchliessen = function () {
+    const modal = document.getElementById("tierAufzuchtindexRankModal");
+    if (modal) {
+        modal.classList.remove("open");
+        modal.style.setProperty("display", "none", "important");
+    }
+};
+
+
+
+
+
+
+function tierAufzuchtindexRanglisteSchliessen() {
+    const modal = document.getElementById("tierAufzuchtindexRankModal");
+
+    if (modal) {
+        modal.classList.remove("open");
+        modal.style.display = "";
+    }
+}
+
+
+
 
 
     
@@ -2965,49 +3403,162 @@ details.classList.add("show");
         ? '<strong>Rang nicht verfügbar</strong><span>Keine passenden 40-Tage-Daten · Rangliste ansehen →</span>'
         : '<strong>Rang ' + rang40 + ' von ' + vergleichswerte40.length + '</strong><span>' + (a.geschlecht === "F" ? 'Vergleichswert ' : '40-Tage-Gewicht ') + eigeneLeistung40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg' + (a.geschlecht === "F" ? ' · wurfgrössenbereinigt' : '') + ' · Rangliste →</span>'}
     </button>
-    ${a.geschlecht === "F" ? `
+  
+${a.geschlecht === "F" ? `
 <div class="section">
-    <h4>Milch- und Aufzuchtleistung · Schätzwert</h4>
+    <h4>Aufzuchtleistung des Mutterschafs</h4>
+
     <div class="rearing-metric">
         ${aufzucht40Mittel !== null ? `
         <div class="rearing-values">
-            <div><span>Ø erfasstes 40-Tage-Gewicht</span><strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong></div>
-            <div><span>Ø tägliche Zunahme ab Geburt</span><strong>${aufzuchtZunahme === null ? '–' : aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 }) + ' g/Tag'}</strong></div>
-            <div><span>Würfe</span><strong>${tierBericht.wuerfe ?? wuerfeNachDatum.size}</strong></div>
-            <div><span>Nachkommen</span><strong>${tierBericht.laemmer ?? kids.length}</strong></div>
+            <div>
+                <span>Ø 40-Tage-Gewicht</span>
+                <strong>${aufzucht40Mittel.toLocaleString("de-CH", { maximumFractionDigits: 2 })} kg</strong>
+            </div>
+            <div>
+                <span>Ø Tageszunahme ab Geburt</span>
+                <strong>${aufzuchtZunahme === null ? '–' : aufzuchtZunahme.toLocaleString("de-CH", { maximumFractionDigits: 0 }) + ' g/Tag'}</strong>
+            </div>
+            <div>
+                <span>Erfasste Würfe</span>
+                <strong>${tierBericht.wuerfe ?? wuerfeNachDatum.size}</strong>
+            </div>
+            <div>
+                <span>Nachkommen</span>
+                <strong>${tierBericht.laemmer ?? kids.length}</strong>
+            </div>
         </div>
-        <p class="rearing-note">Rohdurchschnitt der erfassten 40-Tage-Gewichte; für die Rangliste wird nach Wurfgrösse bereinigt.</p>
-        <div class="rearing-values">
-            <div><span>Betrieblicher Aufzuchtindex · Schätzwert</span><strong>${aufzuchtIndex === null ? '–' : aufzuchtIndex}</strong></div>
-        </div>
-        <p class="rearing-note">${aufzuchtIndex === null
-            ? 'Mit den vorhandenen Vergleichsdaten nicht berechenbar.'
-            : `100 = Herdenmittel (n=${aufzuchtIndexBasis.length}); 10 Punkte = 1 Standardabweichung.`}
-            Betriebsindex aus wurfgrössenbereinigten 40-Tage-Gewichten; kein offizieller Zuchtwert.</p>
-        ` : '<p class="rearing-note">Noch keine Nachkommen mit 40-Tage-Gewichten erfasst.</p>'}
-        ${jahresLeistungListe.length ? '<div class="rearing-years">' + jahresLeistungListe.map(([jahr, statistik]) => {
-            const gw = Array.from(statistik.gewichte.values());
-            const durchschnitt40 = gw.length ? gw.reduce((sum, gewicht) => sum + gewicht, 0) / gw.length : null;
-            return '<div class="rearing-year"><b>' + jahr + '</b><span>Würfe: ' + statistik.wuerfe.size + ' · erfasste Lämmer: ' + statistik.laemmer.size + '</span><span>40-Tage-Gewichte: ' + gw.length + (durchschnitt40 === null ? '' : ' · Ø ' + durchschnitt40.toLocaleString("de-CH", { maximumFractionDigits: 2 }) + ' kg') + '</span></div>';
-        }).join('') + '</div>' : ''}
-        <p class="rearing-note"><strong>Datengrundlage:</strong> ${wurfImportStatus.einzelwuerfeVollstaendig
-            ? `${wurfImportStatus.wuerfe.length} von ${wurfImportStatus.erwartet} Würfen als Einzelwürfe erfasst; ${wurfImportStatus.gewicht40Anzahl} davon mit 40-Tage-Gewicht.`
-            : wurfImportStatus.wuerfe.length
-                ? `${wurfImportStatus.wuerfe.length}${Number.isFinite(wurfImportStatus.erwartet) ? ` von ${wurfImportStatus.erwartet}` : ''} Würfe als Einzelwürfe erfasst; der Import ist unvollständig.`
-                : 'Noch keine Einzelwürfe aus dem Herdebuchauszug übernommen; die Auswertung kann unvollständig sein.'}
-            ${wurfImportStatus.gewicht40Vollstaendig ? ' Alle erfassten Würfe haben ein 40-Tage-Gewicht.' : ''}
+        ` : `
+        <p class="rearing-note">
+            Noch keine ausreichenden 40-Tage-Gewichtsdaten vorhanden.
         </p>
-        ${wurfGroessenListe.length ? '<div style="margin-top:12px"><strong>40-Tage-Vergleich nach erfasster Wurfgrösse</strong><div class="rearing-class-row"><strong>Wurfgrösse</strong><strong>Würfe</strong><strong>Ø 40 Tage</strong><strong>Ø Zunahme</strong></div>' + wurfGroessenListe.map(([klasse, statistik]) => {
-            const gewichte = statistik.werte.map(x => x.gewicht40);
-            const zunahmen = statistik.werte.filter(x => x.zunahme !== null).map(x => x.zunahme);
-            const mw = gewichte.length ? (gewichte.reduce((sum, x) => sum + x, 0) / gewichte.length).toLocaleString("de-CH", { maximumFractionDigits: 2 }) + " kg" : "–";
-            const mz = zunahmen.length ? (zunahmen.reduce((sum, x) => sum + x, 0) / zunahmen.length).toLocaleString("de-CH", { maximumFractionDigits: 0 }) + " g/Tag" : "–";
-            return '<div class="rearing-class-row"><span>' + klasse + '</span><span>' + statistik.wuerfe + '</span><span>' + mw + '</span><span>' + mz + '</span></div>';
-        }).join('') + '</div>' : ''}
-        <p class="rearing-note">Jahreszahlen zählen die bekannten Nachkommen. Ein fehlendes 40-Tage-Gewicht bedeutet „nicht erfasst“, nicht „verendet“.</p>
+        `}
+
+
+
+
+
+
+
+
+
+
+        <div class="rearing-index">
+            <div class="rearing-index-head">
+                <div>
+                    <span class="rearing-index-label">
+                        Betriebsinterner Aufzuchtindex
+                    </span>
+                    <p>Wurfgrössenbereinigter Vergleich</p>
+                </div>
+             
+<button
+    type="button"
+    class="rearing-index-score rearing-index-score-button"
+    onclick="tierAufzuchtindexRanglisteOeffnen()"
+    aria-label="Rangliste des betriebsinternen Aufzuchtindex öffnen"
+    title="Klicken, um die Rangliste zu öffnen">
+    ${aufzuchtIndex === null ? '–' : aufzuchtIndex}
+</button>
+
+            </div>
+
+            <p class="rearing-note">
+                ${aufzuchtIndex === null
+                    ? 'Mit den vorhandenen Vergleichsdaten nicht berechenbar.'
+                    : `100 Punkte entsprechen dem Herdebuch (n = ${aufzuchtIndexBasis.length}); je 10 Punkte entsprechen einer Standardabweichung.`}
+                Der Index berücksichtigt die Wurfgrösse. Er ist ein betriebsinterner Schätzwert und kein offizieller Zuchtwert.
+            </p>
+        </div>
+
+        ${jahresLeistungListe.length ? `
+        <div class="rearing-years">
+            ${jahresLeistungListe.map(([jahr, statistik]) => {
+                const gw = Array.from(statistik.gewichte.values());
+                const durchschnitt40 = gw.length
+                    ? gw.reduce((sum, gewicht) => sum + gewicht, 0) / gw.length
+                    : null;
+
+                return '<div class="rearing-year"><b>' + jahr +
+                    '</b><span>Würfe: ' + statistik.wuerfe.size +
+                    ' · erfasste Lämmer: ' + statistik.laemmer.size +
+                    '</span><span>40-Tage-Gewichte: ' + gw.length +
+                    (durchschnitt40 === null
+                        ? ''
+                        : ' · Ø ' + durchschnitt40.toLocaleString("de-CH", {
+                            maximumFractionDigits: 2
+                        }) + ' kg') +
+                    '</span></div>';
+            }).join('')}
+        </div>
+        ` : ''}
+
+        <p class="rearing-note">
+            <strong>Datengrundlage:</strong>
+            ${wurfImportStatus.einzelwuerfeVollstaendig
+                ? `${wurfImportStatus.wuerfe.length} von ${wurfImportStatus.erwartet} Würfen als Einzelwürfe erfasst; ${wurfImportStatus.gewicht40Anzahl} davon mit 40-Tage-Gewicht.`
+                : wurfImportStatus.wuerfe.length
+                    ? `${wurfImportStatus.wuerfe.length}${Number.isFinite(wurfImportStatus.erwartet) ? ` von ${wurfImportStatus.erwartet}` : ''} Würfe als Einzelwürfe erfasst; der Import ist unvollständig.`
+                    : 'Noch keine Einzelwürfe aus dem Herdebuchauszug übernommen; die Auswertung kann unvollständig sein.'}
+            ${wurfImportStatus.gewicht40Vollstaendig
+                ? ' Alle erfassten Würfe haben ein 40-Tage-Gewicht.'
+                : ''}
+        </p>
+
+        ${wurfGroessenListe.length ? `
+        <div style="margin-top:12px">
+            <strong>40-Tage-Vergleich nach erfasster Wurfgrösse</strong>
+
+            <div class="rearing-class-row">
+                <strong>Wurfgrösse</strong>
+                <strong>Würfe</strong>
+                <strong>Ø 40 Tage</strong>
+                <strong>Ø Zunahme</strong>
+            </div>
+
+            ${wurfGroessenListe.map(([klasse, statistik]) => {
+                const gewichte = statistik.werte.map(x => x.gewicht40);
+                const zunahmen = statistik.werte
+                    .filter(x => x.zunahme !== null)
+                    .map(x => x.zunahme);
+
+                const mw = gewichte.length
+                    ? (gewichte.reduce((sum, x) => sum + x, 0) / gewichte.length)
+                        .toLocaleString("de-CH", { maximumFractionDigits: 2 }) + " kg"
+                    : "–";
+
+                const mz = zunahmen.length
+                    ? (zunahmen.reduce((sum, x) => sum + x, 0) / zunahmen.length)
+                        .toLocaleString("de-CH", { maximumFractionDigits: 0 }) + " g/Tag"
+                    : "–";
+
+                return '<div class="rearing-class-row">' +
+                    '<span>' + klasse + '</span>' +
+                    '<span>' + statistik.wuerfe + '</span>' +
+                    '<span>' + mw + '</span>' +
+                    '<span>' + mz + '</span>' +
+                    '</div>';
+            }).join('')}
+        </div>
+        ` : ''}
+
+        <p class="rearing-note">
+            Jahreszahlen zählen die bekannten Nachkommen.
+            Ein fehlendes 40-Tage-Gewicht bedeutet „nicht erfasst“,
+            nicht „verendet“.
+        </p>
     </div>
 </div>
-` : '<div class="section"><h4>Milch- und Aufzuchtleistung · Schätzwert</h4><p class="rearing-note">Diese Auswertung ist für Mutterschafe vorgesehen und basiert auf den Gewichten ihrer Nachkommen.</p></div>'}
+` : `
+<div class="section">
+    <h4>Aufzuchtleistung</h4>
+    <p class="rearing-note">
+        Diese Auswertung ist für Mutterschafe vorgesehen und basiert
+        auf den Gewichten ihrer Nachkommen.
+    </p>
+</div>
+`}
+
     ${tierBericht.linear ? '<div class="section linear-info"><h4>Lineare Beschreibung und Einstufung</h4><button type="button" class="linear-score linear-score-button" onclick="tierLinearRanglisteOeffnen()" aria-haspopup="dialog" aria-controls="tierLinearRankModal"><div><div class="linear-score-label">Gesamtnote</div><div class="linear-score-value">' + tierBericht.linear.gesamtnote + '</div></div><div class="linear-score-date">Beurteilung<br><strong>' + tierBericht.linear.datum + '</strong><br>Rangliste ansehen →</div></button>' +
         '<div class="linear-variations">' + tierBericht.linear.varia.map(([label, wert]) => '<span><b>' + label + ':</b> ' + wert + '</span>').join('') + '</div>' +
         tierBericht.linear.bloecke.map(block => '<div class="linear-block"><h5>' + block.name + ' · Blocknote ' + block.note + '</h5><div class="linear-grid"><strong>Merkmal</strong><strong>Mass</strong><strong>Note</strong>' +
@@ -3032,6 +3583,47 @@ details.classList.add("show");
     </div>
   </div>
 </div>
+
+
+
+
+<div id="tierAufzuchtindexRankModal"
+     class="modal rank-list-modal"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="tierAufzuchtindexRankTitel"
+     onclick="if(event.target===this)tierAufzuchtindexRanglisteSchliessen()">
+
+    <div class="modal-box">
+        <div class="info-modal-head">
+            <h2 id="tierAufzuchtindexRankTitel">
+                Rangliste · Betriebsinterner Aufzuchtindex
+            </h2>
+            <button type="button"
+                    class="info-modal-close"
+                    aria-label="Rangliste schliessen"
+                    onclick="tierAufzuchtindexRanglisteSchliessen()">×</button>
+        </div>
+
+        <p class="rearing-note">
+            Die Mutterschafe werden nach ihrem betriebsinternen,
+            wurfgrössenbereinigten Aufzuchtindex sortiert.
+            100 Punkte entsprechen dem Herdebuch.
+            Der Index ist kein offizieller Zuchtwert.
+        </p>
+
+        <div id="tierAufzuchtindexRankListe" class="rank-list"></div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
 
 <div id="tierRankModal" class="modal rank-list-modal" role="dialog" aria-modal="true" aria-labelledby="tierRankTitel" onclick="if(event.target===this)tierRanglisteSchliessen()">
   <div class="modal-box">
@@ -3658,6 +4250,11 @@ function fehlerText(e) {
     try { return JSON.stringify(e); } catch (_) { return String(e); }
 }
 
+
+
+
+
+
 async function journalLaden() {
 
     try {
@@ -3825,6 +4422,11 @@ function journalPunkteEingabeFormatieren() {
     if (punktierung) bemerkung.value = bemerkung.value.replace(/[^1-6]/g, "").slice(0, 3);
 }
 
+
+
+
+
+
 function punktierungsBemerkungErstellen(tierId, punktSatz, datum) {
     const tier = animals.find(t => String(t.id) === String(tierId));
     if (!tier || !tier.geb) return punktSatz;
@@ -3837,6 +4439,11 @@ function punktierungsBemerkungErstellen(tierId, punktSatz, datum) {
     const altersText = alter === 1 ? "Jährig" : `${alter}-jährig`;
     return `${altersText} · ${punktSatz}`;
 }
+
+
+
+
+
 
 async function journalEintragHinzufuegen(tierId) {
 
@@ -3947,9 +4554,32 @@ async function journalEintragHinzufuegen(tierId) {
         ).value = "";
 
 
-        await journalLaden();
+      await journalLaden();
 
-        journalAnzeigen(tierId);
+journalAnzeigen(tierId);
+
+// Tier suchen
+const tier = animals.find(
+    t => String(t.id) === String(tierId)
+);
+
+const tierName = tier
+    ? (tier.ohrmarke || tier.name || tier.id)
+    : tierId;
+
+// Schwebende Erfolgsmeldung mit Tier und gespeichertem Inhalt
+toastMeldung(
+    "✅ Tier " + tierName +
+    ": " + ereignis +
+    " gespeichert (" + datum + ")" +
+    (bemerkung ? ": " + bemerkung : "")
+);
+
+
+
+
+
+
         const verlaufAnzeige = document.getElementById("punkteVerlauf");
         if (verlaufAnzeige) verlaufAnzeige.innerHTML = punktVerlaufHTML(animals.find(t => String(t.id) === String(tierId)) || { id: tierId });
 
@@ -3972,22 +4602,66 @@ async function journalEintragHinzufuegen(tierId) {
 
 
 
+function toastMeldung(text) {
+    let toast = document.getElementById("toastMeldung");
+
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toastMeldung";
+
+        Object.assign(toast.style, {
+            position: "fixed",
+            bottom: "25px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            background: "#198754",
+            color: "#fff",
+            padding: "12px 22px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.25)",
+            fontSize: "15px",
+            fontWeight: "600",
+            zIndex: "99999",
+            opacity: "0",
+            transition: "opacity 0.25s ease",
+            pointerEvents: "none"
+        });
+
+        document.body.appendChild(toast);
+    }
+
+    toast.textContent = text;
+    toast.style.opacity = "1";
+
+    clearTimeout(toast.timer);
+
+    toast.timer = setTimeout(() => {
+        toast.style.opacity = "0";
+    }, 2500);
+}
+
+
+
+
+
+
+
 
 /* ---------------------------------------------------------
-   JOURNAL-EINTRAG LÖSCHEN NEU
+   JOURNAL-EINTRAG LÖSCHEN
    --------------------------------------------------------- */
 
 async function journalEintragLoeschen(tierId, serverId) {
 
-    if (!confirm("Diesen Journal-Eintrag wirklich löschen?")) {
-        return;
-    }
-
-    console.log("LÖSCHEN:");
-    console.log("Tier:", tierId);
-    console.log("Journal-ID:", serverId);
+    toastMeldung(
+        "🗑️ Journal-Eintrag Nr. " + serverId + " wird gelöscht …"
+    );
 
     try {
+
+        console.log("LÖSCHEN:");
+        console.log("Tier:", tierId);
+        console.log("Journal-ID:", serverId);
 
         // Eintrag in Supabase löschen
         const { data, error } = await db
@@ -3997,60 +4671,53 @@ async function journalEintragLoeschen(tierId, serverId) {
             .select();
 
         if (error) {
+            console.error("FEHLER BEIM LÖSCHEN:", error);
 
-            console.error(
-                "FEHLER BEIM LÖSCHEN:",
-                error
-            );
-
-            alert(
-                "Der Journal-Eintrag konnte nicht gelöscht werden.\n\n" +
-                error.message
+            toastMeldung(
+                "❌ Löschen fehlgeschlagen: " + error.message
             );
 
             return;
         }
 
-        console.log(
-            "GELÖSCHTER EINTRAG:",
-            data
-        );
+        console.log("GELÖSCHTER EINTRAG:", data);
 
         // Prüfen, ob wirklich etwas gelöscht wurde
         if (!data || data.length === 0) {
+            console.warn("Es wurde kein Journal-Eintrag gelöscht!");
 
-            console.warn(
-                "Es wurde kein Journal-Eintrag gelöscht!"
-            );
-
-            alert(
-                "Der Eintrag wurde in Supabase nicht gelöscht.\n\n" +
-                "Möglicherweise verhindert die Supabase-Berechtigung (RLS) das Löschen."
+            toastMeldung(
+                "⚠️ Eintrag nicht gelöscht – Berechtigung prüfen."
             );
 
             return;
         }
 
-        // Lokale Journal-Liste neu laden
-        await journalLaden();
+        // Gelöschten Eintrag sichern
+        const geloeschterEintrag = data[0];
 
-        console.log(
-            "JOURNAL NACH LÖSCHEN:",
-            tierJournal
-        );
+        // Journal neu laden
+        await journalLaden();
 
         // Journal auf der Seite neu anzeigen
         journalAnzeigen(tierId);
 
-    } catch (fehler) {
-
-        console.error(
-            "FEHLER:",
-            fehler
+        // Erfolgsmeldung mit Ereignis und Bemerkung
+        toastMeldung(
+            "✅ " +
+            (geloeschterEintrag.ereignis || "Journal-Eintrag") +
+            " erfolgreich gelöscht" +
+            (geloeschterEintrag.bemerkung
+                ? ": " + geloeschterEintrag.bemerkung
+                : "")
         );
 
-        alert(
-            "Fehler beim Löschen des Journal-Eintrags."
+    } catch (fehler) {
+
+        console.error("FEHLER:", fehler);
+
+        toastMeldung(
+            "❌ Fehler beim Löschen des Journal-Eintrags."
         );
     }
 }
