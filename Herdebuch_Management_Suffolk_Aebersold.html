@@ -34,7 +34,10 @@ body {
   font: 16px/1.45 Arial, sans-serif;
 }
 button, input, select, textarea { font: inherit; }
-button { cursor: pointer; }
+button { cursor:pointer; border-radius:8px; font-weight:600; transition:background-color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease,filter .16s ease; }
+button:focus-visible { outline:3px solid #9bcf62; outline-offset:2px; }
+button:hover { filter:brightness(.97); }
+button:active { transform:translateY(1px); }
 img { max-width: 100%; }
 
 /* Kopfbereich */
@@ -75,21 +78,20 @@ header {
   justify-content: center;
   gap: 7px;
   color: var(--green-900);
-  background: linear-gradient(180deg, #fff, #f3f8f0);
-  border: 1px solid rgb(255 255 255 / 72%);
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgb(24 63 29 / 20%);
+  background: #fff;
+  border: 1px solid #d7e4d1;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgb(24 63 29 / 12%);
   font-weight: 700;
   line-height: 1.2;
   transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
 }
 .header-buttons button:hover {
-  background: linear-gradient(180deg, #fff, #e3f1dc);
-  box-shadow: 0 6px 14px rgb(24 63 29 / 28%);
-  transform: translateY(-2px);
+  background: #edf5e9;
+  border-color: #b9d4aa;
+  box-shadow: 0 3px 8px rgb(24 63 29 / 16%);
 }
-.header-buttons button:active { transform: translateY(0); }
-.header-buttons button:focus-visible { outline: 3px solid #d9f29a; outline-offset: 2px; }
+.header-buttons button:active { transform:translateY(1px); }
 
 /* Seitenaufbau */
 .container { width: min(100% - 32px, 1500px); margin: 20px auto; }
@@ -110,6 +112,11 @@ header {
   border-radius: var(--radius);
   box-shadow: var(--shadow);
 }
+.business-nav { width:min(100% - 32px,1500px); margin:12px auto 0; display:flex; flex-wrap:wrap; gap:10px; }
+.business-nav button { min-height:46px; padding:10px 16px; display:inline-flex; align-items:center; justify-content:center; gap:7px; color:var(--green-900); background:linear-gradient(180deg,#fff,#f3f8f0); border:1px solid #dce8d7; border-radius:12px; box-shadow:0 4px 10px rgb(24 63 29 / 12%); font-weight:700; line-height:1.2; transition:transform .16s ease,box-shadow .16s ease,background .16s ease; }
+.business-nav button:hover { background:linear-gradient(180deg,#fff,#e3f1dc); box-shadow:0 6px 14px rgb(24 63 29 / 18%); transform:translateY(-2px); }
+.business-nav button:active { transform:translateY(0); }
+.business-nav button:focus-visible { outline:3px solid #8eaf71; outline-offset:2px; }
 .card h2 {
   margin: 0;
   padding: 16px;
@@ -192,6 +199,26 @@ tbody tr:hover { background: #f2f8ee; }
 .field { min-width: 0; padding: 9px; background: #f3f7f1; border-left: 3px solid var(--green-300); border-radius: 8px; overflow-wrap: anywhere; }
 .field span { display: block; margin-bottom: 3px; color: var(--muted); font-size: 11px; }
 .section { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line); }
+.business-module { margin-bottom:16px; }
+body.business-view .container > .toolbar,
+body.business-view .container > .stats,
+body.business-view .container > #weigh40Reminder,
+body.business-view .container > .layout { display:none !important; }
+.app-toast { position:fixed; right:18px; bottom:18px; z-index:1000; max-width:min(420px,calc(100vw - 32px)); padding:13px 17px; color:#fff; background:#315f36; border-radius:10px; box-shadow:0 8px 28px #18251d55; opacity:0; transform:translateY(12px); pointer-events:none; transition:opacity .2s,transform .2s; }
+.app-toast.visible { opacity:1; transform:translateY(0); }
+.app-toast.error { background:#9a3c32; }
+.app-toast.pending { background:#526253; }
+.business-body { padding:16px; }
+.module-back { margin:0 0 14px; padding:9px 13px; color:var(--green-900); background:var(--green-100); border:1px solid #c7ddb9; border-radius:8px; font-weight:700; }
+.module-back:hover { background:#d3e9c9; }
+.finance-totals { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:16px 0; }
+.finance-totals div,.reservation-summary { padding:12px; background:#f3f8f1; border:1px solid var(--line); border-radius:9px; }
+.finance-totals b {display:block;color:var(--green-800);font-size:19px;margin-top:4px}
+.chart-wrap {height:260px;margin:12px 0 20px}.chart-wrap canvas {width:100%;height:100%}
+.business-row {display:grid;grid-template-columns:100px 1fr auto auto;align-items:center;gap:10px;padding:9px;border-bottom:1px solid var(--line)}
+.business-row small {display:block;color:var(--muted)}.business-row button {padding:6px 9px;border:0;border-radius:6px;background:#f8e8e5;color:#853d32}
+.reservation-summary {display:flex;align-items:center;gap:10px;margin:16px 0}.reservation-summary strong {font-size:28px;color:var(--green-800)}.reservation-summary span {flex:1}
+@media(max-width:600px){.finance-totals{grid-template-columns:1fr}.business-row{grid-template-columns:1fr auto}}
 .section h4 { margin: 0 0 8px; color: var(--green-800); }
 .family { display: flex; flex-wrap: wrap; gap: 8px; }
 .animal { padding: 9px; background: #fafcf9; border: 1px solid #c4d7bd; border-radius: 9px; cursor: pointer; }
@@ -306,8 +333,10 @@ tbody tr:hover { background: #f2f8ee; }
   .logo-wrap { grid-column: 2; grid-row: 1; }
   .logo-badge { width: min(210px, 44vw); height: 92px; }
   .header-buttons { grid-column: 1 / -1; grid-row: 2; flex-wrap: wrap; gap: 6px; }
-  .header-buttons button { min-height: 40px; padding: 8px 11px; border-radius: 10px; font-size: 12px; }
+  .header-buttons button { min-height: 40px; padding: 8px 11px; border-radius: 8px; font-size: 12px; }
   .container { width: calc(100% - 16px); margin: 10px auto; }
+  .business-nav { width:calc(100% - 16px); margin-top:8px; }
+  .business-nav button { flex:1 1 150px; padding:9px; font-size:13px; }
   .layout { display: block; width: 100%; }
   .layout > * + * { margin-top: 12px; }
   .stats { gap: 8px; }
@@ -956,6 +985,8 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
         <button onclick="openAdd()">
             ＋ Tier hinzufügen
         </button>
+        <button type="button" onclick="showModule('finanzen')">💶 Finanzen</button>
+        <button type="button" onclick="showModule('reservationen')">🏷️ Reservationen</button>
         <button type="button" onclick="openMassBrunst()">🧬 Massenmutation</button>
         <button type="button" onclick="datenSichern()" title="Tierbestand und Journal als Sicherungsdatei speichern">💾 Daten sichern</button>
         <button type="button" onclick="kalender40TageExportieren()" title="Kalendertermine für noch ausstehende 40-Tage-Wägungen herunterladen">📅 Kalendertermine</button>
@@ -973,11 +1004,46 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
 
 
 </header>
+<div id="appToast" class="app-toast" role="status" aria-live="polite"></div>
 <div class="container">
 
     <!-- =========================
          FILTER
          ========================= -->
+    <section id="businessLogin" class="card business-module" hidden>
+      <h2>🔒 Anmeldung für Finanzen &amp; Reservationen</h2><div class="business-body">
+        <p>Bitte das gemeinsame Betriebspasswort eingeben, um auf Finanz- und Reservationsdaten zuzugreifen.</p>
+        <form id="businessLoginForm" class="form">
+          <label>Passwort<input name="password" type="password" autocomplete="current-password" required></label>
+          <div class="full"><button class="primary-action" type="submit">Anmelden</button></div>
+        </form>
+        <button type="button" class="module-back" onclick="zurTierliste()">← Zur Tierliste</button>
+      </div>
+    </section>
+    <section id="finanzen" class="card business-module" hidden>
+      <h2>💶 Einnahmen &amp; Ausgaben</h2><div class="business-body">
+        <button type="button" class="module-back" onclick="zurTierliste()">← Zur Tierliste</button>
+        <button type="button" class="module-back" onclick="businessAbmelden()">🔒 Abmelden</button>
+        <form id="financeForm" class="form">
+          <label>Art<select name="typ"><option value="ausgabe">Ausgabe</option><option value="einnahme">Einnahme</option></select></label>
+          <label>Kategorie<select name="kategorie"><option>Futter</option><option>Tierarzt</option><option>Sonstiges</option><option>Tierverkauf</option></select></label>
+          <label>Datum<input name="datum" type="date" required></label><label>Betrag (CHF)<input name="betrag" type="number" min="0.01" step="0.01" required></label>
+          <label class="full">Notiz<input name="notiz" maxlength="150"></label><div class="full"><button class="primary-action">Eintrag speichern</button></div>
+        </form>
+        <div class="finance-totals"><div>Einnahmen<b id="financeIncome">CHF 0.00</b></div><div>Ausgaben<b id="financeExpense">CHF 0.00</b></div><div>Saldo<b id="financeBalance">CHF 0.00</b></div></div>
+        <label>Auswertung für <select id="financeYear"></select></label><div class="chart-wrap"><canvas id="financeChart"></canvas></div><div id="financeList"></div>
+      </div>
+    </section>
+    <section id="reservationen" class="card business-module" hidden><h2>📅 Tierreservationen</h2><div class="business-body">
+      <button type="button" class="module-back" onclick="zurTierliste()">← Zur Tierliste</button>
+      <button type="button" class="module-back" onclick="businessAbmelden()">🔒 Abmelden</button>
+      <form id="reservationForm" class="form">
+        <label>Tier<select name="tier" required><option value="">Tier auswählen</option></select></label><label>Reserviert für<input name="kunde" maxlength="100"></label>
+        <label>Abgabedatum<input name="datum" type="date" required></label><label>Status<select name="status"><option value="reserviert">Reserviert</option><option value="verkauft">Verkauft</option><option value="storniert">Storniert</option></select></label>
+        <label class="full">Notiz<input name="notiz" maxlength="150"></label><div class="full"><button class="primary-action">Reservation speichern</button></div>
+      </form><div class="reservation-summary"><strong id="reservationCount">0</strong><span>aktive Reservationen</span><select id="reservationYear"></select></div><div id="reservationList"></div>
+    </div></section>
+
     <div class="toolbar">
 
         <input
@@ -1430,18 +1496,24 @@ button.detail-action.info-action { color: #fff; background: #72a96a; border: 1px
 
 async function datenSichern() {
     try {
-        const [animalResult, journalResult] = await Promise.all([
+        const [animalResult, journalResult, financeResult, reservationResult] = await Promise.all([
             db.from("animals").select("*").order("id"),
-            db.from("tier_journal").select("*").order("datum", { ascending: true })
+            db.from("tier_journal").select("*").order("datum", { ascending: true }),
+            db.from("finanzen").select("*").order("datum", { ascending: true }),
+            db.from("tier_reservationen").select("*").order("abgabedatum", { ascending: true })
         ]);
         if (animalResult.error) throw animalResult.error;
         if (journalResult.error) throw journalResult.error;
+        if (financeResult.error) throw financeResult.error;
+        if (reservationResult.error) throw reservationResult.error;
         const exportData = {
             format: "herdebuch-backup",
             version: 1,
             createdAt: new Date().toISOString(),
             animals: animalResult.data || [],
-            journal: journalResult.data || []
+            journal: journalResult.data || [],
+            finanzen: financeResult.data || [],
+            reservationen: reservationResult.data || []
         };
         const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: "application/json;charset=utf-8" });
         const url = URL.createObjectURL(blob);
@@ -5680,10 +5752,64 @@ async function tiereAusSupabaseLaden() {
     );
 
    }
+let finanzenDaten = [];
+let reservationenDaten = [];
+let businessSignedIn = false;
+let activeBusinessModule = 'finanzen';
+// Shared Supabase Auth account used behind the password-only prompt.
+const FINANZEN_AUTH_EMAIL = 'finanzen@herdebuch.local';
+let toastTimer;
+function toastMeldung(text,typ='success'){const el=document.getElementById('appToast');el.textContent=text;el.className='app-toast visible '+typ;clearTimeout(toastTimer);if(typ!=='pending')toastTimer=setTimeout(()=>el.classList.remove('visible'),5000);}
+function showModule(id){activeBusinessModule=id;document.body.classList.add('business-view');document.querySelectorAll('.business-module').forEach(x=>x.hidden=true);if(!businessSignedIn){document.getElementById('businessLogin').hidden=false;document.getElementById('businessLogin').scrollIntoView({behavior:'smooth',block:'start'});return;}const panel=document.getElementById(id);panel.hidden=false;if(id==='finanzen')renderFinanzen();else renderReservationen();panel.scrollIntoView({behavior:'smooth',block:'start'});}
+function zurTierliste(){document.body.classList.remove('business-view');document.querySelectorAll('.business-module').forEach(x=>x.hidden=true);document.querySelector('.toolbar').scrollIntoView({behavior:'smooth',block:'start'});}
+function geld(n){return new Intl.NumberFormat('de-CH',{style:'currency',currency:'CHF'}).format(Number(n)||0);}
+function htmlSafe(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+async function betriebsdatenLaden(){
+ const [f,r]=await Promise.all([db.from('finanzen').select('*').order('datum',{ascending:false}),db.from('tier_reservationen').select('*').order('abgabedatum')]);
+ if(f.error||r.error){const e=f.error||r.error;console.error(e);if(String(e.message).includes('does not exist')||String(e.code)==='42P01'||String(e.code)==='PGRST205'){toastMeldung('Supabase-Tabellen fehlen. Bitte supabase-schema.sql im SQL-Editor ausführen.','error');return;}toastMeldung('Datenbankzugriff fehlgeschlagen: '+e.message,'error');return;}
+ finanzenDaten=f.data||[];reservationenDaten=r.data||[];document.getElementById('financeForm').elements.datum.value=new Date().toISOString().slice(0,10);renderFinanzen();renderReservationen();
+}
+document.getElementById('businessLoginForm').addEventListener('submit',async e=>{
+ e.preventDefault();const form=e.currentTarget,f=new FormData(e.currentTarget);toastMeldung('Passwort wird geprüft …','pending');
+ try {
+  const response=await Promise.race([
+   db.auth.signInWithPassword({email:FINANZEN_AUTH_EMAIL,password:f.get('password')}),
+   new Promise((_,reject)=>setTimeout(()=>reject(new Error('Keine Antwort von Supabase nach 15 Sekunden. Internetverbindung und Supabase-Projekt prüfen.')),15000))
+  ]);
+  if(response.error){toastMeldung('Anmeldung fehlgeschlagen. Prüfe, ob der Supabase-Benutzer finanzen@herdebuch.local angelegt wurde und das Passwort stimmt.','error');return;}
+  form.reset();businessSignedIn=true;await betriebsdatenLaden();showModule(activeBusinessModule);
+  if(!document.getElementById('appToast').classList.contains('error'))toastMeldung('Angemeldet.');
+ } catch(error){toastMeldung(error.message||'Anmeldung bei Supabase fehlgeschlagen.','error');}
+});
+async function businessAbmelden(){const {error}=await db.auth.signOut();if(error){toastMeldung('Abmelden fehlgeschlagen: '+error.message,'error');return;}businessSignedIn=false;finanzenDaten=[];reservationenDaten=[];showModule(activeBusinessModule);toastMeldung('Du wurdest abgemeldet.');}
+document.getElementById('financeForm').addEventListener('submit',async e=>{
+ e.preventDefault();const form=e.currentTarget;
+ const f=new FormData(e.currentTarget),payload={typ:f.get('typ'),kategorie:f.get('kategorie'),datum:f.get('datum'),betrag:Number(f.get('betrag')),notiz:f.get('notiz')};
+ const tempId='pending-'+Date.now();
+ finanzenDaten.unshift({...payload,id:tempId});
+ renderFinanzen();
+ toastMeldung('Eintrag wird gespeichert …','pending');
+ const {data,error}=await db.from('finanzen').insert(payload).select().single();
+ if(error){finanzenDaten=finanzenDaten.filter(x=>x.id!==tempId);renderFinanzen();const fehlend=error.code==='42P01'||error.code==='PGRST205'||String(error.message).toLowerCase().includes('schema cache');toastMeldung(fehlend?'Supabase-Tabellen fehlen. Bitte supabase-schema.sql im SQL-Editor ausführen.':'Speichern fehlgeschlagen: '+error.message,'error');return;}
+ finanzenDaten=finanzenDaten.map(x=>x.id===tempId?data:x).sort((a,b)=>b.datum.localeCompare(a.datum));
+ form.reset();form.elements.datum.value=new Date().toISOString().slice(0,10);
+ renderFinanzen();toastMeldung('Finanzeintrag wurde gespeichert.');
+});
+function renderFinanzen(){const ys=document.getElementById('financeYear'),year=new Date().getFullYear();ys.innerHTML=Array.from({length:6},(_,i)=>`<option>${year-i}</option>`).join('');ys.value=ys.dataset.selected||year;ys.onchange=()=>{ys.dataset.selected=ys.value;renderFinanzen();};const inc=finanzenDaten.filter(x=>x.typ==='einnahme').reduce((s,x)=>s+Number(x.betrag),0),out=finanzenDaten.filter(x=>x.typ==='ausgabe').reduce((s,x)=>s+Number(x.betrag),0);document.getElementById('financeIncome').textContent=geld(inc);document.getElementById('financeExpense').textContent=geld(out);document.getElementById('financeBalance').textContent=geld(inc-out);document.getElementById('financeList').innerHTML=finanzenDaten.map(x=>`<div class="business-row"><span>${new Date(x.datum+'T12:00:00').toLocaleDateString('de-CH')}</span><span><b>${htmlSafe(x.kategorie)}</b><small>${htmlSafe(x.notiz||'')}</small></span><b>${x.typ==='einnahme'?'+':'−'} ${geld(x.betrag)}</b><button type="button" onclick="finanzEintragLoeschen('${x.id}')">Löschen</button></div>`).join('')||'<p class="empty">Noch keine Einträge erfasst.</p>';diagrammZeichnen(Number(ys.value));}
+function diagrammZeichnen(year){const c=document.getElementById('financeChart'),box=c.parentElement,dpr=devicePixelRatio||1;c.width=box.clientWidth*dpr;c.height=box.clientHeight*dpr;const ctx=c.getContext('2d');ctx.scale(dpr,dpr);const w=box.clientWidth,h=box.clientHeight,p={l:48,r:10,t:12,b:28},v=Array.from({length:12},()=>[0,0]);finanzenDaten.filter(x=>Number(x.datum.slice(0,4))===year).forEach(x=>v[Number(x.datum.slice(5,7))-1][x.typ==='einnahme'?0:1]+=Number(x.betrag));const max=Math.max(1,...v.flat());ctx.clearRect(0,0,w,h);ctx.font='10px Arial';ctx.strokeStyle='#dce8d7';for(let i=0;i<5;i++){const y=p.t+(h-p.t-p.b)*i/4;ctx.beginPath();ctx.moveTo(p.l,y);ctx.lineTo(w-p.r,y);ctx.stroke();ctx.fillStyle='#68737a';ctx.fillText(Math.round(max*(1-i/4)),2,y+3);}const m=['Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez'],slot=(w-p.l-p.r)/12,bw=Math.min(12,slot*.3);v.forEach((a,i)=>{const x=p.l+i*slot+slot/2;[a[0],a[1]].forEach((n,j)=>{ctx.fillStyle=j?'#d58a48':'#4f8a45';ctx.fillRect(x+(j?1:-bw-1),h-p.b-(n/max*(h-p.t-p.b)),bw,n/max*(h-p.t-p.b));});ctx.textAlign='center';ctx.fillStyle='#68737a';ctx.fillText(m[i],x,h-6);});}
+async function finanzEintragLoeschen(id){toastMeldung('Eintrag wird gelöscht …','pending');const {error}=await db.from('finanzen').delete().eq('id',id);if(error){toastMeldung('Löschen fehlgeschlagen: '+error.message,'error');return;}await betriebsdatenLaden();toastMeldung('Eintrag wurde gelöscht.');}
+document.getElementById('reservationForm').addEventListener('submit',async e=>{e.preventDefault();const form=e.currentTarget,f=new FormData(form),payload={tier_id:f.get('tier'),kunde:f.get('kunde'),abgabedatum:f.get('datum'),status:f.get('status'),notiz:f.get('notiz')};toastMeldung('Reservation wird gespeichert …','pending');const {error}=await db.from('tier_reservationen').insert(payload);if(error){const fehlend=error.code==='42P01'||error.code==='PGRST205'||String(error.message).toLowerCase().includes('schema cache');toastMeldung(fehlend?'Supabase-Tabellen fehlen. Bitte supabase-schema.sql im SQL-Editor ausführen.':'Speichern fehlgeschlagen: '+error.message,'error');return;}form.reset();await betriebsdatenLaden();toastMeldung('Reservation wurde gespeichert.');});
+function renderReservationen(){const tier=document.querySelector('#reservationForm [name="tier"]'),prev=tier.value;tier.innerHTML='<option value="">Tier auswählen</option>'+animals.map(a=>`<option value="${htmlSafe(a.id)}">${htmlSafe(a.id)}${a.name?' – '+htmlSafe(a.name):''}</option>`).join('');tier.value=prev;const ys=document.getElementById('reservationYear'),next=new Date().getFullYear()+1;ys.innerHTML=[next,next+1].map(y=>`<option>${y}</option>`).join('');ys.value=ys.dataset.selected||next;ys.onchange=()=>{ys.dataset.selected=ys.value;renderReservationen();};const list=reservationenDaten.filter(x=>Number(x.abgabedatum.slice(0,4))===Number(ys.value));document.getElementById('reservationCount').textContent=list.filter(x=>x.status==='reserviert').length;document.getElementById('reservationList').innerHTML=list.map(x=>`<div class="business-row"><span>${new Date(x.abgabedatum+'T12:00:00').toLocaleDateString('de-CH')}</span><span><b>${htmlSafe(x.tier_id)}${x.kunde?' · '+htmlSafe(x.kunde):''}</b><small>${htmlSafe(x.notiz||'')}</small></span><span>${htmlSafe(x.status)}</span><button type="button" onclick="reservationLoeschen('${x.id}')">Löschen</button></div>`).join('')||'<p class="empty">Für dieses Jahr sind keine Reservationen eingetragen.</p>';}
+async function reservationLoeschen(id){toastMeldung('Reservation wird gelöscht …','pending');const {error}=await db.from('tier_reservationen').delete().eq('id',id);if(error){toastMeldung('Löschen fehlgeschlagen: '+error.message,'error');return;}await betriebsdatenLaden();toastMeldung('Reservation wurde gelöscht.');}
+window.addEventListener('resize',()=>{if(!document.getElementById('finanzen').hidden)diagrammZeichnen(Number(document.getElementById('financeYear').value));});
+
 (async function () {
 
     await tiereAusSupabaseLaden();
     await journalLaden();
+    const { data: authState } = await db.auth.getSession();
+    businessSignedIn = Boolean(authState.session);
+    if (businessSignedIn) await betriebsdatenLaden();
 
     render();
 
