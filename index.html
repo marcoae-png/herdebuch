@@ -4463,6 +4463,7 @@ function plusTage(isoDatum, tage) {
 function aktualisiereAblammung(tierId) {
     const el = document.getElementById("plannedLambing");
     if (!el) return;
+    if (!journalGeladen && !journalLadeFehler) { el.innerHTML = '<strong>Ablammung geplant:</strong> Journal wird geladen …'; return; }
     if (journalLadeFehler && !(tierJournal || []).length) { el.innerHTML = '<strong>Ablammung geplant:</strong> Journal nicht geladen<small>Fehler: ' + escapeJournalHTML(journalLadeFehler) + '</small>'; return; }
     if (!(tierJournal || []).length) { el.innerHTML = '<strong>Ablammung geplant:</strong> Journal enthält noch keine Einträge<small>Klicken für die Herdenübersicht</small>'; return; }
     const brunst = letztesBrunstDatum(tierId);
@@ -4531,6 +4532,12 @@ function fehlerText(e) {
 
 
 let journalLadeFehler = "";
+let journalGeladen = false;
+function journalDiagnose(tierId) {
+    const alle = (tierJournal || []).length;
+    const dieses = (tierJournal || []).filter(e => String(e.tier_id).trim() === String(tierId).trim()).length;
+    return '<div style="margin-top:8px;font-size:11px;color:#888">Journal: ' + (journalGeladen ? alle + ' Einträge geladen, ' + dieses + ' für dieses Tier' : 'noch nicht geladen') + ' · Bildschirm ' + window.innerWidth + ' px</div>';
+}
 
 async function journalLaden() {
     try {
@@ -4549,6 +4556,8 @@ async function journalLaden() {
 
         journalLadeFehler = "";
         tierJournal = data || [];
+        journalGeladen = true;
+        try { if (selectedId && document.getElementById("journalListe")) journalAnzeigen(String(selectedId)); } catch (e) { console.error(e); }
         console.log("Tier-Journal aus Firebase geladen:", tierJournal.length);
         return true;
     } catch (fehler) {
@@ -4591,6 +4600,11 @@ function journalAnzeigen(tierId) {
 
     });
 
+    if (!journalGeladen && !journalLadeFehler) {
+        liste.innerHTML = '<div class="empty">Journal wird geladen …</div>' + journalDiagnose(tierId);
+        return;
+    }
+
     if (journalLadeFehler && (tierJournal || []).length === 0) {
         liste.innerHTML = '<div class="empty">Das Tier-Journal konnte nicht geladen werden:<br><small>' + escapeJournalHTML(journalLadeFehler) + '</small><br><button type="button" onclick="journalErneutLaden()">Erneut laden</button></div>';
         return;
@@ -4601,7 +4615,7 @@ function journalAnzeigen(tierId) {
         liste.innerHTML =
             '<div class="empty">' +
             'Noch keine Einträge vorhanden.' +
-            '</div>';
+            '</div>' + journalDiagnose(tierId);
 
         return;
     }
@@ -4657,7 +4671,7 @@ function journalAnzeigen(tierId) {
 
     });
 
-    liste.innerHTML = html;
+    liste.innerHTML = html + journalDiagnose(tierId);
 }
 
 
