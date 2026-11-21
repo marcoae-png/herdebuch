@@ -4533,11 +4533,6 @@ function fehlerText(e) {
 
 let journalLadeFehler = "";
 let journalGeladen = false;
-function journalDiagnose(tierId) {
-    const alle = (tierJournal || []).length;
-    const dieses = (tierJournal || []).filter(e => String(e.tier_id).trim() === String(tierId).trim()).length;
-    return '<div style="margin-top:8px;font-size:11px;color:#888">Journal: ' + (journalGeladen ? alle + ' Einträge geladen, ' + dieses + ' für dieses Tier' : 'noch nicht geladen') + ' · Bildschirm ' + window.innerWidth + ' px</div>';
-}
 
 async function journalLaden() {
     try {
@@ -4601,7 +4596,7 @@ function journalAnzeigen(tierId) {
     });
 
     if (!journalGeladen && !journalLadeFehler) {
-        liste.innerHTML = '<div class="empty">Journal wird geladen …</div>' + journalDiagnose(tierId);
+        liste.innerHTML = '<div class="empty">Journal wird geladen …</div>';
         return;
     }
 
@@ -4615,7 +4610,7 @@ function journalAnzeigen(tierId) {
         liste.innerHTML =
             '<div class="empty">' +
             'Noch keine Einträge vorhanden.' +
-            '</div>' + journalDiagnose(tierId);
+            '</div>';
 
         return;
     }
@@ -4671,7 +4666,7 @@ function journalAnzeigen(tierId) {
 
     });
 
-    liste.innerHTML = html + journalDiagnose(tierId);
+    liste.innerHTML = html;
 }
 
 
